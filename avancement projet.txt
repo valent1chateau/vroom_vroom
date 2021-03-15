@@ -1,0 +1,12 @@
+A définir dans la semaine pour retour au prof et info diverse:
+
+1) definir les types d'agents (véhicules autonomes (option))
+2) definir les technologies utilisés
+3) Définir l'environnement et ses éléments (feux intelligente, rond point etc...)
+4) Risk assessement : Priorité ++
+5) représentation de la route : Graphe (voir type de graphe et comment faire)
+6) Intelligent driver model : pour avoir l'accélération
+7) maquette route
+
+Info:
+faire le rapport en continu, il faut envoyer chaque mois un update.
