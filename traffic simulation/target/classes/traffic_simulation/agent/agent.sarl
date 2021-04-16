@@ -1,0 +1,97 @@
+/* 
+ * $Id$
+ * 
+ * Copyright (c) 2014-17 Stephane GALLAND <stephane.galland@utbm.fr>.
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * This program is free software; you can redistribute it and/or modify
+ */
+package traffic_simulation.^agent
+
+
+
+import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+import java.util.List
+import java.util.UUID
+import io.sarl.core.DefaultContextInteractions
+
+import io.sarl.core.Logging
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Schedules
+import io.sarl.core.AgentSpawned
+
+import java.util.concurrent.atomic.AtomicInteger
+
+import traffic_simulation.environment.AbstractEnvironment
+
+event light{
+	var l : String
+	new (x : String){
+		l = x
+	}
+}
+agent classicDriver {
+	
+	uses PhysicEnvironment, Lifecycle, DefaultContextInteractions, Logging
+
+	
+
+	on Initialize {
+		loggingName = "classicDriver"
+		info("I'm starting")
+		
+	}
+
+	on light {
+		if (occurrence.l == "green"){
+			info("yes it's " + occurrence.l)
+			
+			}
+		else{
+			
+				info("oh no it's " + occurrence.l)
+				
+				}
+		
+		killMe
+	}
+
+}
+
+agent priorityDriver {
+
+	uses PhysicEnvironment, Lifecycle, DefaultContextInteractions, Logging
+
+	on Initialize {
+		loggingName = "priorityDriver"
+		info("I'm starting")
+		
+	}
+
+	on light {
+		if (occurrence.l == "green") {
+			info("nice it's " + occurrence.l)
+
+		} else {
+
+			info("fuck but I have the priority!")
+
+		}
+
+		killMe
+	}
+
+}
