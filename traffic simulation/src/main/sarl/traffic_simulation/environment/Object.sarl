@@ -1,0 +1,46 @@
+package traffic_simulation.environment
+
+import java.awt.geom.Point2D
+import org.eclipse.xtend.lib.annotations.Accessors
+
+class trafficObject {
+	@Accessors
+	var coord : Point2D
+	
+	new (xParam : int, yParam : int){
+		coord = new Point2D.Double(xParam,yParam)
+	}	
+	
+}
+
+interface Light {
+	
+	def turnRed : void
+	
+	def turnGreen : void
+	
+	def switchLight(state : boolean)
+}
+
+class trafficLight implements Light extends trafficObject {
+
+	var isGreen = false
+	
+	new (xParam : int, yParam : int, state : boolean) {
+		super(xParam, yParam)
+		this.isGreen = state
+	}
+	
+	def turnRed : void {
+		switchLight(false)
+	}
+	
+	def turnGreen : void {
+		switchLight(true)
+	}
+	
+	def switchLight(state : boolean) : void{
+		this.isGreen = state
+	}
+	
+}

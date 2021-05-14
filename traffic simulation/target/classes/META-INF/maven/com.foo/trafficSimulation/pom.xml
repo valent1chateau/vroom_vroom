@@ -17,6 +17,11 @@
       <artifactId>io.sarl.maven.sdk</artifactId>
       <version>${sarl.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.arakhne.afc.core</groupId>
+      <artifactId>mathphysics</artifactId>
+      <version>16.0</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

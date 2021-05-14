@@ -77,6 +77,13 @@ public class EnvironmentAgent extends Agent {
     }
   }
   
+  protected void startLoop() {
+  }
+  
+  protected void endLoop() {
+    this.startLoop();
+  }
+  
   @Extension
   @ImportedCapacityFeature(Lifecycle.class)
   @SyntheticMember

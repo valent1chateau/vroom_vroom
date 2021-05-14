@@ -44,14 +44,13 @@ event light{
 	}
 }
 agent classicDriver {
-	
+		
 	uses PhysicEnvironment, Lifecycle, DefaultContextInteractions, Logging
-
-	
 
 	on Initialize {
 		loggingName = "classicDriver"
 		info("I'm starting")
+		info("my classicDriver id :" + ID)
 		
 	}
 
@@ -72,7 +71,7 @@ agent classicDriver {
 }
 
 agent priorityDriver {
-
+	
 	uses PhysicEnvironment, Lifecycle, DefaultContextInteractions, Logging
 
 	on Initialize {

@@ -35,6 +35,7 @@ import io.sarl.core.Logging
 import io.sarl.core.AgentSpawned
 
 
+
 /** This agent is managing the physic space. 
  *
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
@@ -57,4 +58,14 @@ agent EnvironmentAgent {
 			killMe
 		}
 	}
+	
+	def startLoop {
+		//Compute perceptions
+	}
+	def endLoop {
+		startLoop();
+	}
+	
+//	on Influence { }
+	
 }

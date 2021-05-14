@@ -27,6 +27,8 @@ import java.util.UUID
 // import traffic_simulation.math.MathUtil
 import java.util.List
 import java.text.MessageFormat
+import org.eclipse.xtend.lib.annotations.Accessors
+import java.awt.geom.Point2D
 
 /**
  * Object on the environment.
@@ -35,8 +37,31 @@ import java.text.MessageFormat
  * @version $Name$ $Revision$ $Date$
  */
  
-/*class AgentBody extends AbstractMobileObject implements Body {
-
+class Vehicle implements Body {
 	
+	@Accessors
+	var id : UUID
+	
+	@Accessors
+	var coord : Point2D
+	
+	def getID(): UUID {
+		return this.id
+	}
+	
+	def accelerate(): void {
+		
+	}
+	
+	def deccelerate(): void {
+		
+	}
+	
+	def calculatePerceptions(): void {
+		
+	}
+}
 
-}*/
+class priorityVehicle extends Vehicle {
+	
+}
