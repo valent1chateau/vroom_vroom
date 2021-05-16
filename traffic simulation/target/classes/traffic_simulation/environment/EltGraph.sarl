@@ -1,0 +1,48 @@
+package traffic_simulation.environment
+
+import java.awt.geom.Point2D
+import java.util.*;
+import javafx.scene.shape.Polyline
+import org.eclipse.xtend.lib.annotations.Accessors
+
+class Node {
+
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var id : int
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var coord : Point2D
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var pred : Node
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var neighboors : ArrayList<Node>
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var statut : String
+
+	new(i : int, x : Double, y : Double) {
+		this.id = i
+		coord = new Point2D.Double()
+		coord.setLocation(x, y)
+		neighboors = new ArrayList<Node>
+	}
+}
+
+class Edge extends Polyline {
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var id_ : int
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var Nin : Node
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var Nout : Node
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var nbVoies : int
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var weight : double
+
+	new (i : int, in_ : Node, out_ : Node) {
+		super()
+		this.id_ = i
+		this.Nin = in_
+		this.Nout = out_
+	}
+
+}

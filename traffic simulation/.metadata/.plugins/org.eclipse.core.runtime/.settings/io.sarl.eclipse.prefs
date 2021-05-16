@@ -1,0 +1,2 @@
+eclipse.preferences.version=1
+io.sarl.eclipse.runtime.PREF_SRE_XML=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?><SREs defaultSRE\="io.janusproject.plugin.sre"><SRE class\="io.janusproject.eclipse.sre.JanusSREInstall" id\="io.janusproject.plugin.sre" platform\="true"/></SREs>
