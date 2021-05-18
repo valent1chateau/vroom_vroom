@@ -12,6 +12,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.scene.Group;
+import javafx.scene.shape.Circle
 
 import io.sarl.core.Initialize
 import io.sarl.core.Lifecycle
@@ -46,7 +47,9 @@ class window extends Application {
 			println(e)
 			println(e.get(j).getNin.id + " - "+ e.get(j).getNout.id)
 		}
-
+		
+		//print(map.getG.getListNodes.get(11).coord )
+		//print(map.getG.dict_Edges.get("1911").weight)
 		// p.Astar(map.getG, map.getG.getListNodes.get(4), map.getG.getListNodes.get(10))
 		// println(map.poly().get(0))
 		// println(map.poly().get(1))
@@ -66,6 +69,14 @@ class window extends Application {
 		var group = new Group(map.poly());
 		// var group = new Group(polyline);
 		// create a scene
+		
+		for (var i = 0; i < map.getG.getListNodes.size();i++){
+			var c : Circle = new Circle()
+			c.setCenterX(map.getG.getListNodes.get(i).coord.getX())
+			c.setCenterY(map.getG.getListNodes.get(i).coord.getY())
+			c.setRadius(this.width*0.01)
+			group.getChildren().add(c)
+		}
 		var scene = new Scene(group, this.length, this.width);
 
 		// set the scene

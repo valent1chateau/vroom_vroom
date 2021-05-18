@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -60,6 +61,15 @@ public class window extends Application {
     Polyline polyline = new Polyline(points);
     ArrayList<Edge> _poly = this.map.poly();
     Group group = new Group(((javafx.scene.Node[])Conversions.unwrapArray(_poly, javafx.scene.Node.class)));
+    for (int i = 0; (i < this.map.getG().getListNodes().size()); i++) {
+      {
+        Circle c = new Circle();
+        c.setCenterX(this.map.getG().getListNodes().get(i).getCoord().getX());
+        c.setCenterY(this.map.getG().getListNodes().get(i).getCoord().getY());
+        c.setRadius((this.width * 0.01));
+        group.getChildren().add(c);
+      }
+    }
     Scene scene = new Scene(group, this.length, this.width);
     primaryStage.setScene(scene);
     primaryStage.show();

@@ -2,7 +2,7 @@
  * 
  */
 package traffic_simulation.environment
-
+import traffic_simulation.util.Tools
 import com.sun.javafx.application.LauncherImpl
 import io.sarl.bootstrap.SRE
 
@@ -14,20 +14,7 @@ import io.sarl.bootstrap.SRE
  */
 class Main {
 	static def main(args : String*) {
-		// var win : window = new window()
-		// win.show
 		
-		// startexemple
-		var n = new Node(1, 10.0, 20.0)
-
-		var n2 = new Node(2, 12.0, 22.0)
-		var n3 = new Node(4, 1.0, 2.0)
-		n3 = n
-		n.neighboors.add(n2)
-
-		n.neighboors.get(0).id = 3
-		n.id = 23
-
 		LauncherImpl::launchApplication(typeof(window), args)
 	}
 

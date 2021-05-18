@@ -1,0 +1,45 @@
+/** 
+ * 
+ */
+package traffic_simulation.util
+
+import java.lang.Math.*
+
+/** 
+ * @author jeome
+ * 
+ */
+class Tools {
+	
+	new(){}
+	
+	def f(x1 : double, xc : double, x2 : double, t : double) : double {
+		return x1 * (1.0d - t) ** 2.0d + 2.0d * xc * t * (1.0d - t) + x2 * (t) ** 2.0d
+	}
+	
+	/*def g(P : double[], t : double){
+		return Math.sqrt(f(P.get(0),P.get(1),P.get(2),t)**2
+	 * }
+	 */
+	def deriv_bez(x1 : double, xc : double, x2 : double, t : double) : double {
+		return - 2.0d*x1*(1.0d-t) + 2.0d * xc * (1.0d - 2.0d*t) + 2.0d* x2 * t
+	}
+	
+	def g(P : double[], t : double){
+		return Math.sqrt(
+			deriv_bez(P.get(0), P.get(1), P.get(2), t) ** 2 + deriv_bez(P.get(3), P.get(4), P.get(5), t) ** 2)
+	}
+	
+	def weight_curve(P : double[], a : double, b : double, n : double) : double{
+		var m = a
+		var d = b - a
+		var h = d/n
+		var I = h * ((g(P, a) / 2) + (g(P, b) / 2) )
+		//println(h)
+		for (var i = 0;i<n;i++){
+			I = I + h*g(P,m+h)
+			m = m + h
+		}
+		return I
+	}
+}

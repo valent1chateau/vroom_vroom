@@ -15,6 +15,7 @@ import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Node;
+import traffic_simulation.util.Tools;
 
 @SarlSpecification("0.11")
 @SarlElementType(10)
@@ -34,6 +35,8 @@ public class Graph {
   
   @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
   private Map<String, Edge> dict_Edges;
+  
+  private Tools tool = new Tools();
   
   public Graph() {
   }
@@ -89,13 +92,20 @@ public class Graph {
                   tour = (tour + 1);
                 }
               }
+              double _x_2 = Nout.getCoord().getX();
+              double _x_3 = Nin.getCoord().getX();
+              double _power = Math.pow((_x_2 - _x_3), 2);
+              double _y_2 = Nout.getCoord().getY();
+              double _y_3 = Nin.getCoord().getY();
+              double _power_1 = Math.pow((_y_2 - _y_3), 2);
+              E.setWeight(Math.sqrt((_power + _power_1)));
             } else {
-              double _x_2 = Nin.getCoord().getX();
-              double _x_3 = Nout.getCoord().getX();
-              if ((_x_2 == _x_3)) {
-                double _y_2 = Nout.getCoord().getY();
-                double _y_3 = Nin.getCoord().getY();
-                pas = ((_y_2 - _y_3) / nbP);
+              double _x_4 = Nin.getCoord().getX();
+              double _x_5 = Nout.getCoord().getX();
+              if ((_x_4 == _x_5)) {
+                double _y_4 = Nout.getCoord().getY();
+                double _y_5 = Nin.getCoord().getY();
+                pas = ((_y_4 - _y_5) / nbP);
                 points[0] = Nin.getCoord().getX();
                 points[1] = Nin.getCoord().getY();
                 points[(2 * nbP)] = Nout.getCoord().getX();
@@ -103,11 +113,18 @@ public class Graph {
                 for (int v = 2; (v < (2 * nbP)); v = (v + 2)) {
                   {
                     points[v] = Nin.getCoord().getX();
-                    double _y_4 = Nin.getCoord().getY();
-                    points[(v + 1)] = (_y_4 + (pas * tour));
+                    double _y_6 = Nin.getCoord().getY();
+                    points[(v + 1)] = (_y_6 + (pas * tour));
                     tour = (tour + 1);
                   }
                 }
+                double _x_6 = Nout.getCoord().getX();
+                double _x_7 = Nin.getCoord().getX();
+                double _power_2 = Math.pow((_x_6 - _x_7), 2);
+                double _y_6 = Nout.getCoord().getY();
+                double _y_7 = Nin.getCoord().getY();
+                double _power_3 = Math.pow((_y_6 - _y_7), 2);
+                E.setWeight(Math.sqrt((_power_2 + _power_3)));
               } else {
                 tour = 0;
                 Point2D PC = null;
@@ -121,15 +138,16 @@ public class Graph {
                   PC.setLocation(Nout.getCoord().getX(), Nin.getCoord().getY());
                 }
                 points = this.bezierQuad(Nin.getCoord(), PC, Nout.getCoord(), nbP);
+                double _x_8 = Nin.getCoord().getX();
+                double _x_9 = PC.getX();
+                double _x_10 = Nout.getCoord().getX();
+                double _y_8 = Nin.getCoord().getY();
+                double _y_9 = PC.getY();
+                double _y_10 = Nout.getCoord().getY();
+                E.setWeight(this.tool.weight_curve(
+                  new double[] { _x_8, _x_9, _x_10, _y_8, _y_9, _y_10 }, 0.0, 1.0, 10000.0));
               }
             }
-            double _x_4 = Nout.getCoord().getX();
-            double _x_5 = Nin.getCoord().getX();
-            double _power = Math.pow((_x_4 - _x_5), 2);
-            double _y_4 = Nout.getCoord().getY();
-            double _y_5 = Nin.getCoord().getY();
-            double _power_1 = Math.pow((_y_4 - _y_5), 2);
-            E.setWeight(Math.sqrt((_power + _power_1)));
             final double[] _converted_points = (double[])points;
             E.getPoints().addAll(((Collection<? extends Double>)Conversions.doWrapArray(_converted_points)));
             this.ListEdge.add(E);
