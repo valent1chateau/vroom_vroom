@@ -35,14 +35,15 @@ import io.sarl.lang.core.AtomicSkillReference;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.DynamicSkillProvider;
 import java.util.Collection;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
-import traffic_simulation.agent.classicDriver;
 import traffic_simulation.agent.light;
-import traffic_simulation.agent.priorityDriver;
+import traffic_simulation.environment.Vehicle;
+import traffic_simulation.environment.priorityVehicle;
 
 /**
  * This agent is managing the physic space.
@@ -55,15 +56,11 @@ import traffic_simulation.agent.priorityDriver;
 public class EnvironmentAgent extends Agent {
   private AtomicInteger spawnedReceived = new AtomicInteger(0);
   
+  private TreeMap<UUID, Vehicle> bodyList;
+  
+  private priorityVehicle priorityVehicle;
+  
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.setLoggingName("Agent - 1");
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info("I\'m starting");
-    Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.spawn(priorityDriver.class);
-    Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER_1.spawn(classicDriver.class);
   }
   
   private void $behaviorUnit$AgentSpawned$1(final AgentSpawned occurrence) {

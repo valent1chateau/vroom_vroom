@@ -1,4 +1,4 @@
-/* 
+/**
  * $Id$
  * 
  * Copyright (c) 2011-17 Stephane GALLAND <stephane.galland@utbm.fr>.
@@ -18,49 +18,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * This program is free software; you can redistribute it and/or modify
  */
-package traffic_simulation.environment
+package traffic_simulation.environment;
 
-// import traffic_simulation.math.Shape2f
-import java.util.ArrayList
-import java.util.UUID
-// import traffic_simulation.math.Vector2f
-// import traffic_simulation.math.MathUtil
-import java.util.List
-import java.text.MessageFormat
-import org.eclipse.xtend.lib.annotations.Accessors
-import java.awt.geom.Point2D
+import io.sarl.lang.annotation.SarlElementType;
+import io.sarl.lang.annotation.SarlSpecification;
+import io.sarl.lang.annotation.SyntheticMember;
+import java.io.Serializable;
 
 /**
- * Object on the environment.
+ * Defined a perception unit.
  * 
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
- 
-class Vehicle implements Body {
-	
-	var id : UUID
-	
-	@Accessors
-	var coord : Point2D
-	
-	def getID(): UUID {
-		return this.id
-	}
-	
-	def accelerate(): void {
-		
-	}
-	
-	def deccelerate(): void {
-		
-	}
-	
-	def calculatePerceptions(): void {
-		
-	}
-}
-
-class priorityVehicle extends Vehicle {
-	
+@SarlSpecification("0.11")
+@SarlElementType(10)
+@SuppressWarnings("all")
+public class Perception implements Serializable {
+  @SyntheticMember
+  public Perception() {
+    super();
+  }
+  
+  @SyntheticMember
+  private static final long serialVersionUID = 1L;
 }

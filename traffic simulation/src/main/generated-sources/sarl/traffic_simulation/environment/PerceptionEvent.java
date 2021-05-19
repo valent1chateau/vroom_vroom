@@ -23,8 +23,12 @@ package traffic_simulation.environment;
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
-import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Event;
+import java.util.List;
+import org.eclipse.xtext.xbase.lib.Conversions;
+import org.eclipse.xtext.xbase.lib.Pure;
+import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
+import traffic_simulation.environment.Perception;
 
 /**
  * This event contains percepts.
@@ -35,16 +39,37 @@ import io.sarl.lang.core.Event;
 @SarlElementType(15)
 @SuppressWarnings("all")
 public class PerceptionEvent extends Event {
+  public List<Perception> p;
+  
+  public PerceptionEvent(final Perception... p) {
+    this.p = ((List<Perception>)Conversions.doWrapArray(p));
+  }
+  
+  @Override
+  @Pure
   @SyntheticMember
-  public PerceptionEvent() {
-    super();
+  public boolean equals(final Object obj) {
+    return super.equals(obj);
+  }
+  
+  @Override
+  @Pure
+  @SyntheticMember
+  public int hashCode() {
+    int result = super.hashCode();
+    return result;
+  }
+  
+  /**
+   * Returns a String representation of the PerceptionEvent event's attributes only.
+   */
+  @SyntheticMember
+  @Pure
+  protected void toString(final ToStringBuilder builder) {
+    super.toString(builder);
+    builder.add("p", this.p);
   }
   
   @SyntheticMember
-  public PerceptionEvent(final Address source) {
-    super(source);
-  }
-  
-  @SyntheticMember
-  private static final long serialVersionUID = 588368462L;
+  private static final long serialVersionUID = 1096335295L;
 }

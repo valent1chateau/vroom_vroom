@@ -28,7 +28,10 @@ import java.util.List
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  */
 event PerceptionEvent {
-	
+	var p : List <Perception>
+    new (p : Perception*) {
+           this.p = p
+    }
 }
 
 /** This event contains an influence 

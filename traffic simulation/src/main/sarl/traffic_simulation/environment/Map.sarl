@@ -75,7 +75,6 @@ class Map {
 
 		G = new Graph(LN, Lst_A)
 		G.LstAdj_To_Graph()
-
 	}
 	
 	def poly() : ArrayList<Edge>{

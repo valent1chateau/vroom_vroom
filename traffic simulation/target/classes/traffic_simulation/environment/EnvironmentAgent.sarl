@@ -33,10 +33,10 @@ import java.util.concurrent.atomic.AtomicInteger
 import io.sarl.core.OpenEventSpace
 import io.sarl.core.Logging
 import io.sarl.core.AgentSpawned
+import java.util.ArrayList
+import java.util.TreeMap
 
-
-
-/** This agent is managing the physic space. 
+/* This agent is managing the physic space. 
  *
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  */
@@ -44,11 +44,17 @@ agent EnvironmentAgent {
 	uses  Lifecycle, DefaultContextInteractions, Logging
 	var spawnedReceived : AtomicInteger = new AtomicInteger(0)
 	
+	// Bodies
+	
+	var bodyList : TreeMap<UUID,Vehicle>
+	var priorityVehicle : priorityVehicle
+		
 	on Initialize {
-		loggingName = "Agent - 1"
-		info("I'm starting")
-		spawn(typeof(priorityDriver))
-		typeof(classicDriver).spawn
+				
+//		loggingName = "Agent - 1"
+//		info("I'm starting")
+//		spawn(typeof(priorityDriver))
+//		typeof(classicDriver).spawn
 	}
 
 	on AgentSpawned {
@@ -62,10 +68,12 @@ agent EnvironmentAgent {
 	def startLoop {
 		//Compute perceptions
 	}
+	
 	def endLoop {
 		startLoop();
 	}
 	
 //	on Influence { }
+// on Perception { }
 	
 }

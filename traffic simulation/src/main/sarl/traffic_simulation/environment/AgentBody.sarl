@@ -39,7 +39,6 @@ import java.awt.geom.Point2D
  
 class Vehicle implements Body {
 	
-	@Accessors
 	var id : UUID
 	
 	@Accessors

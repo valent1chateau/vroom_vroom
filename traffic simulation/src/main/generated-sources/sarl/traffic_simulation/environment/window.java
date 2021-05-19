@@ -33,8 +33,8 @@ public class window extends Application {
   
   public window() {
     super();
-    this.length = 1600;
-    this.width = 900;
+    this.length = 800;
+    this.width = 600;
     Map _map = new Map(this.length, this.width);
     this.map = _map;
     Path p = new Path();

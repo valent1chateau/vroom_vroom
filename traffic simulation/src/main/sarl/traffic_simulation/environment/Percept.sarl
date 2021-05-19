@@ -36,9 +36,7 @@ import com.google.common.base.Objects
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
- /* 
-class Percept implements MobileObject, Serializable {
-
+  
+class Perception implements Serializable {
 	
-
-}*/
+}

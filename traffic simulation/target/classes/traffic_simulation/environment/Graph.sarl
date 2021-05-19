@@ -32,6 +32,10 @@ class Graph {
 		ListEdge = new ArrayList()
 		dict_Edges = new Hashtable<String, Edge>
 	}
+	
+	def addToGraph(): void {
+		
+	}
 
 	def LstAdj_To_Graph() {
 		var idt : int
@@ -154,5 +158,6 @@ class Graph {
 		return res
 
 	}
+
 		
 }

@@ -40,7 +40,6 @@ import traffic_simulation.environment.Body;
 @SarlElementType(10)
 @SuppressWarnings("all")
 public class Vehicle implements Body {
-  @Accessors
   private UUID id;
   
   @Accessors
@@ -88,15 +87,6 @@ public class Vehicle implements Body {
   @SyntheticMember
   public Vehicle() {
     super();
-  }
-  
-  @Pure
-  public UUID getId() {
-    return this.id;
-  }
-  
-  public void setId(final UUID id) {
-    this.id = id;
   }
   
   @Pure

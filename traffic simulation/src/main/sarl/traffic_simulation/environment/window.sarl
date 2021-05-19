@@ -32,8 +32,8 @@ class window extends Application {
 	new() {
 		super()
 
-		this.length = 1600
-		this.width = 900
+		this.length = 800
+		this.width = 600
 		map = new Map(this.length, this.width)
 		var p : Path = new Path()
 		p.Astar(map.getG, map.getG.getListNodes.get(4), map.getG.getListNodes.get(6))

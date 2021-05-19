@@ -51,6 +51,9 @@ public class Graph {
     this.dict_Edges = _hashtable;
   }
   
+  public void addToGraph() {
+  }
+  
   public void LstAdj_To_Graph() {
     int idt = 0;
     int nbP = 0;
