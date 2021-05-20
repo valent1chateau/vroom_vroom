@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import java.util.Map;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Graph;
@@ -178,6 +179,17 @@ public class Path {
   @Pure
   public double f(final double g, final double h) {
     return (g + h);
+  }
+  
+  public void show() {
+    InputOutput.<Integer>println(Integer.valueOf(this.pathNodes.size()));
+    InputOutput.<Integer>println(Integer.valueOf(this.pathEdges.size()));
+    for (int i = 0; (i < this.pathEdges.size()); i++) {
+      int _id = this.pathEdges.get(i).getNin().getId();
+      String _plus = (Integer.valueOf(_id) + " - ");
+      int _id_1 = this.pathEdges.get(i).getNout().getId();
+      InputOutput.<String>println((_plus + Integer.valueOf(_id_1)));
+    }
   }
   
   @Override

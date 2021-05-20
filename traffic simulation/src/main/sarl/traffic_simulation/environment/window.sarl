@@ -3,6 +3,7 @@
  */
 package traffic_simulation.environment
 
+import com.sun.javafx.application.LauncherImpl
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -19,6 +20,8 @@ import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
 import io.sarl.core.DefaultContextInteractions
 import java.util.ArrayList
+import javafx.animation.AnimationTimer
+
 
 /** 
  * @author jeome
@@ -28,14 +31,22 @@ class window extends Application {
 	var map : Map
 	var length : double
 	var width : double
+	var cc : Circle = new Circle()
+	var t : long
+	var group : Group
+	var drivers : ArrayList<classicDriverBody>
 
 	new() {
-		super()
+		//super()
 
 		this.length = 800
 		this.width = 600
 		map = new Map(this.length, this.width)
-		var p : Path = new Path()
+		drivers = new ArrayList<classicDriverBody>
+		
+		//driver = new classicDriverBody(map)
+		//driver.path.show()
+		/*var p : Path = new Path()
 		p.Astar(map.getG, map.getG.getListNodes.get(4), map.getG.getListNodes.get(6))
 		var d : ArrayList<Node> = p.pathNodes
 		var e : ArrayList<Edge> = p.pathEdges
@@ -45,15 +56,20 @@ class window extends Application {
 
 		for (var j = 0; j < e.size; j++) {
 			println(e)
-			println(e.get(j).getNin.id + " - "+ e.get(j).getNout.id)
-		}
-		
+			println(e.get(j).getNin.id + " - " + e.get(j).getNout.id)
+
+			
+		}*/
+		cc.setCenterX(0)
+		cc.setCenterY(0)
+		cc.setRadius(this.width * 0.01)
 		//print(map.getG.getListNodes.get(11).coord )
 		//print(map.getG.dict_Edges.get("1911").weight)
 		// p.Astar(map.getG, map.getG.getListNodes.get(4), map.getG.getListNodes.get(10))
 		// println(map.poly().get(0))
 		// println(map.poly().get(1))
 		// println(map.poly().get(2))
+		
 	}
 
 	def start(primaryStage : Stage) { // throws Exception {
@@ -66,7 +82,7 @@ class window extends Application {
 		var polyline = new Polyline(points);
 
 		// create a Group
-		var group = new Group(map.poly());
+		 group = new Group(map.poly());
 		// var group = new Group(polyline);
 		// create a scene
 		
@@ -77,6 +93,38 @@ class window extends Application {
 			c.setRadius(this.width*0.01)
 			group.getChildren().add(c)
 		}
+		t = 0
+		//group.getChildren().add(cc)
+		drivers.add(new classicDriverBody(map))
+		group.getChildren().add(drivers.get(0).c)
+		var boucle : AnimationTimer = new AnimationTimer() {
+			
+			def handle(now : long) {
+				if (t == 80) {
+					drivers.add(new classicDriverBody(map))
+					group.getChildren().add(drivers.get(drivers.size - 1).c)
+					t = 0
+				}
+				for (var k = 0;k<drivers.size;k++){
+					drivers.get(k).positionToCoord
+					drivers.get(k).move(1)
+				}
+				/*var tps = now - t
+				t = now
+				println(tps)*/
+				//driver.c.setCenterX(driver.c.getCenterX + 1)
+				//driver.c.setCenterY(driver.c.getCenterY + 1)
+				
+				//driver.positionToCoord
+				//driver.move(1)
+				//cc.setCenterX(cc.getCenterX + 0.1)
+				//cc.setCenterY(cc.getCenterY + 0.1)
+				//throw new UnsupportedOperationException("TODO: auto-generated method stub")
+				t = t +1
+			}
+
+		}
+		boucle.start()
 		var scene = new Scene(group, this.length, this.width);
 
 		// set the scene
@@ -99,9 +147,10 @@ agent Agenttest {
 	on Initialize {
 		loggingName = "Agent - 1"
 		info("I'm starting")
-
+		
 		var win : window = new window()
 		win.show
+		info("I'm stop")
 		killMe
 	}
 }

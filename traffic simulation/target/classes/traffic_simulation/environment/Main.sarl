@@ -14,8 +14,10 @@ import io.sarl.bootstrap.SRE
  */
 class Main {
 	static def main(args : String*) {
+		//startexemple
 		
 		LauncherImpl::launchApplication(typeof(window), args)
+		
 	}
 
 	static def startexemple {

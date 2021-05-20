@@ -22,6 +22,7 @@ public class Map {
   
   private double l;
   
+  @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
   private double w;
   
   public Map(final double length, final double width) {
@@ -123,5 +124,14 @@ public class Map {
   
   public void setG(final Graph G) {
     this.G = G;
+  }
+  
+  @Pure
+  public double getW() {
+    return this.w;
+  }
+  
+  public void setW(final double w) {
+    this.w = w;
   }
 }

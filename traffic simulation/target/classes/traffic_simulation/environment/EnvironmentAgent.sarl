@@ -65,13 +65,13 @@ agent EnvironmentAgent {
 		}
 	}
 	
-	def startLoop {
+	/*def startLoop {
 		//Compute perceptions
 	}
 	
 	def endLoop {
 		startLoop();
-	}
+	}*/
 	
 //	on Influence { }
 // on Perception { }

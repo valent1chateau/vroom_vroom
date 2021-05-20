@@ -147,5 +147,14 @@ class Path {
 	def f(g : double, h : double) : double {
 		return g + h
 	}
+	
+	def show() {
+		println(pathNodes.size())
+		println(pathEdges.size())
+		for (var i = 0; i < pathEdges.size();i++){
+			
+			println(pathEdges.get(i).getNin.id + " - " + pathEdges.get(i).getNout.id)
+		}
+	}
 
 }

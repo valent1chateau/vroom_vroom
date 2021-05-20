@@ -29,6 +29,9 @@ import java.util.List
 import java.text.MessageFormat
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.awt.geom.Point2D
+import javafx.scene.shape.Circle
+import javafx.scene.paint.Color
+import java.util.Random
 
 /**
  * Object on the environment.
@@ -37,15 +40,90 @@ import java.awt.geom.Point2D
  * @version $Name$ $Revision$ $Date$
  */
  
-class Vehicle implements Body {
+abstract class Vehicle implements Body {
 	
 	var id : UUID
-	
+	@Accessors
+	var c : Circle
 	@Accessors
 	var coord : Point2D
 	
+	var acc : double
+	var speed : double
+	var maxSpeed : double
+	var position : double
+	var distance : double
+	var distanceMax : double
+	@Accessors
+	var path : Path
+	
+	new() {
+		path = new Path
+		position = 0.0
+		distance = 0.0
+		distanceMax = 0.0
+	}
+	
 	def getID(): UUID {
 		return this.id
+	}
+	
+	def positionToCoord(){
+		var e = path.pathEdges
+		var j = 0
+		var stop = false
+		var TotalWeight : double = 0.0
+		while (j < e.size() && stop == false) {
+			TotalWeight = TotalWeight + e.get(j).weight
+			if (position == 0){stop = true}
+			else if (position <= TotalWeight) {
+				var pos_edge : double 
+				var dist_edge : double = 0.0
+				if (j>0){
+					for (var i = 0; i < j; i++) {
+						dist_edge += e.get(i).weight
+					}
+					
+				}
+				pos_edge = position - dist_edge
+				var percent = pos_edge / e.get(j).weight
+				
+				var poly = e.get(j).getPoints()
+				var nbP = poly.size / 2
+				
+				var a : int =  Math.round(nbP*percent) as int
+				
+				if (a != 0) {
+					var ind = 2 * a - 2
+					
+					var x = poly.get(ind)
+					var y = poly.get(ind + 1)
+					coord.setLocation(x,y)
+					c.setCenterX(x)
+					c.setCenterY(y)
+				}
+				
+				stop = true
+				
+			}else if (position > distanceMax){
+				stop = true
+			}
+			j += 1
+		}
+	}
+	def move(X : double){
+		distance = X
+		position = position + distance
+	}
+	
+	def abstract newPath(G : Graph)
+		
+	def D_Max(){
+		var res: double = 0.0
+		for(var i = 0 ;i<path.pathEdges.size();i++){
+			res = res + path.pathEdges.get(i).weight
+		}
+		distanceMax = res
 	}
 	
 	def accelerate(): void {
@@ -62,5 +140,65 @@ class Vehicle implements Body {
 }
 
 class priorityVehicle extends Vehicle {
+	
+	def newPath(G : Graph) {
+		
+	}
+	
+}
+
+class classicDriverBody extends Vehicle{
+	
+	new( map : Map) {
+		super()
+		
+		newPath(map.getG)
+		var x = path.pathNodes.get(0).coord.getX()
+		var y = path.pathNodes.get(0).coord.getY()
+		coord = new Point2D.Double
+		c = new Circle
+		coord.setLocation(x, y)
+		c.setCenterX(x)
+		c.setCenterY(y)
+		c.setRadius(map.w * 0.01)
+		this.c.setFill(Color.RED)
+		D_Max()
+	}
+	
+	def newPath(G:Graph) {
+		var in : ArrayList<Node> = new ArrayList<Node>
+		var out : ArrayList<Node> = new ArrayList<Node>
+		for (var i = 0; i < G.getListNodes.size();i = i + 2){
+			
+			if(i == 0 || i == 6 || i == 10 || i == 16){
+				out.add(G.getListNodes.get(i))
+			} else {
+				in.add(G.getListNodes.get(i))
+			}
+		}
+		var rand : Random = new Random
+		var numIN : int = rand.nextInt(in.size())
+		var numOUT : int
+		
+		if (in.get(numIN).id == 2){
+			numOUT = 3
+		} else if (in.get(numIN).id == 12) {
+			numOUT = 1
+		}else{
+			if (in.get(numIN).id == 4) {
+				numOUT = 1 + rand.nextInt(2)
+			} else if (in.get(numIN).id == 8) {
+				numOUT = 1 + rand.nextInt(3)
+				if (numOUT == 1){ numOUT = 0}
+			} else if (in.get(numIN).id == 14) {
+				numOUT = 2 + rand.nextInt(2)
+				if (numOUT==2){numOUT=0}
+			} else if (in.get(numIN).id == 18) {
+				numOUT =  rand.nextInt(2)
+			}
+		}
+		
+		path.Astar(G,in.get(numIN),out.get(numOUT))
+	}
 	
 }

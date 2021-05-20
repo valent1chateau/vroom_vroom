@@ -9,6 +9,7 @@ class Map {
 	var G : Graph
 
 	var l : double
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
 	var w : double
 
 	new(length : double, width : double) {
