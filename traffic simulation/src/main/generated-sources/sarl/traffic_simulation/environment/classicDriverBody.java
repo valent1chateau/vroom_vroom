@@ -98,7 +98,7 @@ public class classicDriverBody extends Vehicle {
             } else {
               int _id_5 = in.get(numIN).getId();
               if ((_id_5 == 18)) {
-                numOUT = rand.nextInt(2);
+                numOUT = rand.nextInt(3);
               }
             }
           }
