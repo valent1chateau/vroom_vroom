@@ -51,6 +51,9 @@ public class priorityDriver extends Agent {
     _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.setLoggingName("priorityDriver");
     Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
     _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info("I\'m starting");
+    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_2 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
+    UUID _iD = this.getID();
+    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_2.info(("my priorityDriver id :" + _iD));
   }
   
   private void $behaviorUnit$light$1(final light occurrence) {

@@ -41,12 +41,14 @@ import java.util.Random
  */
  
 abstract class Vehicle implements Body {
-	
+	@Accessors
 	var id : UUID
 	@Accessors
 	var c : Circle
 	@Accessors
 	var coord : Point2D
+	@Accessors
+	var map : Map
 	
 	var acc : double
 	var speed : double
@@ -58,6 +60,7 @@ abstract class Vehicle implements Body {
 	var path : Path
 	
 	new() {
+		id = UUID.randomUUID()
 		path = new Path
 		position = 0.0
 		distance = 0.0
@@ -139,19 +142,18 @@ abstract class Vehicle implements Body {
 	}
 }
 
-class priorityVehicle extends Vehicle {
+class priorityVehicleBody extends Vehicle {
 	
 	def newPath(G : Graph) {
-		
+		var i:int 
 	}
 	
 }
 
 class classicDriverBody extends Vehicle{
 	
-	new( map : Map) {
+	new(map : Map) {
 		super()
-		
 		newPath(map.getG)
 		var x = path.pathNodes.get(0).coord.getX()
 		var y = path.pathNodes.get(0).coord.getY()
@@ -160,7 +162,7 @@ class classicDriverBody extends Vehicle{
 		coord.setLocation(x, y)
 		c.setCenterX(x)
 		c.setCenterY(y)
-		c.setRadius(map.w * 0.01)
+		c.setRadius(2.25)
 		this.c.setFill(Color.RED)
 		D_Max()
 	}
@@ -197,7 +199,6 @@ class classicDriverBody extends Vehicle{
 				numOUT =  rand.nextInt(3)
 			}
 		}
-		
 		path.Astar(G,in.get(numIN),out.get(numOUT))
 	}
 	

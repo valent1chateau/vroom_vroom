@@ -48,8 +48,7 @@ public class classicDriverBody extends Vehicle {
     this.getCoord().setLocation(x, y);
     this.getC().setCenterX(x);
     this.getC().setCenterY(y);
-    double _w = map.getW();
-    this.getC().setRadius((_w * 0.01));
+    this.getC().setRadius(2.25);
     this.getC().setFill(Color.RED);
     this.D_Max();
   }

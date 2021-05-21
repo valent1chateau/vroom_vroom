@@ -23,7 +23,6 @@ package traffic_simulation.environment;
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
-import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Environment;
@@ -45,13 +44,9 @@ public class WorldModelState {
    * @param environment
    */
   public WorldModelState(final Environment environment) {
-    ArrayList<SituatedObject> _arrayList = new ArrayList<SituatedObject>();
-    this.objects = _arrayList;
-    Iterable<? extends SituatedObject> _allObjects = environment.getAllObjects();
-    for (final SituatedObject o : _allObjects) {
-      SituatedObject _clone = o.clone();
-      this.objects.add(_clone);
-    }
+    throw new Error("Unresolved compilation problems:"
+      + "\nThe method or field allObjects is undefined for the type Environment"
+      + "\nclone cannot be resolved");
   }
   
   /**

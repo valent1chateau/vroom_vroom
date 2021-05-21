@@ -23,6 +23,8 @@ package traffic_simulation.environment
 import java.util.UUID
 
 import traffic_simulation.time.TimeManager
+import java.util.TreeMap
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /**
  * Situated environment.  
@@ -30,71 +32,30 @@ import traffic_simulation.time.TimeManager
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-interface Environment {
+class Environment {
+	var agentsToSpawn : int
 	
-	/** Replies the time manager of this environment.
-	 * 
-	 * @return the time manager of this environment.
-	 */
-	def getTimeManager : TimeManager
+	// Bodies
+	@Accessors
+	var bodyList : TreeMap<UUID, classicDriverBody>
+	@Accessors
+	var priorityVehicle : priorityVehicleBody
 	
-	/** Replies the width of the environment.
-	 * 
-	 * @return the width of the environment.
-	 */
-	def getWidth : float
+	var map : Map
 	
-	/** Replies the height of the environment.
-	 * 
-	 * @return the height of the environment.
-	 */
-	def getHeight : float
-	
-	/** Replies number of bodies in the environment.
-	 * 
-	 * @return the number of bodies in the environment.
-	 */
-	def getAgentBodyNumber : int
-
-	/** Replies the agent body associated to the given agent.
-	 * 
-	 * @param agentId
-	 * @return the agent body or <code>null</code>.
-	 */
-	 
-	//def getAgentBodyFor(agentId : UUID) : AgentBody 
-	
-	/** Replies the objects in the environment.
-	 *
-	 * The replied collection is unmodifiable.
-	 *
-	 * @return the objects in the environment.
-	 */
-	def getAllObjects : Iterable<? extends SituatedObject>
-
-	/** Replies the bodies in the environment.
-	 *
-	 * The replied collection is unmodifiable.
-	 *
-	 * @return the bodies in the environment.
-	 */
-	 
-	//def getAgentBodies : Iterable<? extends AgentBody>
-
-	/** Run the environment behaviour: apply influences, compute perceptions.
-	 */
-	def runBehaviour
-	
-	/** Add listener on environment events.
-	 * 
-	 * @param listener
-	 */
-	def addEnvironmentListener(listener : EnvironmentListener)
-
-	/** Remove listener on environment events.
-	 * 
-	 * @param listener
-	 */
-	def removeEnvironmentListener(listener : EnvironmentListener)
-	
+	new() {
+		bodyList = new TreeMap<UUID, classicDriverBody>
+		priorityVehicle = new priorityVehicleBody()
+		map = new Map(800,600)
+	}
+	def initEnvironment(agents:int){
+		agentsToSpawn = agents
+		var i = 0 
+		var currentV: classicDriverBody
+		while (i < agentsToSpawn - 1){
+			currentV = new classicDriverBody(this.map)
+			bodyList.put(currentV.ID,currentV)
+			i++
+		}
+	}
 }

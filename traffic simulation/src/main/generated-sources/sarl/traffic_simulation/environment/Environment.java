@@ -22,9 +22,14 @@ package traffic_simulation.environment;
 
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
-import traffic_simulation.environment.EnvironmentListener;
-import traffic_simulation.environment.SituatedObject;
-import traffic_simulation.time.TimeManager;
+import io.sarl.lang.annotation.SyntheticMember;
+import java.util.TreeMap;
+import java.util.UUID;
+import org.eclipse.xtend.lib.annotations.Accessors;
+import org.eclipse.xtext.xbase.lib.Pure;
+import traffic_simulation.environment.Map;
+import traffic_simulation.environment.classicDriverBody;
+import traffic_simulation.environment.priorityVehicleBody;
 
 /**
  * Situated environment.
@@ -33,62 +38,83 @@ import traffic_simulation.time.TimeManager;
  * @version $Name$ $Revision$ $Date$
  */
 @SarlSpecification("0.11")
-@SarlElementType(11)
+@SarlElementType(10)
 @SuppressWarnings("all")
-public interface Environment {
-  /**
-   * Replies the time manager of this environment.
-   * 
-   * @return the time manager of this environment.
-   */
-  public abstract TimeManager getTimeManager();
+public class Environment {
+  private int agentsToSpawn;
   
-  /**
-   * Replies the width of the environment.
-   * 
-   * @return the width of the environment.
-   */
-  public abstract float getWidth();
+  @Accessors
+  private TreeMap<UUID, classicDriverBody> bodyList;
   
-  /**
-   * Replies the height of the environment.
-   * 
-   * @return the height of the environment.
-   */
-  public abstract float getHeight();
+  @Accessors
+  private priorityVehicleBody priorityVehicle;
   
-  /**
-   * Replies number of bodies in the environment.
-   * 
-   * @return the number of bodies in the environment.
-   */
-  public abstract int getAgentBodyNumber();
+  private Map map;
   
-  /**
-   * Replies the objects in the environment.
-   * 
-   * The replied collection is unmodifiable.
-   * 
-   * @return the objects in the environment.
-   */
-  public abstract Iterable<? extends SituatedObject> getAllObjects();
+  public Environment() {
+    TreeMap<UUID, classicDriverBody> _treeMap = new TreeMap<UUID, classicDriverBody>();
+    this.bodyList = _treeMap;
+    priorityVehicleBody _priorityVehicleBody = new priorityVehicleBody();
+    this.priorityVehicle = _priorityVehicleBody;
+    Map _map = new Map(800, 600);
+    this.map = _map;
+  }
   
-  /**
-   * Run the environment behaviour: apply influences, compute perceptions.
-   */
-  public abstract void runBehaviour();
+  public void initEnvironment(final int agents) {
+    this.agentsToSpawn = agents;
+    int i = 0;
+    classicDriverBody currentV = null;
+    while ((i < (this.agentsToSpawn - 1))) {
+      {
+        classicDriverBody _classicDriverBody = new classicDriverBody(this.map);
+        currentV = _classicDriverBody;
+        this.bodyList.put(currentV.getID(), currentV);
+        i++;
+      }
+    }
+  }
   
-  /**
-   * Add listener on environment events.
-   * 
-   * @param listener
-   */
-  public abstract void addEnvironmentListener(final EnvironmentListener listener);
+  @Override
+  @Pure
+  @SyntheticMember
+  public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Environment other = (Environment) obj;
+    if (other.agentsToSpawn != this.agentsToSpawn)
+      return false;
+    return super.equals(obj);
+  }
   
-  /**
-   * Remove listener on environment events.
-   * 
-   * @param listener
-   */
-  public abstract void removeEnvironmentListener(final EnvironmentListener listener);
+  @Override
+  @Pure
+  @SyntheticMember
+  public int hashCode() {
+    int result = super.hashCode();
+    final int prime = 31;
+    result = prime * result + Integer.hashCode(this.agentsToSpawn);
+    return result;
+  }
+  
+  @Pure
+  public TreeMap<UUID, classicDriverBody> getBodyList() {
+    return this.bodyList;
+  }
+  
+  public void setBodyList(final TreeMap<UUID, classicDriverBody> bodyList) {
+    this.bodyList = bodyList;
+  }
+  
+  @Pure
+  public priorityVehicleBody getPriorityVehicle() {
+    return this.priorityVehicle;
+  }
+  
+  public void setPriorityVehicle(final priorityVehicleBody priorityVehicle) {
+    this.priorityVehicle = priorityVehicle;
+  }
 }

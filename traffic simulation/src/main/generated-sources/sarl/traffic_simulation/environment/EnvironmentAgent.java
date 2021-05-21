@@ -35,32 +35,41 @@ import io.sarl.lang.core.AtomicSkillReference;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.DynamicSkillProvider;
 import java.util.Collection;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
+import traffic_simulation.agent.classicDriver;
 import traffic_simulation.agent.light;
-import traffic_simulation.environment.Vehicle;
-import traffic_simulation.environment.priorityVehicle;
+import traffic_simulation.agent.priorityDriver;
+import traffic_simulation.environment.Environment;
+import traffic_simulation.environment.classicDriverBody;
 
 /**
  * This agent is managing the physic space.
- * 
- * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  */
 @SarlSpecification("0.11")
 @SarlElementType(19)
 @SuppressWarnings("all")
 public class EnvironmentAgent extends Agent {
+  private Environment environment;
+  
   private AtomicInteger spawnedReceived = new AtomicInteger(0);
   
-  private TreeMap<UUID, Vehicle> bodyList;
-  
-  private priorityVehicle priorityVehicle;
-  
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
+    Environment environment = new Environment();
+    environment.initEnvironment(10);
+    Set<Map.Entry<UUID, classicDriverBody>> _entrySet = environment.getBodyList().entrySet();
+    for (final Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
+      Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
+      DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+      _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.spawnInContextWithID(classicDriver.class, entry.getKey(), _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.getDefaultContext());
+    }
+    Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
+    _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER_1.spawn(priorityDriver.class);
   }
   
   private void $behaviorUnit$AgentSpawned$1(final AgentSpawned occurrence) {

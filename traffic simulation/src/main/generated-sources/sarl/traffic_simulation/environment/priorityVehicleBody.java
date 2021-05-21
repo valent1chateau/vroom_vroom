@@ -29,12 +29,13 @@ import traffic_simulation.environment.Vehicle;
 @SarlSpecification("0.11")
 @SarlElementType(10)
 @SuppressWarnings("all")
-public class priorityVehicle extends Vehicle {
+public class priorityVehicleBody extends Vehicle {
   public void newPath(final Graph G) {
+    int i = 0;
   }
   
   @SyntheticMember
-  public priorityVehicle() {
+  public priorityVehicleBody() {
     super();
   }
 }

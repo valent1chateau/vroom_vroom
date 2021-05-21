@@ -28,6 +28,7 @@ import javafx.animation.AnimationTimer
  * 
  */
 class window extends Application {
+		
 	var map : Map
 	var length : double
 	var width : double
@@ -38,7 +39,6 @@ class window extends Application {
 
 	new() {
 		//super()
-
 		this.length = 800
 		this.width = 600
 		map = new Map(this.length, this.width)

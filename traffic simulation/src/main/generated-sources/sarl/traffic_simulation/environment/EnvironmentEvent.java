@@ -59,8 +59,8 @@ public class EnvironmentEvent extends EventObject {
   }
   
   @SyntheticMember
-  public EnvironmentEvent(final Object source) {
-    super(source);
+  public EnvironmentEvent(final Object arg0) {
+    super(arg0);
   }
   
   @SyntheticMember

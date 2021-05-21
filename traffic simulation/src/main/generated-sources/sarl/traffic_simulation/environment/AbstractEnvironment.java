@@ -34,7 +34,7 @@ import traffic_simulation.environment.Environment;
 @SarlSpecification("0.11")
 @SarlElementType(10)
 @SuppressWarnings("all")
-public abstract class AbstractEnvironment implements Environment {
+public abstract class AbstractEnvironment extends Environment {
   @SyntheticMember
   public AbstractEnvironment() {
     super();
