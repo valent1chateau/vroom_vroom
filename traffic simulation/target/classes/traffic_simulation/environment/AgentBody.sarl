@@ -49,6 +49,8 @@ abstract class Vehicle implements Body {
 	var coord : Point2D
 	@Accessors
 	var map : Map
+	@Accessors
+	var edge : Edge
 	
 	var acc : double
 	var speed : double
@@ -78,6 +80,7 @@ abstract class Vehicle implements Body {
 		var TotalWeight : double = 0.0
 		while (j < e.size() && stop == false) {
 			TotalWeight = TotalWeight + e.get(j).weight
+			
 			if (position == 0){stop = true}
 			else if (position <= TotalWeight) {
 				var pos_edge : double 
@@ -105,10 +108,21 @@ abstract class Vehicle implements Body {
 					c.setCenterX(x)
 					c.setCenterY(y)
 				}
+
+				if (e.get(j).id_ != this.edge.id_) {
+		
+					edge.removeBody(this)
+					
+					edge = e.get(j)
+					edge.addBody(this)
+					
+					
+				}
 				
 				stop = true
 				
-			}else if (position > distanceMax){
+			} else if (position > distanceMax) {
+				edge.removeBody(this)
 				stop = true
 			}
 			j += 1
@@ -165,6 +179,8 @@ class classicDriverBody extends Vehicle{
 		c.setRadius(2.25)
 		this.c.setFill(Color.RED)
 		D_Max()
+		edge = path.pathEdges.get(0)
+		edge.addBody(this)
 	}
 	
 	def newPath(G:Graph) {

@@ -20,7 +20,7 @@
  */
 package traffic_simulation.gui
 
-import traffic_simulation.environment.WorldModelState
+//import traffic_simulation.environment.WorldModelState
 
 // import traffic_simulation.math.Point2f
 
@@ -55,6 +55,6 @@ interface WorldModelStateProvider {
 	 * 
 	 * @return the state of the world model.
 	 */
-	def getState : WorldModelState 
+	//def getState : WorldModelState 
 
 }

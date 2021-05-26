@@ -21,7 +21,7 @@
 package traffic_simulation.gui
 
 import traffic_simulation.environment.EnvironmentEvent
-import traffic_simulation.environment.WorldModelState
+//import traffic_simulation.environment.WorldModelState
 
 /* import traffic_simulation.math.Circle2f
  * import traffic_simulation.math.Point2f

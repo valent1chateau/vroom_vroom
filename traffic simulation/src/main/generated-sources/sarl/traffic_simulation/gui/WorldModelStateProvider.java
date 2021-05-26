@@ -22,7 +22,6 @@ package traffic_simulation.gui;
 
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
-import traffic_simulation.environment.WorldModelState;
 
 /**
  * State provider for the world model.
@@ -47,11 +46,4 @@ public interface WorldModelStateProvider {
    * @return the height of the environment.
    */
   public abstract float getHeight();
-  
-  /**
-   * Replies the state of the world model.
-   * 
-   * @return the state of the world model.
-   */
-  public abstract WorldModelState getState();
 }

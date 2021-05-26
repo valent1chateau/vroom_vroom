@@ -29,13 +29,14 @@ import java.util.List
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-class WorldModelState {
+
+/*class WorldModelState {
 
 	val objects : List<SituatedObject> 
 	
 	/**
 	 * @param environment
-	 */
+	 
 	new(environment : Environment) {
 		this.objects = new ArrayList
 		for (o : environment.allObjects) {
@@ -46,9 +47,9 @@ class WorldModelState {
 	/** Replies the objects in the environment.
 	 * 
 	 * @return the objects in the environment.
-	 */
+	 
 	def getObjects : Iterable<SituatedObject> {
 		this.objects
 	}
 
-}
+}*/

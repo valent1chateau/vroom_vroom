@@ -21,7 +21,7 @@
 package traffic_simulation.gui;
 
 import traffic_simulation.environment.EnvironmentListener
-import traffic_simulation.environment.WorldModelState
+//import traffic_simulation.environment.WorldModelState
 // import traffic_simulation.math.Point2f
 // import traffic_simulation.math.Shape2f
 // import traffic_simulation.math.Vector2f
@@ -78,7 +78,7 @@ interface FrameworkGUI extends EnvironmentListener {
 	 * 
 	 * @return the last environment state.
 	 */
-	def getLastWorldState : WorldModelState
+	//def getLastWorldState : WorldModelState
 
 	/** Convert the coordinates in the MAS into the equivalent coordinates on the screen.
 	 * 

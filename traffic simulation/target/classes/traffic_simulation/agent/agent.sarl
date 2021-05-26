@@ -35,7 +35,7 @@ import io.sarl.core.AgentSpawned
 
 import java.util.concurrent.atomic.AtomicInteger
 
-import traffic_simulation.environment.AbstractEnvironment
+//import traffic_simulation.environment.AbstractEnvironment
 
 event light{
 	var l : String

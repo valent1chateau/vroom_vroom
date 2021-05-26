@@ -37,12 +37,23 @@ class Edge extends Polyline {
 	var nbVoies : int
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
 	var weight : double
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var bodies : ArrayList<Vehicle>
 
 	new (i : int, in_ : Node, out_ : Node) {
 		super()
 		this.id_ = i
 		this.Nin = in_
 		this.Nout = out_
+		this.bodies = new ArrayList<Vehicle>
 	}
-
+	
+	def addBody(v : Vehicle) {
+		
+		bodies.add(v)
+	}
+	
+	def removeBody(v : Vehicle){
+		bodies.remove(v)
+	}
 }

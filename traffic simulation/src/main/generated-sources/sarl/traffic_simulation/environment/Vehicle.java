@@ -59,6 +59,9 @@ public abstract class Vehicle implements Body {
   @Accessors
   private Map map;
   
+  @Accessors
+  private Edge edge;
+  
   private double acc;
   
   private double speed;
@@ -124,9 +127,17 @@ public abstract class Vehicle implements Body {
               this.c.setCenterX(((x) == null ? 0 : (x).doubleValue()));
               this.c.setCenterY(((y) == null ? 0 : (y).doubleValue()));
             }
+            int _id_ = e.get(j).getId_();
+            int _id__1 = this.edge.getId_();
+            if ((_id_ != _id__1)) {
+              this.edge.removeBody(this);
+              this.edge = e.get(j);
+              this.edge.addBody(this);
+            }
             stop = true;
           } else {
             if ((this.position > this.distanceMax)) {
+              this.edge.removeBody(this);
               stop = true;
             }
           }
@@ -247,6 +258,15 @@ public abstract class Vehicle implements Body {
   
   public void setMap(final Map map) {
     this.map = map;
+  }
+  
+  @Pure
+  public Edge getEdge() {
+    return this.edge;
+  }
+  
+  public void setEdge(final Edge edge) {
+    this.edge = edge;
   }
   
   @Pure

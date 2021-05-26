@@ -40,7 +40,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
-abstract class AbstractEnvironment implements Environment {
+
+/*abstract class AbstractEnvironment implements Environment {
 	
 
-}
+}*/

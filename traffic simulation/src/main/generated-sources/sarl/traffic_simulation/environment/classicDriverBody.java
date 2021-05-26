@@ -51,6 +51,8 @@ public class classicDriverBody extends Vehicle {
     this.getC().setRadius(2.25);
     this.getC().setFill(Color.RED);
     this.D_Max();
+    this.setEdge(this.getPath().getPathEdges().get(0));
+    this.getEdge().addBody(this);
   }
   
   public void newPath(final Graph G) {

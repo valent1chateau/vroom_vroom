@@ -25,7 +25,6 @@ import io.sarl.lang.annotation.SarlSpecification;
 import java.awt.Graphics2D;
 import org.eclipse.xtext.xbase.lib.Procedures.Procedure0;
 import traffic_simulation.environment.EnvironmentListener;
-import traffic_simulation.environment.WorldModelState;
 
 /**
  * GUI for the simulation framework.
@@ -76,13 +75,6 @@ public interface FrameworkGUI extends EnvironmentListener {
    * @return the height.
    */
   public abstract float getWorldHeight();
-  
-  /**
-   * Replies the last environment state.
-   * 
-   * @return the last environment state.
-   */
-  public abstract WorldModelState getLastWorldState();
   
   /**
    * Convert the size in the MAS into the equivalent size on the screen.

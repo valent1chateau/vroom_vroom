@@ -3,11 +3,13 @@ package traffic_simulation.environment;
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
+import java.util.ArrayList;
 import javafx.scene.shape.Polyline;
 import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Node;
+import traffic_simulation.environment.Vehicle;
 
 @SarlSpecification("0.11")
 @SarlElementType(10)
@@ -28,11 +30,24 @@ public class Edge extends Polyline {
   @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
   private double weight;
   
+  @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
+  private ArrayList<Vehicle> bodies;
+  
   public Edge(final int i, final Node in_, final Node out_) {
     super();
     this.id_ = i;
     this.Nin = in_;
     this.Nout = out_;
+    ArrayList<Vehicle> _arrayList = new ArrayList<Vehicle>();
+    this.bodies = _arrayList;
+  }
+  
+  public boolean addBody(final Vehicle v) {
+    return this.bodies.add(v);
+  }
+  
+  public boolean removeBody(final Vehicle v) {
+    return this.bodies.remove(v);
   }
   
   @Override
@@ -110,5 +125,14 @@ public class Edge extends Polyline {
   
   public void setWeight(final double weight) {
     this.weight = weight;
+  }
+  
+  @Pure
+  public ArrayList<Vehicle> getBodies() {
+    return this.bodies;
+  }
+  
+  public void setBodies(final ArrayList<Vehicle> bodies) {
+    this.bodies = bodies;
   }
 }
