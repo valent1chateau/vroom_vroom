@@ -47,8 +47,7 @@ abstract class Vehicle implements Body {
 	var c : Circle
 	@Accessors
 	var coord : Point2D
-	@Accessors
-	var map : Map
+
 	@Accessors
 	var edge : Edge
 	

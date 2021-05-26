@@ -42,18 +42,18 @@ public class WorldPanel extends JPanel {
   }
   
   @SyntheticMember
-  public WorldPanel(final boolean isDoubleBuffered) {
-    super(isDoubleBuffered);
+  public WorldPanel(final boolean arg0) {
+    super(arg0);
   }
   
   @SyntheticMember
-  public WorldPanel(final LayoutManager layout) {
-    super(layout);
+  public WorldPanel(final LayoutManager arg0) {
+    super(arg0);
   }
   
   @SyntheticMember
-  public WorldPanel(final LayoutManager layout, final boolean isDoubleBuffered) {
-    super(layout, isDoubleBuffered);
+  public WorldPanel(final LayoutManager arg0, final boolean arg1) {
+    super(arg0, arg1);
   }
   
   @SyntheticMember

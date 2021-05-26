@@ -43,18 +43,18 @@ public abstract class AbstractFrameworkGUI extends JFrame implements FrameworkGU
   }
   
   @SyntheticMember
-  public AbstractFrameworkGUI(final GraphicsConfiguration gc) {
-    super(gc);
+  public AbstractFrameworkGUI(final GraphicsConfiguration arg0) {
+    super(arg0);
   }
   
   @SyntheticMember
-  public AbstractFrameworkGUI(final String title) {
-    super(title);
+  public AbstractFrameworkGUI(final String arg0) {
+    super(arg0);
   }
   
   @SyntheticMember
-  public AbstractFrameworkGUI(final String title, final GraphicsConfiguration gc) {
-    super(title, gc);
+  public AbstractFrameworkGUI(final String arg0, final GraphicsConfiguration arg1) {
+    super(arg0, arg1);
   }
   
   @SyntheticMember

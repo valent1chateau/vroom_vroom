@@ -4,6 +4,8 @@ import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
 import java.awt.geom.Point2D;
+import java.util.Objects;
+import java.util.UUID;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Pure;
 
@@ -11,6 +13,9 @@ import org.eclipse.xtext.xbase.lib.Pure;
 @SarlElementType(10)
 @SuppressWarnings("all")
 public class trafficObject {
+  @Accessors
+  private UUID id;
+  
   @Accessors
   private Point2D coord;
   
@@ -23,6 +28,15 @@ public class trafficObject {
   @Pure
   @SyntheticMember
   public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    trafficObject other = (trafficObject) obj;
+    if (!Objects.equals(this.id, other.id))
+      return false;
     return super.equals(obj);
   }
   
@@ -31,7 +45,18 @@ public class trafficObject {
   @SyntheticMember
   public int hashCode() {
     int result = super.hashCode();
+    final int prime = 31;
+    result = prime * result + Objects.hashCode(this.id);
     return result;
+  }
+  
+  @Pure
+  public UUID getId() {
+    return this.id;
+  }
+  
+  public void setId(final UUID id) {
+    this.id = id;
   }
   
   @Pure

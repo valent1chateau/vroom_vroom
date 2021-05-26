@@ -34,7 +34,6 @@ import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Body;
 import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Graph;
-import traffic_simulation.environment.Map;
 import traffic_simulation.environment.Path;
 
 /**
@@ -55,9 +54,6 @@ public abstract class Vehicle implements Body {
   
   @Accessors
   private Point2D coord;
-  
-  @Accessors
-  private Map map;
   
   @Accessors
   private Edge edge;
@@ -249,15 +245,6 @@ public abstract class Vehicle implements Body {
   
   public void setCoord(final Point2D coord) {
     this.coord = coord;
-  }
-  
-  @Pure
-  public Map getMap() {
-    return this.map;
-  }
-  
-  public void setMap(final Map map) {
-    this.map = map;
   }
   
   @Pure
