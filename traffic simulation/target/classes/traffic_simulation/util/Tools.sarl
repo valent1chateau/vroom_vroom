@@ -42,4 +42,28 @@ class Tools {
 		}
 		return I
 	}
+	
+	def accelerationFree(a:double,Va:double,V0:double) : double{
+		var res : double
+		res = a*(1 - (Va/V0)**4)
+		return res
+	}
+	
+	def accelerationInt(a : double, Va : double, b : double,Sa:double,S0:double,delta:double,T:double) : double {
+		var res : double
+		res = -a*(((S0+Va*T)/Sa) + ((Va*delta)/(2*Math.sqrt(a*b)*Sa)))**2
+		return res
+	}
+	
+	def calc_position(v:double, t : double) : double{
+		var res : double
+		res = v * t
+		return res
+	}
+	
+	def calc_speed(acc : double, t : double) : double {
+		var res : double
+		res = acc * t 
+		return res
+	}
 }

@@ -34,6 +34,7 @@ class window extends Application {
 	var width : double
 	var cc : Circle = new Circle()
 	var t : long
+	var dt : double = 0.5
 	var group : Group
 	var drivers : ArrayList<classicDriverBody>
 
@@ -94,20 +95,24 @@ class window extends Application {
 			group.getChildren().add(c)
 		}
 		t = 0
+		
 		//group.getChildren().add(cc)
 		drivers.add(new classicDriverBody(map))
 		group.getChildren().add(drivers.get(0).c)
 		var boucle : AnimationTimer = new AnimationTimer() {
 			
 			def handle(now : long) {
-				if (t == 80) {
+				
+				
+				if (t == 40) {
 					drivers.add(new classicDriverBody(map))
 					group.getChildren().add(drivers.get(drivers.size - 1).c)
 					t = 0
 				}
 				for (var k = 0;k<drivers.size;k++){
-					drivers.get(k).positionToCoord
-					drivers.get(k).move(1)
+					drivers.get(k).accelerateFree(0.5)
+					//drivers.get(k).positionToCoord
+					//drivers.get(k).move(1)
 				}
 				/*var tps = now - t
 				t = now

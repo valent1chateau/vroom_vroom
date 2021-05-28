@@ -58,4 +58,35 @@ public class Tools {
     }
     return I;
   }
+  
+  @Pure
+  public double accelerationFree(final double a, final double Va, final double V0) {
+    double res = 0;
+    double _power = Math.pow((Va / V0), 4);
+    res = (a * (1 - _power));
+    return res;
+  }
+  
+  @Pure
+  public double accelerationInt(final double a, final double Va, final double b, final double Sa, final double S0, final double delta, final double T) {
+    double res = 0;
+    double _sqrt = Math.sqrt((a * b));
+    double _power = Math.pow((((S0 + (Va * T)) / Sa) + ((Va * delta) / ((2 * _sqrt) * Sa))), 2);
+    res = ((-a) * _power);
+    return res;
+  }
+  
+  @Pure
+  public double calc_position(final double v, final double t) {
+    double res = 0;
+    res = (v * t);
+    return res;
+  }
+  
+  @Pure
+  public double calc_speed(final double acc, final double t) {
+    double res = 0;
+    res = (acc * t);
+    return res;
+  }
 }

@@ -1,0 +1,52 @@
+/** 
+ * 
+ */
+package traffic_simulation.gui
+
+import traffic_simulation.environment.Window2
+import traffic_simulation.environment.Environment
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+
+
+import javafx.^event.ActionEvent
+import javafx.^event.EventHandler
+
+/** 
+ * @author jeome
+ * 
+ */
+class Menu extends Application{
+	var button : Button
+	var win : Window2
+	var env : Environment
+	new(){
+		//super()
+		env = new Environment()
+		win = new Window2(env)
+		button = new Button("Play")
+		button.setOnAction( new EventHandler<ActionEvent> {
+
+			def handle(e : ActionEvent) {
+				// throw new UnsupportedOperationException("TODO: auto-generated method stub")
+				win.show()
+				
+			}
+	
+	
+		})	
+	
+	}
+	
+	
+	def start(primaryStage : Stage) throws Exception {
+		// throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		var scene = new Scene(button, 200, 100);
+		primaryStage.setScene(scene);
+		primaryStage.show();
+	}
+	
+}
+

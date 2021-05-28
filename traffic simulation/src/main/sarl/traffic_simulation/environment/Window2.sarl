@@ -1,0 +1,99 @@
+/** 
+ * 
+ */
+package traffic_simulation.environment
+
+import com.sun.javafx.application.LauncherImpl
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Polyline;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+import javafx.scene.Group;
+import javafx.scene.shape.Circle
+
+import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
+import io.sarl.core.DefaultContextInteractions
+import java.util.ArrayList
+import javafx.animation.AnimationTimer
+
+/** 
+ * @author jeome
+ * 
+ */
+class Window2 extends Stage {
+	var env : Environment
+	var map : Map
+	var length : double
+	var width : double
+	var cc : Circle = new Circle()
+	var t : long
+	var dt : double = 0.5
+	var group : Group
+	var drivers : ArrayList<classicDriverBody>
+
+	new(e : Environment) {
+		// super()
+		this.length = 800
+		this.width = 600
+		map = new Map(this.length, this.width)
+		drivers = new ArrayList<classicDriverBody>
+
+		this.setTitle("window2")
+		
+		
+
+		
+		// create a Group
+		 group = new Group(map.poly());
+		
+		
+		for (var i = 0; i < map.getG.getListNodes.size(); i++) {
+			var c : Circle = new Circle()
+			c.setCenterX(map.getG.getListNodes.get(i).coord.getX())
+			c.setCenterY(map.getG.getListNodes.get(i).coord.getY())
+			c.setRadius(this.width * 0.01)
+			group.getChildren().add(c)
+		}
+		t = 0
+
+		// group.getChildren().add(cc)
+		drivers.add(new classicDriverBody(map))
+		group.getChildren().add(drivers.get(0).c)
+		var boucle : AnimationTimer = new AnimationTimer() {
+
+			def handle(now : long) {
+
+				if (t == 40) {
+					drivers.add(new classicDriverBody(map))
+					group.getChildren().add(drivers.get(drivers.size - 1).c)
+					t = 0
+				}
+				for (var k = 0; k < drivers.size; k++) {
+					drivers.get(k).accelerateFree(0.5)
+					//drivers.get(k).positionToCoord
+					// drivers.get(k).move(1)
+				}
+				
+				// throw new UnsupportedOperationException("TODO: auto-generated method stub")
+				t = t + 1
+			}
+
+		}
+		boucle.start()
+		var scene = new Scene(group, this.length, this.width);
+
+		// set the scene
+		this.setScene(scene);
+
+		//primaryStage.show();
+		
+		
+	}
+	
+}

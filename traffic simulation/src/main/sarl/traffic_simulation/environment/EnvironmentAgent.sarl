@@ -41,6 +41,7 @@ import java.util.TreeMap
  * This agent is managing the physic space.
  */
 agent EnvironmentAgent {
+	
 	uses  Lifecycle, DefaultContextInteractions, Logging
 	
 	var environment : Environment

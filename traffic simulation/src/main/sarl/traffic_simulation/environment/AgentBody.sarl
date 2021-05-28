@@ -19,7 +19,7 @@
  * This program is free software; you can redistribute it and/or modify
  */
 package traffic_simulation.environment
-
+import traffic_simulation.util.Tools
 // import traffic_simulation.math.Shape2f
 import java.util.ArrayList
 import java.util.UUID
@@ -41,6 +41,7 @@ import java.util.Random
  */
  
 abstract class Vehicle implements Body {
+	var tool : Tools = new Tools
 	@Accessors
 	var id : UUID
 	@Accessors
@@ -50,9 +51,14 @@ abstract class Vehicle implements Body {
 
 	@Accessors
 	var edge : Edge
-	
+
+	@Accessors
+	var accMax : double
+	@Accessors
 	var acc : double
+	@Accessors
 	var speed : double
+	@Accessors
 	var maxSpeed : double
 	var position : double
 	var distance : double
@@ -66,6 +72,8 @@ abstract class Vehicle implements Body {
 		position = 0.0
 		distance = 0.0
 		distanceMax = 0.0
+		speed = 0.0
+		acc = 0.0
 	}
 	
 	def getID(): UUID {
@@ -142,6 +150,17 @@ abstract class Vehicle implements Body {
 		distanceMax = res
 	}
 	
+	def accelerateFree(t:double){
+		if (speed < maxSpeed){
+		acc = tool.accelerationFree(accMax, speed,maxSpeed)
+		speed = speed + tool.calc_speed(acc,t)}
+		this.move(tool.calc_position(speed, t))
+		positionToCoord()
+		//println(acc)
+		//println(speed)
+		//println(tool.calc_position(speed, t))
+	}
+	
 	def accelerate(): void {
 		
 	}
@@ -180,6 +199,8 @@ class classicDriverBody extends Vehicle{
 		D_Max()
 		edge = path.pathEdges.get(0)
 		edge.addBody(this)
+		accMax = 0.73
+		maxSpeed = 13.8
 	}
 	
 	def newPath(G:Graph) {

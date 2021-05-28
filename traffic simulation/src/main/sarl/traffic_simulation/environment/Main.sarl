@@ -5,6 +5,7 @@ package traffic_simulation.environment
 import traffic_simulation.util.Tools
 import com.sun.javafx.application.LauncherImpl
 import io.sarl.bootstrap.SRE
+import traffic_simulation.gui.Menu
 
 // import org.apache.commons.math4.analysis.integration.TrapezoidIntegrator
 
@@ -16,7 +17,8 @@ class Main {
 	static def main(args : String*) {
 		//startexemple
 		
-		LauncherImpl::launchApplication(typeof(window), args)
+		//LauncherImpl::launchApplication(typeof(window), args)
+		LauncherImpl::launchApplication(typeof(Menu), args)
 		
 	}
 

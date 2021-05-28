@@ -35,6 +35,8 @@ public class window extends Application {
   
   private long t;
   
+  private double dt = 0.5;
+  
   private Group group;
   
   private ArrayList<classicDriverBody> drivers;
@@ -77,7 +79,7 @@ public class window extends Application {
     this.group.getChildren().add(this.drivers.get(0).getC());
     AnimationTimer boucle = new __window_0() {
       public void handle(final long now) {
-        if ((window.this.t == 80)) {
+        if ((window.this.t == 40)) {
           classicDriverBody _classicDriverBody = new classicDriverBody(window.this.map);
           window.this.drivers.add(_classicDriverBody);
           int _size = window.this.drivers.size();
@@ -85,10 +87,7 @@ public class window extends Application {
           window.this.t = 0;
         }
         for (int k = 0; (k < window.this.drivers.size()); k++) {
-          {
-            window.this.drivers.get(k).positionToCoord();
-            window.this.drivers.get(k).move(1);
-          }
+          window.this.drivers.get(k).accelerateFree(0.5);
         }
         window.this.t = (window.this.t + 1);
       }
@@ -120,6 +119,8 @@ public class window extends Application {
       return false;
     if (other.t != this.t)
       return false;
+    if (Double.doubleToLongBits(other.dt) != Double.doubleToLongBits(this.dt))
+      return false;
     return super.equals(obj);
   }
   
@@ -132,6 +133,7 @@ public class window extends Application {
     result = prime * result + Double.hashCode(this.length);
     result = prime * result + Double.hashCode(this.width);
     result = prime * result + Long.hashCode(this.t);
+    result = prime * result + Double.hashCode(this.dt);
     return result;
   }
 }

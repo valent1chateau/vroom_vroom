@@ -35,6 +35,7 @@ import traffic_simulation.environment.Body;
 import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Graph;
 import traffic_simulation.environment.Path;
+import traffic_simulation.util.Tools;
 
 /**
  * Object on the environment.
@@ -46,6 +47,8 @@ import traffic_simulation.environment.Path;
 @SarlElementType(10)
 @SuppressWarnings("all")
 public abstract class Vehicle implements Body {
+  private Tools tool = new Tools();
+  
   @Accessors
   private UUID id;
   
@@ -58,10 +61,16 @@ public abstract class Vehicle implements Body {
   @Accessors
   private Edge edge;
   
+  @Accessors
+  private double accMax;
+  
+  @Accessors
   private double acc;
   
+  @Accessors
   private double speed;
   
+  @Accessors
   private double maxSpeed;
   
   private double position;
@@ -80,6 +89,8 @@ public abstract class Vehicle implements Body {
     this.position = 0.0;
     this.distance = 0.0;
     this.distanceMax = 0.0;
+    this.speed = 0.0;
+    this.acc = 0.0;
   }
   
   public UUID getID() {
@@ -167,6 +178,16 @@ public abstract class Vehicle implements Body {
     return _xblockexpression;
   }
   
+  public void accelerateFree(final double t) {
+    if ((this.speed < this.maxSpeed)) {
+      this.acc = this.tool.accelerationFree(this.accMax, this.speed, this.maxSpeed);
+      double _calc_speed = this.tool.calc_speed(this.acc, t);
+      this.speed = (this.speed + _calc_speed);
+    }
+    this.move(this.tool.calc_position(this.speed, t));
+    this.positionToCoord();
+  }
+  
   public void accelerate() {
   }
   
@@ -188,6 +209,8 @@ public abstract class Vehicle implements Body {
       return false;
     Vehicle other = (Vehicle) obj;
     if (!Objects.equals(this.id, other.id))
+      return false;
+    if (Double.doubleToLongBits(other.accMax) != Double.doubleToLongBits(this.accMax))
       return false;
     if (Double.doubleToLongBits(other.acc) != Double.doubleToLongBits(this.acc))
       return false;
@@ -211,6 +234,7 @@ public abstract class Vehicle implements Body {
     int result = super.hashCode();
     final int prime = 31;
     result = prime * result + Objects.hashCode(this.id);
+    result = prime * result + Double.hashCode(this.accMax);
     result = prime * result + Double.hashCode(this.acc);
     result = prime * result + Double.hashCode(this.speed);
     result = prime * result + Double.hashCode(this.maxSpeed);
@@ -254,6 +278,42 @@ public abstract class Vehicle implements Body {
   
   public void setEdge(final Edge edge) {
     this.edge = edge;
+  }
+  
+  @Pure
+  public double getAccMax() {
+    return this.accMax;
+  }
+  
+  public void setAccMax(final double accMax) {
+    this.accMax = accMax;
+  }
+  
+  @Pure
+  public double getAcc() {
+    return this.acc;
+  }
+  
+  public void setAcc(final double acc) {
+    this.acc = acc;
+  }
+  
+  @Pure
+  public double getSpeed() {
+    return this.speed;
+  }
+  
+  public void setSpeed(final double speed) {
+    this.speed = speed;
+  }
+  
+  @Pure
+  public double getMaxSpeed() {
+    return this.maxSpeed;
+  }
+  
+  public void setMaxSpeed(final double maxSpeed) {
+    this.maxSpeed = maxSpeed;
   }
   
   @Pure

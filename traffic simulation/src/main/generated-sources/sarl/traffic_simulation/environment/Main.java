@@ -8,7 +8,7 @@ import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import traffic_simulation.environment.Agenttest;
-import traffic_simulation.environment.window;
+import traffic_simulation.gui.Menu;
 
 /**
  * @author jeome
@@ -18,7 +18,7 @@ import traffic_simulation.environment.window;
 @SuppressWarnings("all")
 public class Main {
   public static void main(final String... args) {
-    LauncherImpl.launchApplication(window.class, args);
+    LauncherImpl.launchApplication(Menu.class, args);
   }
   
   public static void startexemple() {

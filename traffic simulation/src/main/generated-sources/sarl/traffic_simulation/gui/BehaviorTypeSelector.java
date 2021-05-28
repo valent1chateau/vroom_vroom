@@ -45,78 +45,78 @@ public class BehaviorTypeSelector extends JDialog {
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Dialog arg0) {
-    super(arg0);
+  public BehaviorTypeSelector(final Dialog owner) {
+    super(owner);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Frame arg0) {
-    super(arg0);
+  public BehaviorTypeSelector(final Frame owner) {
+    super(owner);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Window arg0) {
-    super(arg0);
+  public BehaviorTypeSelector(final Window owner) {
+    super(owner);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Dialog arg0, final boolean arg1) {
-    super(arg0, arg1);
+  public BehaviorTypeSelector(final Dialog owner, final boolean modal) {
+    super(owner, modal);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Dialog arg0, final String arg1) {
-    super(arg0, arg1);
+  public BehaviorTypeSelector(final Dialog owner, final String title) {
+    super(owner, title);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Frame arg0, final boolean arg1) {
-    super(arg0, arg1);
+  public BehaviorTypeSelector(final Frame owner, final boolean modal) {
+    super(owner, modal);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Frame arg0, final String arg1) {
-    super(arg0, arg1);
+  public BehaviorTypeSelector(final Frame owner, final String title) {
+    super(owner, title);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Window arg0, final Dialog.ModalityType arg1) {
-    super(arg0, arg1);
+  public BehaviorTypeSelector(final Window owner, final Dialog.ModalityType modalityType) {
+    super(owner, modalityType);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Window arg0, final String arg1) {
-    super(arg0, arg1);
+  public BehaviorTypeSelector(final Window owner, final String title) {
+    super(owner, title);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Dialog arg0, final String arg1, final boolean arg2) {
-    super(arg0, arg1, arg2);
+  public BehaviorTypeSelector(final Dialog owner, final String title, final boolean modal) {
+    super(owner, title, modal);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Frame arg0, final String arg1, final boolean arg2) {
-    super(arg0, arg1, arg2);
+  public BehaviorTypeSelector(final Frame owner, final String title, final boolean modal) {
+    super(owner, title, modal);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Window arg0, final String arg1, final Dialog.ModalityType arg2) {
-    super(arg0, arg1, arg2);
+  public BehaviorTypeSelector(final Window owner, final String title, final Dialog.ModalityType modalityType) {
+    super(owner, title, modalityType);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Dialog arg0, final String arg1, final boolean arg2, final GraphicsConfiguration arg3) {
-    super(arg0, arg1, arg2, arg3);
+  public BehaviorTypeSelector(final Dialog owner, final String title, final boolean modal, final GraphicsConfiguration gc) {
+    super(owner, title, modal, gc);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Frame arg0, final String arg1, final boolean arg2, final GraphicsConfiguration arg3) {
-    super(arg0, arg1, arg2, arg3);
+  public BehaviorTypeSelector(final Frame owner, final String title, final boolean modal, final GraphicsConfiguration gc) {
+    super(owner, title, modal, gc);
   }
   
   @SyntheticMember
-  public BehaviorTypeSelector(final Window arg0, final String arg1, final Dialog.ModalityType arg2, final GraphicsConfiguration arg3) {
-    super(arg0, arg1, arg2, arg3);
+  public BehaviorTypeSelector(final Window owner, final String title, final Dialog.ModalityType modalityType, final GraphicsConfiguration gc) {
+    super(owner, title, modalityType, gc);
   }
   
   @SyntheticMember
