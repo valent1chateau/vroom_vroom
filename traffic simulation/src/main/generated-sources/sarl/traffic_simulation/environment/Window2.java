@@ -47,8 +47,8 @@ public class Window2 extends Stage {
       public abstract void handle(final long now);
     }
     
-    this.length = 800;
-    this.width = 600;
+    this.length = 1600;
+    this.width = 900;
     Map _map = new Map(this.length, this.width);
     this.map = _map;
     ArrayList<classicDriverBody> _arrayList = new ArrayList<classicDriverBody>();
@@ -72,7 +72,7 @@ public class Window2 extends Stage {
     this.group.getChildren().add(this.drivers.get(0).getC());
     AnimationTimer boucle = new __Window2_0() {
       public void handle(final long now) {
-        if ((Window2.this.t == 40)) {
+        if ((Window2.this.t == 10)) {
           classicDriverBody _classicDriverBody = new classicDriverBody(Window2.this.map);
           Window2.this.drivers.add(_classicDriverBody);
           int _size = Window2.this.drivers.size();

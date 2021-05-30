@@ -30,6 +30,7 @@ import javafx.scene.shape.Circle;
 import traffic_simulation.environment.Graph;
 import traffic_simulation.environment.Map;
 import traffic_simulation.environment.Node;
+import traffic_simulation.environment.Perception;
 import traffic_simulation.environment.Vehicle;
 
 @SarlSpecification("0.11")
@@ -49,12 +50,16 @@ public class classicDriverBody extends Vehicle {
     this.getC().setCenterX(x);
     this.getC().setCenterY(y);
     this.getC().setRadius(2.25);
+    this.setDim((2 * 2.25));
     this.getC().setFill(Color.RED);
     this.D_Max();
     this.setEdge(this.getPath().getPathEdges().get(0));
     this.getEdge().addBody(this);
     this.setAccMax(0.73);
     this.setMaxSpeed(13.8);
+    Graph _g = map.getG();
+    Perception _perception = new Perception(this, 150.0, _g);
+    this.setPerception(_perception);
   }
   
   public void newPath(final Graph G) {

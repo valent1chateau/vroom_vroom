@@ -34,6 +34,7 @@ import io.sarl.core.Schedules
 import io.sarl.core.AgentSpawned
 
 import java.util.concurrent.atomic.AtomicInteger
+import traffic_simulation.environment.Perceptions
 
 //import traffic_simulation.environment.AbstractEnvironment
 
@@ -43,6 +44,13 @@ event light{
 		l = x
 	}
 }
+event influence{
+	var value : int
+	new(v : int){
+		value = v
+	}
+}
+
 agent classicDriver {
 		
 	uses PhysicEnvironment, Lifecycle, DefaultContextInteractions, Logging
@@ -53,11 +61,18 @@ agent classicDriver {
 		info("my classicDriver id :" + ID)
 		
 	}
+	
+	on Perceptions{
+		//info(occurrence.value)
+		info("ok")
+		var p = occurrence.value
+		emit(new influence(1))
+	}
 
 	on light {
 		if (occurrence.l == "green"){info("yes it's " + occurrence.l)}
 		else{info("oh no it's " + occurrence.l)}	
-		killMe
+		//killMe
 	}
 }
 

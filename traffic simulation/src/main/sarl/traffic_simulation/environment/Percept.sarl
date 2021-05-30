@@ -24,6 +24,9 @@ import java.io.Serializable
 import java.util.UUID
 
 import com.google.common.base.Objects
+import java.util.ArrayList
+import traffic_simulation.util.Tools
+import org.eclipse.xtend.lib.annotations.Accessors
 
 /* import traffic_simulation.math.Point2f
  * import traffic_simulation.math.Shape2f
@@ -37,6 +40,73 @@ import com.google.common.base.Objects
  * @version $Name$ $Revision$ $Date$
  */
   
-class Perception implements Serializable {
+class Perception {
+	
+	var vehicle : Vehicle
+	var dist_vision : double
+	var tool : Tools = new Tools
+	var G : Graph
+
+	@Accessors
+	var res:ArrayList<Vehicle>
+	
+	new(v : Vehicle, dv : double, g : Graph){
+		vehicle = v
+		dist_vision = dv
+		G = g
+		res = new ArrayList<Vehicle>
+	}
+	
+	def percept() : ArrayList<Vehicle> {
+
+		res = new ArrayList<Vehicle>
+		for (var i = 0; i < vehicle.edge.bodies.size();i++){
+			var v = vehicle.edge.bodies.get(i)
+			// on vérifie que le véhicule ne se perçoit pas lui-même et ne perçoit pas les véhicules derrières
+			if(v.id != vehicle.id && isCarBehind(v) != true){ 
+				if (isView(v)){
+					res.add(v)
+				}
+			}
+		}
+		
+		var dist_restante = dist_vision - (vehicle.edge.weight - vehicle.pos_edge)
+		
+		if (dist_restante > 0) {
+			dfs_percept(vehicle.edge.getNout, dist_restante)
+			
+				}
+			
+		return res
+	}
+	
+	def dfs_percept(n : Node, dist_restante : double) {
+		for (var i = 0; i < n.neighboors.size(); i++) {
+			var nout = n.neighboors.get(i)
+			var e = G.dict_Edges.get(String.valueOf(n.id) + String.valueOf(nout.id))
+			for (var k = 0; k < e.bodies.size(); k++) {
+				var vh = e.bodies.get(k)
+				if (isView(vh)) {
+					res.add(vh)
+				}
+			}
+			var newResDist = dist_restante - e.weight
+			if (newResDist > 0) {
+				dfs_percept(nout,newResDist)
+			}
+		}
+	}
+	
+	def isCarBehind(v : Vehicle):boolean{ //on vérifie si la voiture détecté est devant ou derrière 
+		var res : boolean = false
+		if(v.pos_edge < vehicle.pos_edge){res = true}
+		return res
+	}
+	
+	def isView(v : Vehicle) : boolean { //on vérifie si le véhicule est perçu par le conducteur 
+		var res : boolean = true
+		if (tool.distance_vehicle(vehicle,v) > dist_vision) {res = false}
+		return res
+	}
 	
 }

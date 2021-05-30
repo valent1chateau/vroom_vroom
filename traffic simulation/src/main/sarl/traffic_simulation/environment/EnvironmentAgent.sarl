@@ -36,42 +36,67 @@ import io.sarl.core.Logging
 import io.sarl.core.AgentSpawned
 import java.util.ArrayList
 import java.util.TreeMap
+import io.sarl.core.Schedules
 
 /*  
  * This agent is managing the physic space.
  */
+ 
+event Perceptions{
+	var value : ArrayList<Vehicle>
+	new (v : ArrayList<Vehicle>){
+	value = v
+	}	
+}
+
 agent EnvironmentAgent {
 	
-	uses  Lifecycle, DefaultContextInteractions, Logging
+	uses  Lifecycle, DefaultContextInteractions, Logging, Schedules
 	
 	var environment : Environment
 	
 	var spawnedReceived : AtomicInteger = new AtomicInteger(0)
 			
 	on Initialize {
-		var environment = new Environment()
+		environment = occurrence.parameters.get(0) as Environment
 		environment.initEnvironment(10);
 		for(entry : environment.bodyList.entrySet()){
-			classicDriver.spawnInContextWithID(entry.getKey(),defaultContext)
+			//println(environment.bodyList.get(entry.getKey()))
+			typeof(classicDriver).spawnInContextWithID(entry.getKey(),defaultContext)
 		}
 		spawn(typeof(priorityDriver))
+		
 	}
 
 	on AgentSpawned {
 		var v : int = spawnedReceived.incrementAndGet
-		if (v == 2) {
+		if (v == 10) {
 			emit(new light("green"))
-			killMe
+			startLoop()
+			//killMe
 		}
 	}
 	
-	
-	
-	/*def startLoop {
-		//Compute perceptions
+	on influence{
+		
 	}
 	
-	def endLoop {
+	def startLoop {
+		//Compute perceptions
+		var bodies = environment.bodyList
+		if(bodies.isEmpty == false){
+		for(entry : bodies.entrySet()){
+			bodies.get(entry.getKey()).calculatePerceptions
+			var p = bodies.get(entry.getKey()).perception.res
+			
+			emit(new Perceptions(p))[it.UUID == entry.getKey()]
+			//println(entry.getKey)
+		}
+		
+		}
+	}
+	
+	/*def endLoop {
 		startLoop();
 	}*/
 	

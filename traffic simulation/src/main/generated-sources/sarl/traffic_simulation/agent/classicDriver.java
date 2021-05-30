@@ -34,13 +34,17 @@ import io.sarl.lang.core.Agent;
 import io.sarl.lang.core.AtomicSkillReference;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.DynamicSkillProvider;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.PhysicEnvironment;
+import traffic_simulation.agent.influence;
 import traffic_simulation.agent.light;
+import traffic_simulation.environment.Perceptions;
+import traffic_simulation.environment.Vehicle;
 
 @SarlSpecification("0.11")
 @SarlElementType(19)
@@ -56,7 +60,16 @@ public class classicDriver extends Agent {
     _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_2.info(("my classicDriver id :" + _iD));
   }
   
-  private void $behaviorUnit$light$1(final light occurrence) {
+  private void $behaviorUnit$Perceptions$1(final Perceptions occurrence) {
+    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
+    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info("ok");
+    ArrayList<Vehicle> p = occurrence.value;
+    DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+    influence _influence = new influence(1);
+    _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_influence);
+  }
+  
+  private void $behaviorUnit$light$2(final light occurrence) {
     boolean _equals = Objects.equal(occurrence.l, "green");
     if (_equals) {
       Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
@@ -65,8 +78,6 @@ public class classicDriver extends Agent {
       Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
       _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info(("oh no it\'s " + occurrence.l));
     }
-    Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.killMe();
   }
   
   @Extension
@@ -138,7 +149,15 @@ public class classicDriver extends Agent {
   private void $guardEvaluator$light(final light occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$light$1(occurrence));
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$light$2(occurrence));
+  }
+  
+  @SyntheticMember
+  @PerceptGuardEvaluator
+  private void $guardEvaluator$Perceptions(final Perceptions occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
+    assert occurrence != null;
+    assert ___SARLlocal_runnableCollection != null;
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$Perceptions$1(occurrence));
   }
   
   @SyntheticMember

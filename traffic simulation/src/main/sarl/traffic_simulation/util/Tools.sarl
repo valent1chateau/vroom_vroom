@@ -4,6 +4,7 @@
 package traffic_simulation.util
 
 import java.lang.Math.*
+import traffic_simulation.environment.Vehicle
 
 /** 
  * @author jeome
@@ -64,6 +65,12 @@ class Tools {
 	def calc_speed(acc : double, t : double) : double {
 		var res : double
 		res = acc * t 
+		return res
+	}
+	
+	def distance_vehicle(v1 : Vehicle,v2 : Vehicle) : double{
+		var res : double
+		res = Math.sqrt((v2.coord.getX() - v1.coord.getX()) ** 2 + (v2.coord.getY() - v1.coord.getY()) ** 2) - v1.dim/2 - v2.dim/2
 		return res
 	}
 }

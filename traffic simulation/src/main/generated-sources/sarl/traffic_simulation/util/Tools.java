@@ -3,6 +3,7 @@ package traffic_simulation.util;
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import org.eclipse.xtext.xbase.lib.Pure;
+import traffic_simulation.environment.Vehicle;
 
 /**
  * @author jeome
@@ -87,6 +88,23 @@ public class Tools {
   public double calc_speed(final double acc, final double t) {
     double res = 0;
     res = (acc * t);
+    return res;
+  }
+  
+  @Pure
+  public double distance_vehicle(final Vehicle v1, final Vehicle v2) {
+    double res = 0;
+    double _x = v2.getCoord().getX();
+    double _x_1 = v1.getCoord().getX();
+    double _power = Math.pow((_x - _x_1), 2);
+    double _y = v2.getCoord().getY();
+    double _y_1 = v1.getCoord().getY();
+    double _power_1 = Math.pow((_y - _y_1), 2);
+    double _sqrt = Math.sqrt((_power + _power_1));
+    double _dim = v1.getDim();
+    double _minus = (_sqrt - (_dim / 2));
+    double _dim_1 = v2.getDim();
+    res = (_minus - (_dim_1 / 2));
     return res;
   }
 }

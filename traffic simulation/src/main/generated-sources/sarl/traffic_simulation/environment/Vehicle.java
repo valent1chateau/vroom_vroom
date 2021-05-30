@@ -35,6 +35,7 @@ import traffic_simulation.environment.Body;
 import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Graph;
 import traffic_simulation.environment.Path;
+import traffic_simulation.environment.Perception;
 import traffic_simulation.util.Tools;
 
 /**
@@ -59,7 +60,13 @@ public abstract class Vehicle implements Body {
   private Point2D coord;
   
   @Accessors
+  private double dim;
+  
+  @Accessors
   private Edge edge;
+  
+  @Accessors
+  private double pos_edge;
   
   @Accessors
   private double accMax;
@@ -82,11 +89,15 @@ public abstract class Vehicle implements Body {
   @Accessors
   private Path path;
   
+  @Accessors
+  private Perception perception;
+  
   public Vehicle() {
     this.id = UUID.randomUUID();
     Path _path = new Path();
     this.path = _path;
     this.position = 0.0;
+    this.pos_edge = 0.0;
     this.distance = 0.0;
     this.distanceMax = 0.0;
     this.speed = 0.0;
@@ -110,7 +121,6 @@ public abstract class Vehicle implements Body {
           stop = true;
         } else {
           if ((this.position <= TotalWeight)) {
-            double pos_edge = 0;
             double dist_edge = 0.0;
             if ((j > 0)) {
               for (int i = 0; (i < j); i++) {
@@ -118,9 +128,9 @@ public abstract class Vehicle implements Body {
                 dist_edge = (dist_edge + _weight_1);
               }
             }
-            pos_edge = (this.position - dist_edge);
+            this.pos_edge = (this.position - dist_edge);
             double _weight_1 = e.get(j).getWeight();
-            double percent = (pos_edge / _weight_1);
+            double percent = (this.pos_edge / _weight_1);
             ObservableList<Double> poly = e.get(j).getPoints();
             int _size = poly.size();
             int nbP = (_size / 2);
@@ -195,6 +205,7 @@ public abstract class Vehicle implements Body {
   }
   
   public void calculatePerceptions() {
+    this.perception.percept();
   }
   
   @Override
@@ -209,6 +220,10 @@ public abstract class Vehicle implements Body {
       return false;
     Vehicle other = (Vehicle) obj;
     if (!Objects.equals(this.id, other.id))
+      return false;
+    if (Double.doubleToLongBits(other.dim) != Double.doubleToLongBits(this.dim))
+      return false;
+    if (Double.doubleToLongBits(other.pos_edge) != Double.doubleToLongBits(this.pos_edge))
       return false;
     if (Double.doubleToLongBits(other.accMax) != Double.doubleToLongBits(this.accMax))
       return false;
@@ -234,6 +249,8 @@ public abstract class Vehicle implements Body {
     int result = super.hashCode();
     final int prime = 31;
     result = prime * result + Objects.hashCode(this.id);
+    result = prime * result + Double.hashCode(this.dim);
+    result = prime * result + Double.hashCode(this.pos_edge);
     result = prime * result + Double.hashCode(this.accMax);
     result = prime * result + Double.hashCode(this.acc);
     result = prime * result + Double.hashCode(this.speed);
@@ -272,12 +289,30 @@ public abstract class Vehicle implements Body {
   }
   
   @Pure
+  public double getDim() {
+    return this.dim;
+  }
+  
+  public void setDim(final double dim) {
+    this.dim = dim;
+  }
+  
+  @Pure
   public Edge getEdge() {
     return this.edge;
   }
   
   public void setEdge(final Edge edge) {
     this.edge = edge;
+  }
+  
+  @Pure
+  public double getPos_edge() {
+    return this.pos_edge;
+  }
+  
+  public void setPos_edge(final double pos_edge) {
+    this.pos_edge = pos_edge;
   }
   
   @Pure
@@ -323,5 +358,14 @@ public abstract class Vehicle implements Body {
   
   public void setPath(final Path path) {
     this.path = path;
+  }
+  
+  @Pure
+  public Perception getPerception() {
+    return this.perception;
+  }
+  
+  public void setPerception(final Perception perception) {
+    this.perception = perception;
   }
 }

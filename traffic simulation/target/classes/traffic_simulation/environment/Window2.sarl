@@ -39,8 +39,8 @@ class Window2 extends Stage {
 
 	new(e : Environment) {
 		// super()
-		this.length = 800
-		this.width = 600
+		this.length = 1600
+		this.width = 900
 		map = new Map(this.length, this.width)
 		drivers = new ArrayList<classicDriverBody>
 
@@ -69,7 +69,7 @@ class Window2 extends Stage {
 
 			def handle(now : long) {
 
-				if (t == 40) {
+				if (t == 10) {
 					drivers.add(new classicDriverBody(map))
 					group.getChildren().add(drivers.get(drivers.size - 1).c)
 					t = 0

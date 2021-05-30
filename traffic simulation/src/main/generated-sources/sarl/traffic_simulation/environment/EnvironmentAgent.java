@@ -20,37 +20,45 @@
  */
 package traffic_simulation.environment;
 
+import com.google.common.base.Objects;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.DefaultContextInteractions;
 import io.sarl.core.Initialize;
 import io.sarl.core.Lifecycle;
 import io.sarl.core.Logging;
+import io.sarl.core.Schedules;
 import io.sarl.lang.annotation.ImportedCapacityFeature;
 import io.sarl.lang.annotation.PerceptGuardEvaluator;
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
+import io.sarl.lang.core.Address;
 import io.sarl.lang.core.Agent;
 import io.sarl.lang.core.AtomicSkillReference;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.DynamicSkillProvider;
+import io.sarl.lang.core.Scope;
+import io.sarl.lang.util.SerializableProxy;
+import java.io.ObjectStreamException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.classicDriver;
+import traffic_simulation.agent.influence;
 import traffic_simulation.agent.light;
 import traffic_simulation.agent.priorityDriver;
 import traffic_simulation.environment.Environment;
+import traffic_simulation.environment.Perceptions;
+import traffic_simulation.environment.Vehicle;
 import traffic_simulation.environment.classicDriverBody;
 
-/**
- * This agent is managing the physic space.
- */
 @SarlSpecification("0.11")
 @SarlElementType(19)
 @SuppressWarnings("all")
@@ -60,9 +68,10 @@ public class EnvironmentAgent extends Agent {
   private AtomicInteger spawnedReceived = new AtomicInteger(0);
   
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
-    Environment environment = new Environment();
-    environment.initEnvironment(10);
-    Set<Map.Entry<UUID, classicDriverBody>> _entrySet = environment.getBodyList().entrySet();
+    Object _get = occurrence.parameters[0];
+    this.environment = ((Environment) _get);
+    this.environment.initEnvironment(10);
+    Set<Map.Entry<UUID, classicDriverBody>> _entrySet = this.environment.getBodyList().entrySet();
     for (final Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
       Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
       DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
@@ -74,12 +83,56 @@ public class EnvironmentAgent extends Agent {
   
   private void $behaviorUnit$AgentSpawned$1(final AgentSpawned occurrence) {
     int v = this.spawnedReceived.incrementAndGet();
-    if ((v == 2)) {
+    if ((v == 10)) {
       DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
       light _light = new light("green");
       _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_light);
-      Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
-      _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.killMe();
+      this.startLoop();
+    }
+  }
+  
+  private void $behaviorUnit$influence$2(final influence occurrence) {
+  }
+  
+  protected void startLoop() {
+    TreeMap<UUID, classicDriverBody> bodies = this.environment.getBodyList();
+    boolean _isEmpty = bodies.isEmpty();
+    if ((_isEmpty == false)) {
+      Set<Map.Entry<UUID, classicDriverBody>> _entrySet = bodies.entrySet();
+      for (final Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
+        {
+          bodies.get(entry.getKey()).calculatePerceptions();
+          ArrayList<Vehicle> p = bodies.get(entry.getKey()).getPerception().getRes();
+          DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+          Perceptions _perceptions = new Perceptions(p);
+          class $SerializableClosureProxy implements Scope<Address> {
+            
+            private final UUID $_key;
+            
+            public $SerializableClosureProxy(final UUID $_key) {
+              this.$_key = $_key;
+            }
+            
+            @Override
+            public boolean matches(final Address it) {
+              UUID _uUID = it.getUUID();
+              return Objects.equal(_uUID, $_key);
+            }
+          }
+          final Scope<Address> _function = new Scope<Address>() {
+            @Override
+            public boolean matches(final Address it) {
+              UUID _uUID = it.getUUID();
+              UUID _key = entry.getKey();
+              return Objects.equal(_uUID, _key);
+            }
+            private Object writeReplace() throws ObjectStreamException {
+              return new SerializableProxy($SerializableClosureProxy.class, entry.getKey());
+            }
+          };
+          _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_perceptions, _function);
+        }
+      }
     }
   }
   
@@ -125,6 +178,20 @@ public class EnvironmentAgent extends Agent {
     return $castSkill(Logging.class, this.$CAPACITY_USE$IO_SARL_CORE_LOGGING);
   }
   
+  @Extension
+  @ImportedCapacityFeature(Schedules.class)
+  @SyntheticMember
+  private transient AtomicSkillReference $CAPACITY_USE$IO_SARL_CORE_SCHEDULES;
+  
+  @SyntheticMember
+  @Pure
+  private Schedules $CAPACITY_USE$IO_SARL_CORE_SCHEDULES$CALLER() {
+    if (this.$CAPACITY_USE$IO_SARL_CORE_SCHEDULES == null || this.$CAPACITY_USE$IO_SARL_CORE_SCHEDULES.get() == null) {
+      this.$CAPACITY_USE$IO_SARL_CORE_SCHEDULES = $getSkill(Schedules.class);
+    }
+    return $castSkill(Schedules.class, this.$CAPACITY_USE$IO_SARL_CORE_SCHEDULES);
+  }
+  
   @SyntheticMember
   @PerceptGuardEvaluator
   private void $guardEvaluator$Initialize(final Initialize occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
@@ -139,6 +206,14 @@ public class EnvironmentAgent extends Agent {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
     ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$AgentSpawned$1(occurrence));
+  }
+  
+  @SyntheticMember
+  @PerceptGuardEvaluator
+  private void $guardEvaluator$influence(final influence occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
+    assert occurrence != null;
+    assert ___SARLlocal_runnableCollection != null;
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$influence$2(occurrence));
   }
   
   @Override
