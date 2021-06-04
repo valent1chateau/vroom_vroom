@@ -23,9 +23,12 @@ package traffic_simulation.environment;
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
+import java.util.Collection;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import org.eclipse.xtend.lib.annotations.Accessors;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Map;
 import traffic_simulation.environment.classicDriverBody;
@@ -49,6 +52,7 @@ public class Environment {
   @Accessors
   private priorityVehicleBody priorityVehicle;
   
+  @Accessors
   private Map map;
   
   public Environment() {
@@ -56,8 +60,19 @@ public class Environment {
     this.bodyList = _treeMap;
     priorityVehicleBody _priorityVehicleBody = new priorityVehicleBody();
     this.priorityVehicle = _priorityVehicleBody;
-    Map _map = new Map(800, 600);
+    Map _map = new Map(1600, 900);
     this.map = _map;
+  }
+  
+  public void Update() {
+    Collection<classicDriverBody> a = this.bodyList.values();
+    Set<java.util.Map.Entry<UUID, classicDriverBody>> _entrySet = this.bodyList.entrySet();
+    for (final java.util.Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
+      {
+        InputOutput.<Double>println(Double.valueOf(this.bodyList.get(entry.getKey()).getSpeed()));
+        this.bodyList.get(entry.getKey()).accelerate(0.5);
+      }
+    }
   }
   
   public void initEnvironment(final int agents) {
@@ -116,5 +131,14 @@ public class Environment {
   
   public void setPriorityVehicle(final priorityVehicleBody priorityVehicle) {
     this.priorityVehicle = priorityVehicle;
+  }
+  
+  @Pure
+  public Map getMap() {
+    return this.map;
+  }
+  
+  public void setMap(final Map map) {
+    this.map = map;
   }
 }

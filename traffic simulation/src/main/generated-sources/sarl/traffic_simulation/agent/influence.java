@@ -24,6 +24,8 @@ import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
 import io.sarl.lang.core.Event;
+import java.util.Objects;
+import java.util.UUID;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
@@ -31,10 +33,13 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 @SarlElementType(15)
 @SuppressWarnings("all")
 public class influence extends Event {
-  public int value;
+  public double acc;
   
-  public influence(final int v) {
-    this.value = v;
+  public UUID idt;
+  
+  public influence(final double a, final UUID id) {
+    this.acc = a;
+    this.idt = id;
   }
   
   @Override
@@ -48,7 +53,9 @@ public class influence extends Event {
     if (getClass() != obj.getClass())
       return false;
     influence other = (influence) obj;
-    if (other.value != this.value)
+    if (Double.doubleToLongBits(other.acc) != Double.doubleToLongBits(this.acc))
+      return false;
+    if (!Objects.equals(this.idt, other.idt))
       return false;
     return super.equals(obj);
   }
@@ -59,7 +66,8 @@ public class influence extends Event {
   public int hashCode() {
     int result = super.hashCode();
     final int prime = 31;
-    result = prime * result + Integer.hashCode(this.value);
+    result = prime * result + Double.hashCode(this.acc);
+    result = prime * result + Objects.hashCode(this.idt);
     return result;
   }
   
@@ -70,9 +78,10 @@ public class influence extends Event {
   @Pure
   protected void toString(final ToStringBuilder builder) {
     super.toString(builder);
-    builder.add("value", this.value);
+    builder.add("acc", this.acc);
+    builder.add("idt", this.idt);
   }
   
   @SyntheticMember
-  private static final long serialVersionUID = 703686134L;
+  private static final long serialVersionUID = -1558656705L;
 }

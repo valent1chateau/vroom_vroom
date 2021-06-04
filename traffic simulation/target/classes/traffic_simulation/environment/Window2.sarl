@@ -21,6 +21,8 @@ import io.sarl.core.Logging
 import io.sarl.core.DefaultContextInteractions
 import java.util.ArrayList
 import javafx.animation.AnimationTimer
+import java.util.TreeMap
+import java.util.UUID
 
 /** 
  * @author jeome
@@ -35,55 +37,84 @@ class Window2 extends Stage {
 	var t : long
 	var dt : double = 0.5
 	var group : Group
-	var drivers : ArrayList<classicDriverBody>
-
+	var test = false
+	// var drivers : ArrayList<classicDriverBody>
+	var drivers = new TreeMap<UUID, classicDriverBody>
 	new(e : Environment) {
 		// super()
 		this.length = 1600
 		this.width = 900
 		map = new Map(this.length, this.width)
-		drivers = new ArrayList<classicDriverBody>
-
+		//drivers = new ArrayList<classicDriverBody>
+		
+		env = e
+		drivers = env.bodyList
 		this.setTitle("window2")
 		
 		
 
 		
 		// create a Group
-		 group = new Group(map.poly());
+		 group = new Group(env.map.poly());
 		
 		
-		for (var i = 0; i < map.getG.getListNodes.size(); i++) {
+		for (var i = 0; i < env.map.getG.getListNodes.size(); i++) {
 			var c : Circle = new Circle()
-			c.setCenterX(map.getG.getListNodes.get(i).coord.getX())
-			c.setCenterY(map.getG.getListNodes.get(i).coord.getY())
+			c.setCenterX(env.map.getG.getListNodes.get(i).coord.getX())
+			c.setCenterY(env.map.getG.getListNodes.get(i).coord.getY())
 			c.setRadius(this.width * 0.01)
 			group.getChildren().add(c)
 		}
 		t = 0
-
+		
 		// group.getChildren().add(cc)
-		drivers.add(new classicDriverBody(map))
-		group.getChildren().add(drivers.get(0).c)
+		//drivers.add(new classicDriverBody(map))
+		//group.getChildren().add(drivers.get(0).c)
 		var boucle : AnimationTimer = new AnimationTimer() {
 
 			def handle(now : long) {
-
-				if (t == 10) {
+				
+				drivers = env.bodyList
+				group.getChildren().clear()
+				// group = new Group(env.map.poly());
+				for (var j = 0; j < env.map.poly().size; j++) {
+					group.getChildren().add(env.map.poly().get(j))
+				}
+				
+				for (var i = 0; i < env.map.getG.getListNodes.size(); i++) {
+					var c : Circle = new Circle()
+					c.setCenterX(env.map.getG.getListNodes.get(i).coord.getX())
+					c.setCenterY(env.map.getG.getListNodes.get(i).coord.getY())
+					c.setRadius(width * 0.01)
+					group.getChildren().add(c)
+				}
+				//println(drivers.isEmpty)
+			/*if (drivers.isEmpty != true && test == false) {
+				var a = drivers.values
+					group.getChildren().add(a.get(0).c)
+					test = true*/
+				for (entry : drivers.entrySet()) {
+				//println(drivers.get(entry.getKey()).c)
+				//println(drivers.get(entry.getKey()))
+				group.getChildren().add(drivers.get(entry.getKey()).c)
+				//println("e")
+				//println(drivers.get(entry.getKey()).c)
+				/*if (t == 10) {
 					drivers.add(new classicDriverBody(map))
 					group.getChildren().add(drivers.get(drivers.size - 1).c)
 					t = 0
-				}
-				for (var k = 0; k < drivers.size; k++) {
+				}*/
+				/*for (var k = 0; k < drivers.size; k++) {
 					drivers.get(k).accelerateFree(0.5)
 					//drivers.get(k).positionToCoord
 					// drivers.get(k).move(1)
-				}
+				}*/
 				
 				// throw new UnsupportedOperationException("TODO: auto-generated method stub")
-				t = t + 1
+ 				t = t + 1
 			}
-
+			}
+			
 		}
 		boucle.start()
 		var scene = new Scene(group, this.length, this.width);

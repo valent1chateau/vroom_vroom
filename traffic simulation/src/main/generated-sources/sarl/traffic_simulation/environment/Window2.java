@@ -4,6 +4,9 @@ import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.UUID;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -40,7 +43,9 @@ public class Window2 extends Stage {
   
   private Group group;
   
-  private ArrayList<classicDriverBody> drivers;
+  private boolean test = false;
+  
+  private TreeMap<UUID, classicDriverBody> drivers = new TreeMap<UUID, classicDriverBody>();
   
   public Window2(final Environment e) {
     abstract class __Window2_0 extends AnimationTimer {
@@ -51,38 +56,45 @@ public class Window2 extends Stage {
     this.width = 900;
     Map _map = new Map(this.length, this.width);
     this.map = _map;
-    ArrayList<classicDriverBody> _arrayList = new ArrayList<classicDriverBody>();
-    this.drivers = _arrayList;
+    this.env = e;
+    this.drivers = this.env.getBodyList();
     this.setTitle("window2");
-    ArrayList<Edge> _poly = this.map.poly();
+    ArrayList<Edge> _poly = this.env.getMap().poly();
     Group _group = new Group(((Node[])Conversions.unwrapArray(_poly, Node.class)));
     this.group = _group;
-    for (int i = 0; (i < this.map.getG().getListNodes().size()); i++) {
+    for (int i = 0; (i < this.env.getMap().getG().getListNodes().size()); i++) {
       {
         Circle c = new Circle();
-        c.setCenterX(this.map.getG().getListNodes().get(i).getCoord().getX());
-        c.setCenterY(this.map.getG().getListNodes().get(i).getCoord().getY());
+        c.setCenterX(this.env.getMap().getG().getListNodes().get(i).getCoord().getX());
+        c.setCenterY(this.env.getMap().getG().getListNodes().get(i).getCoord().getY());
         c.setRadius((this.width * 0.01));
         this.group.getChildren().add(c);
       }
     }
     this.t = 0;
-    classicDriverBody _classicDriverBody = new classicDriverBody(this.map);
-    this.drivers.add(_classicDriverBody);
-    this.group.getChildren().add(this.drivers.get(0).getC());
     AnimationTimer boucle = new __Window2_0() {
       public void handle(final long now) {
-        if ((Window2.this.t == 10)) {
-          classicDriverBody _classicDriverBody = new classicDriverBody(Window2.this.map);
-          Window2.this.drivers.add(_classicDriverBody);
-          int _size = Window2.this.drivers.size();
-          Window2.this.group.getChildren().add(Window2.this.drivers.get((_size - 1)).getC());
-          Window2.this.t = 0;
+        Window2.this.drivers = Window2.this.env.getBodyList();
+        Window2.this.group.getChildren().clear();
+        for (int j = 0; (j < Window2.this.env.getMap().poly().size()); j++) {
+          Window2.this.group.getChildren().add(Window2.this.env.getMap().poly().get(j));
         }
-        for (int k = 0; (k < Window2.this.drivers.size()); k++) {
-          Window2.this.drivers.get(k).accelerateFree(0.5);
+        for (int i = 0; (i < Window2.this.env.getMap().getG().getListNodes().size()); i++) {
+          {
+            Circle c = new Circle();
+            c.setCenterX(Window2.this.env.getMap().getG().getListNodes().get(i).getCoord().getX());
+            c.setCenterY(Window2.this.env.getMap().getG().getListNodes().get(i).getCoord().getY());
+            c.setRadius((Window2.this.width * 0.01));
+            Window2.this.group.getChildren().add(c);
+          }
         }
-        Window2.this.t = (Window2.this.t + 1);
+        Set<java.util.Map.Entry<UUID, classicDriverBody>> _entrySet = Window2.this.drivers.entrySet();
+        for (final java.util.Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
+          {
+            Window2.this.group.getChildren().add(Window2.this.drivers.get(entry.getKey()).getC());
+            Window2.this.t = (Window2.this.t + 1);
+          }
+        }
       }
     };
     boucle.start();
@@ -109,6 +121,8 @@ public class Window2 extends Stage {
       return false;
     if (Double.doubleToLongBits(other.dt) != Double.doubleToLongBits(this.dt))
       return false;
+    if (other.test != this.test)
+      return false;
     return super.equals(obj);
   }
   
@@ -122,6 +136,7 @@ public class Window2 extends Stage {
     result = prime * result + Double.hashCode(this.width);
     result = prime * result + Long.hashCode(this.t);
     result = prime * result + Double.hashCode(this.dt);
+    result = prime * result + Boolean.hashCode(this.test);
     return result;
   }
 }

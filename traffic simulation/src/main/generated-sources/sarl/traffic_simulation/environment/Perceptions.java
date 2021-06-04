@@ -24,6 +24,7 @@ import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
 import io.sarl.lang.core.Event;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import org.eclipse.xtext.xbase.lib.Pure;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
@@ -36,16 +37,34 @@ import traffic_simulation.environment.Vehicle;
 @SarlElementType(15)
 @SuppressWarnings("all")
 public class Perceptions extends Event {
-  public ArrayList<Vehicle> value;
+  public ArrayList<Vehicle> p_value;
   
-  public Perceptions(final ArrayList<Vehicle> v) {
-    this.value = v;
+  public double[] state;
+  
+  public Point2D loc;
+  
+  public double dim;
+  
+  public Perceptions(final ArrayList<Vehicle> p, final double vtm, final double vt, final double am, final Point2D co, final double d) {
+    this.p_value = p;
+    this.state = new double[] { vtm, vt, am };
+    this.loc = co;
+    this.dim = d;
   }
   
   @Override
   @Pure
   @SyntheticMember
   public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Perceptions other = (Perceptions) obj;
+    if (Double.doubleToLongBits(other.dim) != Double.doubleToLongBits(this.dim))
+      return false;
     return super.equals(obj);
   }
   
@@ -54,6 +73,8 @@ public class Perceptions extends Event {
   @SyntheticMember
   public int hashCode() {
     int result = super.hashCode();
+    final int prime = 31;
+    result = prime * result + Double.hashCode(this.dim);
     return result;
   }
   
@@ -64,9 +85,12 @@ public class Perceptions extends Event {
   @Pure
   protected void toString(final ToStringBuilder builder) {
     super.toString(builder);
-    builder.add("value", this.value);
+    builder.add("p_value", this.p_value);
+    builder.add("state", this.state);
+    builder.add("loc", this.loc);
+    builder.add("dim", this.dim);
   }
   
   @SyntheticMember
-  private static final long serialVersionUID = 1441339830L;
+  private static final long serialVersionUID = 1009440178L;
 }

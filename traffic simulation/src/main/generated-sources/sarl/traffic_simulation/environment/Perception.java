@@ -113,10 +113,15 @@ public class Perception {
   @Pure
   public boolean isCarBehind(final Vehicle v) {
     boolean res = false;
-    double _pos_edge = v.getPos_edge();
-    double _pos_edge_1 = this.vehicle.getPos_edge();
-    if ((_pos_edge < _pos_edge_1)) {
-      res = true;
+    String _id = v.getEdge().getId();
+    String _id_1 = this.vehicle.getEdge().getId();
+    boolean _equals = Objects.equal(_id, _id_1);
+    if (_equals) {
+      double _pos_edge = v.getPos_edge();
+      double _pos_edge_1 = this.vehicle.getPos_edge();
+      if ((_pos_edge < _pos_edge_1)) {
+        res = true;
+      }
     }
     return res;
   }

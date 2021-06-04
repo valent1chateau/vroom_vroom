@@ -110,7 +110,7 @@ class window extends Application {
 					t = 0
 				}
 				for (var k = 0;k<drivers.size;k++){
-					drivers.get(k).accelerateFree(0.5)
+					//drivers.get(k).accelerateFree(0.5)
 					//drivers.get(k).positionToCoord
 					//drivers.get(k).move(1)
 				}

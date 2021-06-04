@@ -54,6 +54,8 @@ abstract class Vehicle implements Body {
 	@Accessors
 	var edge : Edge
 	@Accessors
+	var spawn : Node
+	@Accessors
 	var pos_edge : double
 	@Accessors
 	var accMax : double
@@ -70,6 +72,8 @@ abstract class Vehicle implements Body {
 	var path : Path
 	@Accessors
 	var perception : Perception
+	@Accessors
+	var kill : boolean = false
 	
 	new() {
 		id = UUID.randomUUID()
@@ -111,11 +115,11 @@ abstract class Vehicle implements Body {
 				var poly = e.get(j).getPoints()
 				var nbP = poly.size / 2
 				
-				var a : int =  Math.round(nbP*percent) as int
-				
-				if (a != 0) {
-					var ind = 2 * a - 2
-					
+				var at : int = Math.round(nbP * percent) as int
+				//println(a)
+				if (at != 0) {
+					var ind = 2 * at - 2
+					//println(ind)
 					var x = poly.get(ind)
 					var y = poly.get(ind + 1)
 					coord.setLocation(x,y)
@@ -138,6 +142,7 @@ abstract class Vehicle implements Body {
 			} else if (position > distanceMax) {
 				edge.removeBody(this)
 				stop = true
+				kill = true
 			}
 			j += 1
 		}
@@ -157,11 +162,12 @@ abstract class Vehicle implements Body {
 		distanceMax = res
 	}
 	
-	def accelerateFree(t : double) {
+	def accelerate( t : double) {
 		
 		if (speed < maxSpeed){
-		acc = tool.accelerationFree(accMax, speed,maxSpeed)
+		
 		speed = speed + tool.calc_speed(acc,t)}
+		if (speed<0){speed=0}
 		this.move(tool.calc_position(speed, t))
 		positionToCoord()
 		
@@ -170,8 +176,35 @@ abstract class Vehicle implements Body {
 		//println(tool.calc_position(speed, t))
 	}
 	
-	def accelerate(): void {
+	//def accelerate(): void {
 		
+	//}
+	
+	def canSpawn():boolean{
+		var res = true
+		var lst_v = edge.bodies
+		var sx = spawn.coord.getX()
+		var sy = spawn.coord.getY()
+		var s_id = spawn.id
+		lst_v.remove(this)
+		if (lst_v.isEmpty != true){
+			var i = 0
+			while (i<lst_v.size() && res==true){
+				if (s_id == 8 || s_id == 18) {
+					if (sy + this.dim / 2 >= lst_v.get(i).coord.getY() - dim / 2 ||
+						sy - this.dim / 2 <= lst_v.get(i).coord.getY() + dim / 2) {
+						res = false
+					}
+				}else{
+					if (sx + this.dim / 2 >= lst_v.get(i).coord.getX() - dim / 2 ||
+						sx - this.dim / 2 <= lst_v.get(i).coord.getX() + dim / 2 ) {
+						res = false
+					}
+				}
+				i = i + 1
+			}
+		}
+		return res
 	}
 	
 	def deccelerate(): void {
@@ -247,6 +280,7 @@ class classicDriverBody extends Vehicle{
 				numOUT =  rand.nextInt(3)
 			}
 		}
+		spawn = in.get(numIN)
 		path.Astar(G,in.get(numIN),out.get(numOUT))
 	}
 	

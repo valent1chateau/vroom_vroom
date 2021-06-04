@@ -113,6 +113,7 @@ public class classicDriverBody extends Vehicle {
         }
       }
     }
+    this.setSpawn(in.get(numIN));
     this.getPath().Astar(G, in.get(numIN), out.get(numOUT));
   }
 }

@@ -34,39 +34,79 @@ import io.sarl.lang.core.Agent;
 import io.sarl.lang.core.AtomicSkillReference;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.DynamicSkillProvider;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.PhysicEnvironment;
 import traffic_simulation.agent.influence;
 import traffic_simulation.agent.light;
 import traffic_simulation.environment.Perceptions;
 import traffic_simulation.environment.Vehicle;
+import traffic_simulation.util.Tools;
 
 @SarlSpecification("0.11")
 @SarlElementType(19)
 @SuppressWarnings("all")
 public class classicDriver extends Agent {
+  private Tools tool = new Tools();
+  
+  private double So = 2.0;
+  
+  private double T = 1.5;
+  
+  private double b = 1.67;
+  
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
     _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.setLoggingName("classicDriver");
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info("I\'m starting");
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_2 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    UUID _iD = this.getID();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_2.info(("my classicDriver id :" + _iD));
   }
   
   private void $behaviorUnit$Perceptions$1(final Perceptions occurrence) {
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info("ok");
-    ArrayList<Vehicle> p = occurrence.value;
-    DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
-    influence _influence = new influence(1);
-    _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_influence);
+    ArrayList<Vehicle> p = occurrence.p_value;
+    double[] etat = occurrence.state;
+    double dim_car = occurrence.dim;
+    Point2D coord_car = occurrence.loc;
+    double dist_min = (-1.0);
+    Vehicle carInFront = null;
+    double a = 0;
+    boolean _isEmpty = p.isEmpty();
+    if ((_isEmpty != true)) {
+      for (int i = 0; (i < p.size()); i++) {
+        {
+          double distBetweenCar = this.tool.distance_vehicle2(coord_car, p.get(i), dim_car);
+          if ((i == 0)) {
+            dist_min = distBetweenCar;
+            carInFront = p.get(i);
+          } else {
+            if ((distBetweenCar < dist_min)) {
+              dist_min = distBetweenCar;
+              carInFront = p.get(i);
+            }
+          }
+        }
+      }
+      double _accelerationFree = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+      double _get = etat[1];
+      double _speed = carInFront.getSpeed();
+      double _accelerationInt = this.tool.accelerationInt(etat[2], etat[1], this.b, dist_min, this.So, (_get - _speed), this.T);
+      a = (_accelerationFree + _accelerationInt);
+      DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+      UUID _iD = this.getID();
+      influence _influence = new influence(a, _iD);
+      _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_influence);
+      InputOutput.<Double>println(Double.valueOf(a));
+    } else {
+      a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+      DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+      UUID _iD_1 = this.getID();
+      influence _influence_1 = new influence(a, _iD_1);
+      _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1.emit(_influence_1);
+    }
   }
   
   private void $behaviorUnit$light$2(final light occurrence) {
@@ -158,6 +198,38 @@ public class classicDriver extends Agent {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
     ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$Perceptions$1(occurrence));
+  }
+  
+  @Override
+  @Pure
+  @SyntheticMember
+  public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    classicDriver other = (classicDriver) obj;
+    if (Double.doubleToLongBits(other.So) != Double.doubleToLongBits(this.So))
+      return false;
+    if (Double.doubleToLongBits(other.T) != Double.doubleToLongBits(this.T))
+      return false;
+    if (Double.doubleToLongBits(other.b) != Double.doubleToLongBits(this.b))
+      return false;
+    return super.equals(obj);
+  }
+  
+  @Override
+  @Pure
+  @SyntheticMember
+  public int hashCode() {
+    int result = super.hashCode();
+    final int prime = 31;
+    result = prime * result + Double.hashCode(this.So);
+    result = prime * result + Double.hashCode(this.T);
+    result = prime * result + Double.hashCode(this.b);
+    return result;
   }
   
   @SyntheticMember

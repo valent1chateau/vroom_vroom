@@ -87,7 +87,6 @@ public class window extends Application {
           window.this.t = 0;
         }
         for (int k = 0; (k < window.this.drivers.size()); k++) {
-          window.this.drivers.get(k).accelerateFree(0.5);
         }
         window.this.t = (window.this.t + 1);
       }

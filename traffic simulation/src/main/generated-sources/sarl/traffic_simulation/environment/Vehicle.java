@@ -34,6 +34,7 @@ import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Body;
 import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Graph;
+import traffic_simulation.environment.Node;
 import traffic_simulation.environment.Path;
 import traffic_simulation.environment.Perception;
 import traffic_simulation.util.Tools;
@@ -66,6 +67,9 @@ public abstract class Vehicle implements Body {
   private Edge edge;
   
   @Accessors
+  private Node spawn;
+  
+  @Accessors
   private double pos_edge;
   
   @Accessors
@@ -91,6 +95,9 @@ public abstract class Vehicle implements Body {
   
   @Accessors
   private Perception perception;
+  
+  @Accessors
+  private boolean kill = false;
   
   public Vehicle() {
     this.id = UUID.randomUUID();
@@ -135,9 +142,9 @@ public abstract class Vehicle implements Body {
             int _size = poly.size();
             int nbP = (_size / 2);
             long _round = Math.round((nbP * percent));
-            int a = ((int) _round);
-            if ((a != 0)) {
-              int ind = ((2 * a) - 2);
+            int at = ((int) _round);
+            if ((at != 0)) {
+              int ind = ((2 * at) - 2);
               Double x = poly.get(ind);
               Double y = poly.get((ind + 1));
               this.coord.setLocation(((x) == null ? 0 : (x).doubleValue()), ((y) == null ? 0 : (y).doubleValue()));
@@ -156,6 +163,7 @@ public abstract class Vehicle implements Body {
             if ((this.position > this.distanceMax)) {
               this.edge.removeBody(this);
               stop = true;
+              this.kill = true;
             }
           }
         }
@@ -188,17 +196,46 @@ public abstract class Vehicle implements Body {
     return _xblockexpression;
   }
   
-  public void accelerateFree(final double t) {
+  public void accelerate(final double t) {
     if ((this.speed < this.maxSpeed)) {
-      this.acc = this.tool.accelerationFree(this.accMax, this.speed, this.maxSpeed);
       double _calc_speed = this.tool.calc_speed(this.acc, t);
       this.speed = (this.speed + _calc_speed);
+    }
+    if ((this.speed < 0)) {
+      this.speed = 0;
     }
     this.move(this.tool.calc_position(this.speed, t));
     this.positionToCoord();
   }
   
-  public void accelerate() {
+  public boolean canSpawn() {
+    boolean res = true;
+    ArrayList<Vehicle> lst_v = this.edge.getBodies();
+    double sx = this.spawn.getCoord().getX();
+    double sy = this.spawn.getCoord().getY();
+    int s_id = this.spawn.getId();
+    lst_v.remove(this);
+    boolean _isEmpty = lst_v.isEmpty();
+    if ((_isEmpty != true)) {
+      int i = 0;
+      while (((i < lst_v.size()) && (res == true))) {
+        {
+          if (((s_id == 8) || (s_id == 18))) {
+            if ((((sy + (this.dim / 2)) >= (lst_v.get(i).coord.getY() - (this.dim / 2))) || 
+              ((sy - (this.dim / 2)) <= (lst_v.get(i).coord.getY() + (this.dim / 2))))) {
+              res = false;
+            }
+          } else {
+            if ((((sx + (this.dim / 2)) >= (lst_v.get(i).coord.getX() - (this.dim / 2))) || 
+              ((sx - (this.dim / 2)) <= (lst_v.get(i).coord.getX() + (this.dim / 2))))) {
+              res = false;
+            }
+          }
+          i = (i + 1);
+        }
+      }
+    }
+    return res;
   }
   
   public void deccelerate() {
@@ -239,6 +276,8 @@ public abstract class Vehicle implements Body {
       return false;
     if (Double.doubleToLongBits(other.distanceMax) != Double.doubleToLongBits(this.distanceMax))
       return false;
+    if (other.kill != this.kill)
+      return false;
     return super.equals(obj);
   }
   
@@ -258,6 +297,7 @@ public abstract class Vehicle implements Body {
     result = prime * result + Double.hashCode(this.position);
     result = prime * result + Double.hashCode(this.distance);
     result = prime * result + Double.hashCode(this.distanceMax);
+    result = prime * result + Boolean.hashCode(this.kill);
     return result;
   }
   
@@ -304,6 +344,15 @@ public abstract class Vehicle implements Body {
   
   public void setEdge(final Edge edge) {
     this.edge = edge;
+  }
+  
+  @Pure
+  public Node getSpawn() {
+    return this.spawn;
+  }
+  
+  public void setSpawn(final Node spawn) {
+    this.spawn = spawn;
   }
   
   @Pure
@@ -367,5 +416,14 @@ public abstract class Vehicle implements Body {
   
   public void setPerception(final Perception perception) {
     this.perception = perception;
+  }
+  
+  @Pure
+  public boolean isKill() {
+    return this.kill;
+  }
+  
+  public void setKill(final boolean kill) {
+    this.kill = kill;
   }
 }

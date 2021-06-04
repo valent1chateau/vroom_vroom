@@ -40,14 +40,24 @@ class Environment {
 	var bodyList : TreeMap<UUID, classicDriverBody>
 	@Accessors
 	var priorityVehicle : priorityVehicleBody
-	
+	@Accessors
 	var map : Map
 	
 	new() {
 		bodyList = new TreeMap<UUID, classicDriverBody>
 		priorityVehicle = new priorityVehicleBody()
-		map = new Map(800,600)
+		map = new Map(1600,900)
 	}
+	def Update() {
+		var a = bodyList.values
+		//println(a.get(0).c)
+		for(entry : bodyList.entrySet()){
+			println(bodyList.get(entry.getKey()).speed)
+			bodyList.get(entry.getKey()).accelerate(0.5)
+			//println(bodyList.get(entry.getKey()).c)
+			}
+	}
+	
 	def initEnvironment(agents:int){
 		agentsToSpawn = agents
 		var i = 0 

@@ -2,6 +2,7 @@ package traffic_simulation.util;
 
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
+import java.awt.geom.Point2D;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Vehicle;
 
@@ -63,7 +64,7 @@ public class Tools {
   @Pure
   public double accelerationFree(final double a, final double Va, final double V0) {
     double res = 0;
-    double _power = Math.pow((Va / V0), 4);
+    double _power = Math.pow((Va / V0), 2);
     res = (a * (1 - _power));
     return res;
   }
@@ -92,6 +93,22 @@ public class Tools {
   }
   
   @Pure
+  public double distance_vehicle2(final Point2D P1, final Vehicle v2, final double dim1) {
+    double res = 0;
+    double _x = v2.getCoord().getX();
+    double _x_1 = P1.getX();
+    double _power = Math.pow((_x - _x_1), 2);
+    double _y = v2.getCoord().getY();
+    double _y_1 = P1.getY();
+    double _power_1 = Math.pow((_y - _y_1), 2);
+    double _sqrt = Math.sqrt((_power + _power_1));
+    double _minus = (_sqrt - (dim1 / 2));
+    double _dim = v2.getDim();
+    res = (_minus - (_dim / 2));
+    return res;
+  }
+  
+  @Pure
   public double distance_vehicle(final Vehicle v1, final Vehicle v2) {
     double res = 0;
     double _x = v2.getCoord().getX();
@@ -102,7 +119,8 @@ public class Tools {
     double _power_1 = Math.pow((_y - _y_1), 2);
     double _sqrt = Math.sqrt((_power + _power_1));
     double _dim = v1.getDim();
-    double _minus = (_sqrt - (_dim / 2));
+    double _minus = (_sqrt - 
+      (_dim / 2));
     double _dim_1 = v2.getDim();
     res = (_minus - (_dim_1 / 2));
     return res;

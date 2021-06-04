@@ -99,7 +99,12 @@ class Perception {
 	
 	def isCarBehind(v : Vehicle):boolean{ //on vérifie si la voiture détecté est devant ou derrière 
 		var res : boolean = false
-		if(v.pos_edge < vehicle.pos_edge){res = true}
+		if (v.edge.id == vehicle.edge.id) {
+			if (v.pos_edge < vehicle.pos_edge) {
+				res = true
+			}
+		}
+		
 		return res
 	}
 	
