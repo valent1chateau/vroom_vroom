@@ -43,6 +43,7 @@ import traffic_simulation.util.Tools;
 @SarlElementType(10)
 @SuppressWarnings("all")
 public class Perception {
+  @Accessors
   private Vehicle vehicle;
   
   private double dist_vision;
@@ -95,8 +96,7 @@ public class Perception {
         for (int k = 0; (k < e.getBodies().size()); k++) {
           {
             Vehicle vh = e.getBodies().get(k);
-            boolean _isView = this.isView(vh);
-            if (_isView) {
+            if ((((!Objects.equal(vh.getId(), this.vehicle.getId())) && this.isView(vh)) && (this.isCarBehind(vh) != true))) {
               this.res.add(vh);
             }
           }
@@ -113,10 +113,9 @@ public class Perception {
   @Pure
   public boolean isCarBehind(final Vehicle v) {
     boolean res = false;
-    String _id = v.getEdge().getId();
-    String _id_1 = this.vehicle.getEdge().getId();
-    boolean _equals = Objects.equal(_id, _id_1);
-    if (_equals) {
+    int _id_ = v.getEdge().getId_();
+    int _id__1 = this.vehicle.getEdge().getId_();
+    if ((_id_ == _id__1)) {
       double _pos_edge = v.getPos_edge();
       double _pos_edge_1 = this.vehicle.getPos_edge();
       if ((_pos_edge < _pos_edge_1)) {
@@ -160,6 +159,15 @@ public class Perception {
     final int prime = 31;
     result = prime * result + Double.hashCode(this.dist_vision);
     return result;
+  }
+  
+  @Pure
+  public Vehicle getVehicle() {
+    return this.vehicle;
+  }
+  
+  public void setVehicle(final Vehicle vehicle) {
+    this.vehicle = vehicle;
   }
   
   @Pure

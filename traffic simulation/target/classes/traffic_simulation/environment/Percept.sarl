@@ -41,7 +41,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
  */
   
 class Perception {
-	
+
+	@Accessors
 	var vehicle : Vehicle
 	var dist_vision : double
 	var tool : Tools = new Tools
@@ -60,9 +61,11 @@ class Perception {
 	def percept() : ArrayList<Vehicle> {
 
 		res = new ArrayList<Vehicle>
+		//println(vehicle.edge.bodies.size())
 		for (var i = 0; i < vehicle.edge.bodies.size();i++){
 			var v = vehicle.edge.bodies.get(i)
 			// on vérifie que le véhicule ne se perçoit pas lui-même et ne perçoit pas les véhicules derrières
+			
 			if(v.id != vehicle.id && isCarBehind(v) != true){ 
 				if (isView(v)){
 					res.add(v)
@@ -84,9 +87,12 @@ class Perception {
 		for (var i = 0; i < n.neighboors.size(); i++) {
 			var nout = n.neighboors.get(i)
 			var e = G.dict_Edges.get(String.valueOf(n.id) + String.valueOf(nout.id))
+			//println(String.valueOf(n.id) + " - " +  String.valueOf(nout.id))
 			for (var k = 0; k < e.bodies.size(); k++) {
 				var vh = e.bodies.get(k)
-				if (isView(vh)) {
+				//println(isCarBehind(vh))
+				if (vh.id != vehicle.id && isView(vh) && isCarBehind(vh) != true)
+			{
 					res.add(vh)
 				}
 			}
@@ -99,7 +105,7 @@ class Perception {
 	
 	def isCarBehind(v : Vehicle):boolean{ //on vérifie si la voiture détecté est devant ou derrière 
 		var res : boolean = false
-		if (v.edge.id == vehicle.edge.id) {
+		if (v.edge.id_ == vehicle.edge.id_) {
 			if (v.pos_edge < vehicle.pos_edge) {
 				res = true
 			}

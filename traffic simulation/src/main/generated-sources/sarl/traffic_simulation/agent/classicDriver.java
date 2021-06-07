@@ -40,7 +40,6 @@ import java.util.Collection;
 import java.util.UUID;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.PhysicEnvironment;
 import traffic_simulation.agent.influence;
@@ -90,16 +89,13 @@ public class classicDriver extends Agent {
           }
         }
       }
-      double _accelerationFree = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
       double _get = etat[1];
       double _speed = carInFront.getSpeed();
-      double _accelerationInt = this.tool.accelerationInt(etat[2], etat[1], this.b, dist_min, this.So, (_get - _speed), this.T);
-      a = (_accelerationFree + _accelerationInt);
+      a = this.tool.accelerationInt(etat[2], etat[1], this.b, dist_min, this.So, (_get - _speed), this.T);
       DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
       UUID _iD = this.getID();
       influence _influence = new influence(a, _iD);
       _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_influence);
-      InputOutput.<Double>println(Double.valueOf(a));
     } else {
       a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
       DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();

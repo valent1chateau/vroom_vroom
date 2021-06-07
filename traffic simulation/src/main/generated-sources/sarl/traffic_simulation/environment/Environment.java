@@ -28,7 +28,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import org.eclipse.xtend.lib.annotations.Accessors;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Map;
 import traffic_simulation.environment.classicDriverBody;
@@ -69,8 +68,10 @@ public class Environment {
     Set<java.util.Map.Entry<UUID, classicDriverBody>> _entrySet = this.bodyList.entrySet();
     for (final java.util.Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
       {
-        InputOutput.<Double>println(Double.valueOf(this.bodyList.get(entry.getKey()).getSpeed()));
         this.bodyList.get(entry.getKey()).accelerate(0.5);
+        double _speed = this.bodyList.get(entry.getKey()).getSpeed();
+        if ((_speed == 0)) {
+        }
       }
     }
   }

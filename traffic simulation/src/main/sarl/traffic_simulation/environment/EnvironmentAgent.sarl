@@ -101,6 +101,7 @@ agent EnvironmentAgent {
 		var ac = occurrence.acc
 		var id = occurrence.idt 
 		environment.bodyList.get(id).acc = ac
+		//println(environment.bodyList.get(id).edge.id_)
 		//println(nbrAgentOnMap)
 		if (countAgentInfluence.incrementAndGet() == nbrAgentOnMap) {
 			// info("oui")
@@ -140,7 +141,7 @@ agent EnvironmentAgent {
 	def actionsOnInfluence(){
 		
 			
-			Thread::sleep(500)
+			
 			// println(t)
 			 
 			if(environment.bodyList.isEmpty!=true){
@@ -153,17 +154,21 @@ agent EnvironmentAgent {
 		for (var i = 1; i <= nbAgent; i++) {
 			var bodyAgent = new classicDriverBody(this.environment.map)
 			//println(bodyAgent.canSpawn)
+			println(bodyAgent.canSpawn)
 			if (bodyAgent.canSpawn == true){
-				if (environment.bodyList.size<=50){
-					//println("z")
-					environment.bodyList.put(bodyAgent.ID, bodyAgent) 
+				if (environment.bodyList.size<50){
+					// println("z")
+					bodyAgent.initialzeEdgeBodies
+					environment.bodyList.put(bodyAgent.ID, bodyAgent)
+					
 					typeof(classicDriver).spawnInContextWithID(bodyAgent.ID, defaultContext)
 					countAgentSpawned += 1
 					} 
 				} 
 		}
 		if (countAgentSpawned == 0){
-			//print("s")
+			// print("s")
+			Thread::sleep(20)
 			startLoop
 		}
 		

@@ -91,7 +91,8 @@ abstract class Vehicle implements Body {
 		return this.id
 	}
 	
-	def positionToCoord(){
+	def positionToCoord() {
+		
 		var e = path.pathEdges
 		var j = 0
 		var stop = false
@@ -128,7 +129,7 @@ abstract class Vehicle implements Body {
 				}
 
 				if (e.get(j).id_ != this.edge.id_) {
-		
+					
 					edge.removeBody(this)
 					
 					edge = e.get(j)
@@ -163,7 +164,7 @@ abstract class Vehicle implements Body {
 	}
 	
 	def accelerate( t : double) {
-		
+		if (acc< -6){acc = -6}
 		if (speed < maxSpeed){
 		
 		speed = speed + tool.calc_speed(acc,t)}
@@ -186,18 +187,32 @@ abstract class Vehicle implements Body {
 		var sx = spawn.coord.getX()
 		var sy = spawn.coord.getY()
 		var s_id = spawn.id
+		
 		lst_v.remove(this)
 		if (lst_v.isEmpty != true){
 			var i = 0
 			while (i<lst_v.size() && res==true){
-				if (s_id == 8 || s_id == 18) {
-					if (sy + this.dim / 2 >= lst_v.get(i).coord.getY() - dim / 2 ||
-						sy - this.dim / 2 <= lst_v.get(i).coord.getY() + dim / 2) {
+				if (s_id == 8 ) {
+					if (
+						sy - this.dim / 2 < lst_v.get(i).coord.getY() + lst_v.get(i).dim / 2) {
+						//println(lst_v.get(i).coord.getY() - dim / 2 + " , " + sy + lst_v.get(i).coord.getY() + dim / 2)
+						res = false
+						}
+					} 
+				else if(s_id == 18){
+					if (sy + this.dim / 2 > lst_v.get(i).coord.getY() - lst_v.get(i).dim / 2) {
 						res = false
 					}
-				}else{
-					if (sx + this.dim / 2 >= lst_v.get(i).coord.getX() - dim / 2 ||
-						sx - this.dim / 2 <= lst_v.get(i).coord.getX() + dim / 2 ) {
+				}
+				else if (s_id == 2 || s_id == 2){
+					if(sx + this.dim / 2 > lst_v.get(i).coord.getX() - lst_v.get(i).dim / 2 ){
+						res = false
+					}
+				}
+				else{
+					if ( 
+						sx - this.dim / 2 < lst_v.get(i).coord.getX() + lst_v.get(i).dim / 2 )
+			{
 						res = false
 					}
 				}
@@ -206,7 +221,10 @@ abstract class Vehicle implements Body {
 		}
 		return res
 	}
-	
+
+	def initialzeEdgeBodies() {
+		this.edge.addBody(this)	
+	}
 	def deccelerate(): void {
 		
 	}
@@ -239,14 +257,18 @@ class classicDriverBody extends Vehicle{
 		c.setCenterY(y)
 		c.setRadius(2.25)
 		dim = 2*2.25
-		this.c.setFill(Color.RED)
+		this.c.setFill(Color.BLUE)
 		D_Max()
-		edge = path.pathEdges.get(0)
-		edge.addBody(this)
+		
 		accMax = 0.73
 		maxSpeed = 13.8
-		perception = new Perception(this, 150.0, map.getG)
+		this.perception = new Perception(this, 150.0, map.getG)
+		this.edge = path.pathEdges.get(0)
+		
+		
 	}
+	
+	
 	
 	def newPath(G:Graph) {
 		var in : ArrayList<Node> = new ArrayList<Node>

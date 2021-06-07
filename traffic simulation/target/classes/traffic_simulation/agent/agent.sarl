@@ -83,6 +83,7 @@ agent classicDriver {
 		var a : double
 		
 		if (p.isEmpty != true) {
+			//println(p)
 			for (var i = 0; i < p.size(); i++) {
 				var distBetweenCar = tool.distance_vehicle2(coord_car, p.get(i), dim_car)
 				if (i == 0) {
@@ -96,9 +97,10 @@ agent classicDriver {
 				}
 			}
 			//println(etat.get(1) - carInFront.speed)
-			a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0)) + tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, So, etat.get(1) - carInFront.speed, T)
-			emit(new influence(a, ID))  
-			println(a)
+			a = tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, So, etat.get(1) - carInFront.speed, T)
+			emit(new influence(a, ID))
+			//println("q")  
+			//println(a)
 			/*if (a < -1000) {
 				println(
 					tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, So, etat.get(1) - carInFront.speed, T))
@@ -111,8 +113,10 @@ agent classicDriver {
 			
 			//println("a")
 		} else {
+			
 			a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
 			emit(new influence(a, ID))
+			
 		  }
 		 
 		/*a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))

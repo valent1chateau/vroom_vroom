@@ -197,6 +197,9 @@ public abstract class Vehicle implements Body {
   }
   
   public void accelerate(final double t) {
+    if ((this.acc < (-6))) {
+      this.acc = (-6);
+    }
     if ((this.speed < this.maxSpeed)) {
       double _calc_speed = this.tool.calc_speed(this.acc, t);
       this.speed = (this.speed + _calc_speed);
@@ -220,15 +223,29 @@ public abstract class Vehicle implements Body {
       int i = 0;
       while (((i < lst_v.size()) && (res == true))) {
         {
-          if (((s_id == 8) || (s_id == 18))) {
-            if ((((sy + (this.dim / 2)) >= (lst_v.get(i).coord.getY() - (this.dim / 2))) || 
-              ((sy - (this.dim / 2)) <= (lst_v.get(i).coord.getY() + (this.dim / 2))))) {
+          if ((s_id == 8)) {
+            double _y = lst_v.get(i).coord.getY();
+            if (((sy - (this.dim / 2)) < (_y + (lst_v.get(i).dim / 2)))) {
               res = false;
             }
           } else {
-            if ((((sx + (this.dim / 2)) >= (lst_v.get(i).coord.getX() - (this.dim / 2))) || 
-              ((sx - (this.dim / 2)) <= (lst_v.get(i).coord.getX() + (this.dim / 2))))) {
-              res = false;
+            if ((s_id == 18)) {
+              double _y_1 = lst_v.get(i).coord.getY();
+              if (((sy + (this.dim / 2)) > (_y_1 - (lst_v.get(i).dim / 2)))) {
+                res = false;
+              }
+            } else {
+              if (((s_id == 2) || (s_id == 2))) {
+                double _x = lst_v.get(i).coord.getX();
+                if (((sx + (this.dim / 2)) > (_x - (lst_v.get(i).dim / 2)))) {
+                  res = false;
+                }
+              } else {
+                double _x_1 = lst_v.get(i).coord.getX();
+                if (((sx - (this.dim / 2)) < (_x_1 + (lst_v.get(i).dim / 2)))) {
+                  res = false;
+                }
+              }
             }
           }
           i = (i + 1);
@@ -236,6 +253,10 @@ public abstract class Vehicle implements Body {
       }
     }
     return res;
+  }
+  
+  public boolean initialzeEdgeBodies() {
+    return this.edge.addBody(this);
   }
   
   public void deccelerate() {

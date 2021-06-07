@@ -46,14 +46,20 @@ class Environment {
 	new() {
 		bodyList = new TreeMap<UUID, classicDriverBody>
 		priorityVehicle = new priorityVehicleBody()
-		map = new Map(1600,900)
+		map = new Map(1600, 900)
+	
+		
 	}
 	def Update() {
 		var a = bodyList.values
 		//println(a.get(0).c)
 		for(entry : bodyList.entrySet()){
-			println(bodyList.get(entry.getKey()).speed)
+			//println(bodyList.get(entry.getKey()).speed)
 			bodyList.get(entry.getKey()).accelerate(0.5)
+			if (bodyList.get(entry.getKey()).speed == 0) {
+				
+				//println(bodyList.get(entry.getKey()).perception.res)
+			}
 			//println(bodyList.get(entry.getKey()).c)
 			}
 	}
