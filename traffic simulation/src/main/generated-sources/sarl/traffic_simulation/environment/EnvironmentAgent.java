@@ -52,7 +52,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.classicDriver;
 import traffic_simulation.agent.influence;
@@ -120,8 +119,10 @@ public class EnvironmentAgent extends Agent {
           double amax = bodies.get(entry.getKey()).getAccMax();
           Point2D coo = bodies.get(entry.getKey()).getCoord();
           double dims = bodies.get(entry.getKey()).getDim();
+          boolean redLight = bodies.get(entry.getKey()).getPerception().getLightIsView();
+          double dstLight = bodies.get(entry.getKey()).getPerception().getDistWithLight();
           DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
-          Perceptions _perceptions = new Perceptions(p, vmax, v, amax, coo, dims);
+          Perceptions _perceptions = new Perceptions(p, vmax, v, amax, coo, dims, redLight, dstLight);
           class $SerializableClosureProxy implements Scope<Address> {
             
             private final UUID $_key;
@@ -166,11 +167,10 @@ public class EnvironmentAgent extends Agent {
         {
           traffic_simulation.environment.Map _map = this.environment.getMap();
           classicDriverBody bodyAgent = new classicDriverBody(_map);
-          InputOutput.<Boolean>println(Boolean.valueOf(bodyAgent.canSpawn()));
           boolean _canSpawn = bodyAgent.canSpawn();
           if ((_canSpawn == true)) {
             int _size = this.environment.getBodyList().size();
-            if ((_size < 50)) {
+            if ((_size < 100)) {
               bodyAgent.initialzeEdgeBodies();
               this.environment.getBodyList().put(bodyAgent.getID(), bodyAgent);
               Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
@@ -183,7 +183,7 @@ public class EnvironmentAgent extends Agent {
         }
       }
       if ((this.countAgentSpawned == 0)) {
-        Thread.sleep(20);
+        Thread.sleep(40);
         this.startLoop();
       }
     } catch (Throwable _e) {

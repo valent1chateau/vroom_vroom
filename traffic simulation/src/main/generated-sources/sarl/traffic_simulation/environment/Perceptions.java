@@ -45,11 +45,17 @@ public class Perceptions extends Event {
   
   public double dim;
   
-  public Perceptions(final ArrayList<Vehicle> p, final double vtm, final double vt, final double am, final Point2D co, final double d) {
+  public double distwithLight;
+  
+  public boolean isRedView;
+  
+  public Perceptions(final ArrayList<Vehicle> p, final double vtm, final double vt, final double am, final Point2D co, final double d, final boolean isRed, final double distLight) {
     this.p_value = p;
     this.state = new double[] { vtm, vt, am };
     this.loc = co;
     this.dim = d;
+    this.isRedView = isRed;
+    this.distwithLight = distLight;
   }
   
   @Override
@@ -65,6 +71,10 @@ public class Perceptions extends Event {
     Perceptions other = (Perceptions) obj;
     if (Double.doubleToLongBits(other.dim) != Double.doubleToLongBits(this.dim))
       return false;
+    if (Double.doubleToLongBits(other.distwithLight) != Double.doubleToLongBits(this.distwithLight))
+      return false;
+    if (other.isRedView != this.isRedView)
+      return false;
     return super.equals(obj);
   }
   
@@ -75,6 +85,8 @@ public class Perceptions extends Event {
     int result = super.hashCode();
     final int prime = 31;
     result = prime * result + Double.hashCode(this.dim);
+    result = prime * result + Double.hashCode(this.distwithLight);
+    result = prime * result + Boolean.hashCode(this.isRedView);
     return result;
   }
   
@@ -89,8 +101,10 @@ public class Perceptions extends Event {
     builder.add("state", this.state);
     builder.add("loc", this.loc);
     builder.add("dim", this.dim);
+    builder.add("distwithLight", this.distwithLight);
+    builder.add("isRedView", this.isRedView);
   }
   
   @SyntheticMember
-  private static final long serialVersionUID = 1009440178L;
+  private static final long serialVersionUID = 1468982264L;
 }

@@ -3,6 +3,7 @@ package traffic_simulation.environment;
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
+import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Light;
 import traffic_simulation.environment.trafficObject;
@@ -11,9 +12,10 @@ import traffic_simulation.environment.trafficObject;
 @SarlElementType(10)
 @SuppressWarnings("all")
 public class trafficLight extends trafficObject implements Light {
+  @Accessors
   private boolean isGreen = false;
   
-  public trafficLight(final int xParam, final int yParam, final boolean state) {
+  public trafficLight(final double xParam, final double yParam, final boolean state) {
     super(xParam, yParam);
     this.isGreen = state;
   }
@@ -54,5 +56,14 @@ public class trafficLight extends trafficObject implements Light {
     final int prime = 31;
     result = prime * result + Boolean.hashCode(this.isGreen);
     return result;
+  }
+  
+  @Pure
+  public boolean isGreen() {
+    return this.isGreen;
+  }
+  
+  public void setIsGreen(final boolean isGreen) {
+    this.isGreen = isGreen;
   }
 }

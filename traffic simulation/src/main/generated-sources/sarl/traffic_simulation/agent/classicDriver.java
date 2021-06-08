@@ -54,7 +54,7 @@ import traffic_simulation.util.Tools;
 public class classicDriver extends Agent {
   private Tools tool = new Tools();
   
-  private double So = 2.0;
+  private double So = 1.0;
   
   private double T = 1.5;
   
@@ -70,6 +70,8 @@ public class classicDriver extends Agent {
     double[] etat = occurrence.state;
     double dim_car = occurrence.dim;
     Point2D coord_car = occurrence.loc;
+    boolean isRed = occurrence.isRedView;
+    double distWithRedLight = occurrence.distwithLight;
     double dist_min = (-1.0);
     Vehicle carInFront = null;
     double a = 0;
@@ -89,15 +91,29 @@ public class classicDriver extends Agent {
           }
         }
       }
-      double _get = etat[1];
-      double _speed = carInFront.getSpeed();
-      a = this.tool.accelerationInt(etat[2], etat[1], this.b, dist_min, this.So, (_get - _speed), this.T);
+      if (isRed) {
+        if ((distWithRedLight < dist_min)) {
+          a = this.tool.accelerationInt(etat[2], etat[1], this.b, distWithRedLight, 1, etat[1], this.T);
+        } else {
+          double _get = etat[1];
+          double _speed = carInFront.getSpeed();
+          a = this.tool.accelerationInt(etat[2], etat[1], this.b, dist_min, this.So, (_get - _speed), this.T);
+        }
+      } else {
+        double _get_1 = etat[1];
+        double _speed_1 = carInFront.getSpeed();
+        a = this.tool.accelerationInt(etat[2], etat[1], this.b, dist_min, this.So, (_get_1 - _speed_1), this.T);
+      }
       DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
       UUID _iD = this.getID();
       influence _influence = new influence(a, _iD);
       _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_influence);
     } else {
-      a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+      if (isRed) {
+        a = this.tool.accelerationInt(etat[2], etat[1], this.b, distWithRedLight, 1, etat[1], this.T);
+      } else {
+        a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+      }
       DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
       UUID _iD_1 = this.getID();
       influence _influence_1 = new influence(a, _iD_1);

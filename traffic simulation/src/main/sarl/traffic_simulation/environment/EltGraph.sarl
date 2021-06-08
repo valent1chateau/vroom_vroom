@@ -39,6 +39,10 @@ class Edge extends Polyline {
 	var weight : double
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
 	var bodies : ArrayList<Vehicle>
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var haveLight : boolean = false
+	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
+	var light : trafficLight
 
 	new (i : int, in_ : Node, out_ : Node) {
 		super()

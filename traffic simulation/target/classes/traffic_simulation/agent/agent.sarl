@@ -57,7 +57,7 @@ event influence{
 
 agent classicDriver {
 	var tool = new Tools
-	var So : double = 2.0
+	var So : double = 1.0
 	var T : double = 1.5
 	var b : double = 1.67
 	
@@ -77,6 +77,8 @@ agent classicDriver {
 		var etat = occurrence.state
 		var dim_car = occurrence.dim
 		var coord_car = occurrence.loc
+		var isRed = occurrence.isRedView
+		var distWithRedLight = occurrence.distwithLight
 		
 		var dist_min : double = -1.0
 		var carInFront : Vehicle
@@ -96,8 +98,18 @@ agent classicDriver {
 					}
 				}
 			}
+			
+			if (isRed){
+				if (distWithRedLight < dist_min) {
+					a = tool.accelerationInt(etat.get(2), etat.get(1), b, distWithRedLight, 1,etat.get(1), T)
+				} else {
+					a = tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, So, etat.get(1) - carInFront.speed,T)
+				}
+			} else {
+				a = tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, So, etat.get(1) - carInFront.speed, T)
+			}
 			//println(etat.get(1) - carInFront.speed)
-			a = tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, So, etat.get(1) - carInFront.speed, T)
+			
 			emit(new influence(a, ID))
 			//println("q")  
 			//println(a)
@@ -113,8 +125,15 @@ agent classicDriver {
 			
 			//println("a")
 		} else {
+			if (isRed) {
+				
+					a = tool.accelerationInt(etat.get(2), etat.get(1), b, distWithRedLight, 1, etat.get(1), T)
+				
+				}
+			 else {
+				a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
+			}
 			
-			a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
 			emit(new influence(a, ID))
 			
 		  }

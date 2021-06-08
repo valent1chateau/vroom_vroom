@@ -50,11 +50,16 @@ event Perceptions{
 	var state : double[]
 	var loc : Point2D
 	var dim : double
-	new (p : ArrayList<Vehicle>,vtm : double,vt : double, am : double,co : Point2D,d : double){
+	var distwithLight : double 
+	var isRedView : boolean
+	new (p : ArrayList<Vehicle>,vtm : double,vt : double, am : double,co : Point2D,d : double,isRed : boolean,distLight : double){
 	p_value = p
 	state = #[vtm,vt,am]
 	loc = co
 	dim = d
+	isRedView = isRed
+	distwithLight = distLight
+	
 	}	
 }
 
@@ -129,8 +134,12 @@ agent EnvironmentAgent {
 			var amax = bodies.get(entry.getKey()).accMax
 			var coo = bodies.get(entry.getKey()).coord
 			var dims = bodies.get(entry.getKey()).dim
+			var redLight = bodies.get(entry.getKey()).perception.getLightIsView
+			var dstLight = bodies.get(entry.getKey()).perception.distWithLight
 			
-			emit(new Perceptions(p,vmax,v,amax,coo,dims))[it.UUID == entry.getKey()]
+			
+			
+			emit(new Perceptions(p,vmax,v,amax,coo,dims,redLight,dstLight))[it.UUID == entry.getKey()]
 			
 			//println(entry.getKey)
 		}
@@ -153,10 +162,8 @@ agent EnvironmentAgent {
 		var nbAgent = 1 + rand.nextInt(4)
 		for (var i = 1; i <= nbAgent; i++) {
 			var bodyAgent = new classicDriverBody(this.environment.map)
-			//println(bodyAgent.canSpawn)
-			println(bodyAgent.canSpawn)
 			if (bodyAgent.canSpawn == true){
-				if (environment.bodyList.size<50){
+				if (environment.bodyList.size<100){
 					// println("z")
 					bodyAgent.initialzeEdgeBodies
 					environment.bodyList.put(bodyAgent.ID, bodyAgent)
@@ -168,7 +175,7 @@ agent EnvironmentAgent {
 		}
 		if (countAgentSpawned == 0){
 			// print("s")
-			Thread::sleep(20)
+			Thread::sleep(40)
 			startLoop
 		}
 		

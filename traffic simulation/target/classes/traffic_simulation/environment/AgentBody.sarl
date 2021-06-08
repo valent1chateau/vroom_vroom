@@ -164,11 +164,12 @@ abstract class Vehicle implements Body {
 	}
 	
 	def accelerate( t : double) {
-		if (acc< -6){acc = -6}
+		if (acc< -2){acc = -2}
 		if (speed < maxSpeed){
 		
 		speed = speed + tool.calc_speed(acc,t)}
 		if (speed<0){speed=0}
+		//if(speed==0){acc=0}
 		this.move(tool.calc_position(speed, t))
 		positionToCoord()
 		
@@ -229,8 +230,10 @@ abstract class Vehicle implements Body {
 		
 	}
 	
-	def calculatePerceptions(): void {
+	def calculatePerceptions() : void {
+		perception.perceptLight()
 		perception.percept()
+		
 		
 	}
 }
@@ -260,7 +263,7 @@ class classicDriverBody extends Vehicle{
 		this.c.setFill(Color.BLUE)
 		D_Max()
 		
-		accMax = 0.73
+		accMax =2
 		maxSpeed = 13.8
 		this.perception = new Perception(this, 150.0, map.getG)
 		this.edge = path.pathEdges.get(0)

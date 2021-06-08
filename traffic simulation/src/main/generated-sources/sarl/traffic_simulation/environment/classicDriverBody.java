@@ -53,7 +53,7 @@ public class classicDriverBody extends Vehicle {
     this.setDim((2 * 2.25));
     this.getC().setFill(Color.BLUE);
     this.D_Max();
-    this.setAccMax(0.73);
+    this.setAccMax(2);
     this.setMaxSpeed(13.8);
     Graph _g = map.getG();
     Perception _perception = new Perception(this, 150.0, _g);

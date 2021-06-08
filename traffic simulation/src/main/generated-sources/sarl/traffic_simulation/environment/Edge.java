@@ -10,6 +10,7 @@ import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Node;
 import traffic_simulation.environment.Vehicle;
+import traffic_simulation.environment.trafficLight;
 
 @SarlSpecification("0.11")
 @SarlElementType(10)
@@ -32,6 +33,12 @@ public class Edge extends Polyline {
   
   @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
   private ArrayList<Vehicle> bodies;
+  
+  @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
+  private boolean haveLight = false;
+  
+  @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
+  private trafficLight light;
   
   public Edge(final int i, final Node in_, final Node out_) {
     super();
@@ -67,6 +74,8 @@ public class Edge extends Polyline {
       return false;
     if (Double.doubleToLongBits(other.weight) != Double.doubleToLongBits(this.weight))
       return false;
+    if (other.haveLight != this.haveLight)
+      return false;
     return super.equals(obj);
   }
   
@@ -79,6 +88,7 @@ public class Edge extends Polyline {
     result = prime * result + Integer.hashCode(this.id_);
     result = prime * result + Integer.hashCode(this.nbVoies);
     result = prime * result + Double.hashCode(this.weight);
+    result = prime * result + Boolean.hashCode(this.haveLight);
     return result;
   }
   
@@ -134,5 +144,23 @@ public class Edge extends Polyline {
   
   public void setBodies(final ArrayList<Vehicle> bodies) {
     this.bodies = bodies;
+  }
+  
+  @Pure
+  public boolean isHaveLight() {
+    return this.haveLight;
+  }
+  
+  public void setHaveLight(final boolean haveLight) {
+    this.haveLight = haveLight;
+  }
+  
+  @Pure
+  public trafficLight getLight() {
+    return this.light;
+  }
+  
+  public void setLight(final trafficLight light) {
+    this.light = light;
   }
 }

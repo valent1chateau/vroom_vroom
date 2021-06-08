@@ -197,8 +197,8 @@ public abstract class Vehicle implements Body {
   }
   
   public void accelerate(final double t) {
-    if ((this.acc < (-6))) {
-      this.acc = (-6);
+    if ((this.acc < (-2))) {
+      this.acc = (-2);
     }
     if ((this.speed < this.maxSpeed)) {
       double _calc_speed = this.tool.calc_speed(this.acc, t);
@@ -263,6 +263,7 @@ public abstract class Vehicle implements Body {
   }
   
   public void calculatePerceptions() {
+    this.perception.perceptLight();
     this.perception.percept();
   }
   

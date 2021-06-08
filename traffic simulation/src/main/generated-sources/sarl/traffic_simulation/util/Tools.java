@@ -93,6 +93,19 @@ public class Tools {
   }
   
   @Pure
+  public double distance(final Point2D P1, final Point2D P2) {
+    double res = 0;
+    double _x = P2.getX();
+    double _x_1 = P1.getX();
+    double _power = Math.pow((_x - _x_1), 2);
+    double _y = P2.getY();
+    double _y_1 = P1.getY();
+    double _power_1 = Math.pow((_y - _y_1), 2);
+    res = Math.sqrt((_power + _power_1));
+    return res;
+  }
+  
+  @Pure
   public double distance_vehicle2(final Point2D P1, final Vehicle v2, final double dim1) {
     double res = 0;
     double _x = v2.getCoord().getX();

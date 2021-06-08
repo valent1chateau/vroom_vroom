@@ -59,10 +59,28 @@ class Window2 extends Stage {
 		
 		
 		for (var i = 0; i < env.map.getG.getListNodes.size(); i++) {
+			var n = env.map.getG.getListNodes.get(i)
+			if (n.id != 3 && n.id != 5 && n.id != 9 && n.id != 13 && n.id != 15 && n.id != 19) {
+				var c : Circle = new Circle()
+				c.setCenterX(n.coord.getX())
+				c.setCenterY(n.coord.getY())
+				c.setRadius(this.width * 0.01)
+				group.getChildren().add(c)
+			}
+			
+		}
+
+		for (var l = 0; l < env.trafficlight_lst.size(); l++) {
+			var tf = env.trafficlight_lst.get(l)
 			var c : Circle = new Circle()
-			c.setCenterX(env.map.getG.getListNodes.get(i).coord.getX())
-			c.setCenterY(env.map.getG.getListNodes.get(i).coord.getY())
-			c.setRadius(this.width * 0.01)
+			c.setCenterX(tf.coord.getX())
+			c.setCenterY(tf.coord.getY())
+			c.setRadius(width * 0.01)
+			if (tf.isGreen) {
+				c.setFill(Color.GREEN)
+			} else {
+				c.setFill(Color.RED)
+			}
 			group.getChildren().add(c)
 		}
 		t = 0
@@ -80,12 +98,30 @@ class Window2 extends Stage {
 				for (var j = 0; j < env.map.poly().size; j++) {
 					group.getChildren().add(env.map.poly().get(j))
 				}
-				
+
 				for (var i = 0; i < env.map.getG.getListNodes.size(); i++) {
+					var n = env.map.getG.getListNodes.get(i)
+					if (n.id != 3 && n.id != 5 && n.id != 9 && n.id != 13 && n.id != 15 && n.id != 19) {
+						var c : Circle = new Circle()
+						c.setCenterX(n.coord.getX())
+						c.setCenterY(n.coord.getY())
+						c.setRadius(width * 0.01)
+						group.getChildren().add(c)
+					}
+
+				}
+				
+				for (var l = 0; l < env.trafficlight_lst.size();l++){
+					var tf = env.trafficlight_lst.get(l)
 					var c : Circle = new Circle()
-					c.setCenterX(env.map.getG.getListNodes.get(i).coord.getX())
-					c.setCenterY(env.map.getG.getListNodes.get(i).coord.getY())
+					c.setCenterX(tf.coord.getX())
+					c.setCenterY(tf.coord.getY())
 					c.setRadius(width * 0.01)
+					if (tf.isGreen) {
+						c.setFill(Color.GREEN)
+					} else {
+						c.setFill(Color.RED)
+					}
 					group.getChildren().add(c)
 				}
 				//println(drivers.isEmpty)

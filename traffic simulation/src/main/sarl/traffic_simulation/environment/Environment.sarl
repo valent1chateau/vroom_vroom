@@ -21,10 +21,13 @@
 package traffic_simulation.environment
 
 import java.util.UUID
-
+import java.time.LocalDateTime
+import java.util.Timer
+import java.util.TimerTask
 import traffic_simulation.time.TimeManager
 import java.util.TreeMap
 import org.eclipse.xtend.lib.annotations.Accessors
+import java.util.ArrayList
 
 /**
  * Situated environment.  
@@ -34,7 +37,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
  */
 class Environment {
 	var agentsToSpawn : int
-	
+	var timer : Timer = new Timer()
 	// Bodies
 	@Accessors
 	var bodyList : TreeMap<UUID, classicDriverBody>
@@ -42,15 +45,42 @@ class Environment {
 	var priorityVehicle : priorityVehicleBody
 	@Accessors
 	var map : Map
+
+	@Accessors
+	var trafficlight_lst : ArrayList<trafficLight>
 	
 	new() {
 		bodyList = new TreeMap<UUID, classicDriverBody>
 		priorityVehicle = new priorityVehicleBody()
 		map = new Map(1600, 900)
+		trafficlight_lst = new ArrayList<trafficLight>
+		addTrafficlight(3, "23", true)
+		addTrafficlight(5, "45", true)
+		addTrafficlight(13, "1213", true)
+		addTrafficlight(15, "1415", true)
+		addTrafficlight(9, "89", false)
+		addTrafficlight(19, "1819", false)
+		
+		timer.scheduleAtFixedRate(new TimerTask(){
 	
+		def run {
+			//throw new UnsupportedOperationException("TODO: auto-generated method stub")
+			for (var i = 0; i<trafficlight_lst.size;i++){
+				
+				if (trafficlight_lst.get(i).isGreen) {
+						trafficlight_lst.get(i).turnRed
+				} else {
+						trafficlight_lst.get(i).turnGreen
+				}
+				
+			}
+		}
+	
+		}, 8000,8000)
 		
 	}
 	def Update() {
+		//println(LocalDateTime.now())
 		var a = bodyList.values
 		//println(a.get(0).c)
 		for(entry : bodyList.entrySet()){
@@ -62,6 +92,15 @@ class Environment {
 			}
 			//println(bodyList.get(entry.getKey()).c)
 			}
+	}
+	
+	def addTrafficlight(idNode : int,keyEdge : String, state : boolean){
+		var n = map.getG.getListNodes.get(idNode)
+		var e = map.getG.dict_Edges.get(keyEdge)
+		var Tf = new trafficLight(n.coord.getX(),n.coord.getY(),state)
+		e.haveLight = true
+		e.light = Tf
+		trafficlight_lst.add(Tf)
 	}
 	
 	def initEnvironment(agents:int){

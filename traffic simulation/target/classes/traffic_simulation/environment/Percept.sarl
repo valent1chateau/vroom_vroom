@@ -27,6 +27,7 @@ import com.google.common.base.Objects
 import java.util.ArrayList
 import traffic_simulation.util.Tools
 import org.eclipse.xtend.lib.annotations.Accessors
+import java.awt.geom.Point2D
 
 /* import traffic_simulation.math.Point2f
  * import traffic_simulation.math.Shape2f
@@ -49,13 +50,48 @@ class Perception {
 	var G : Graph
 
 	@Accessors
-	var res:ArrayList<Vehicle>
+	var res : ArrayList<Vehicle>
+	
+	var LightIsView : boolean 
+	
+	@Accessors
+	var distWithLight : double = -1
 	
 	new(v : Vehicle, dv : double, g : Graph){
 		vehicle = v
 		dist_vision = dv
 		G = g
 		res = new ArrayList<Vehicle>
+		LightIsView = false
+		
+	}
+	
+	def getLightIsView() : boolean{
+		return LightIsView
+	}
+	def perceptLight(){
+		var e = vehicle.edge
+		
+		if (e.haveLight) {
+			if (e.light.isGreen == false) {
+				distWithLight = tool.distance(vehicle.coord, e.light.coord)
+				if (distWithLight < dist_vision) {
+					this.LightIsView = true
+				} else {
+					this.LightIsView = false
+					distWithLight = -1
+				}
+			} else {
+				this.LightIsView = false
+				distWithLight = -1
+			}
+			
+			
+		} else {
+			this.LightIsView = false
+			distWithLight = -1
+		}
+		//println(LightIsView)
 	}
 	
 	def percept() : ArrayList<Vehicle> {

@@ -68,6 +68,13 @@ class Tools {
 		res = acc * t 
 		return res
 	}
+
+	def distance(P1 : Point2D, P2 : Point2D) : double {
+		var res : double
+		res = Math.sqrt((P2.getX() - P1.getX()) ** 2 + (P2.getY() - P1.getY()) ** 2)
+		return res
+	}
+	
 	
 	def distance_vehicle2(P1 : Point2D, v2 : Vehicle, dim1 : double) : double {
 		var res : double

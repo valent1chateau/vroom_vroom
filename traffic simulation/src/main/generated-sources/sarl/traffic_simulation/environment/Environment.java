@@ -23,15 +23,21 @@ package traffic_simulation.environment;
 import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.UUID;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Pure;
+import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Map;
+import traffic_simulation.environment.Node;
 import traffic_simulation.environment.classicDriverBody;
 import traffic_simulation.environment.priorityVehicleBody;
+import traffic_simulation.environment.trafficLight;
 
 /**
  * Situated environment.
@@ -45,6 +51,8 @@ import traffic_simulation.environment.priorityVehicleBody;
 public class Environment {
   private int agentsToSpawn;
   
+  private Timer timer = new Timer();
+  
   @Accessors
   private TreeMap<UUID, classicDriverBody> bodyList;
   
@@ -54,13 +62,41 @@ public class Environment {
   @Accessors
   private Map map;
   
+  @Accessors
+  private ArrayList<trafficLight> trafficlight_lst;
+  
   public Environment() {
+    abstract class __Environment_0 extends TimerTask {
+      public abstract void run();
+    }
+    
     TreeMap<UUID, classicDriverBody> _treeMap = new TreeMap<UUID, classicDriverBody>();
     this.bodyList = _treeMap;
     priorityVehicleBody _priorityVehicleBody = new priorityVehicleBody();
     this.priorityVehicle = _priorityVehicleBody;
     Map _map = new Map(1600, 900);
     this.map = _map;
+    ArrayList<trafficLight> _arrayList = new ArrayList<trafficLight>();
+    this.trafficlight_lst = _arrayList;
+    this.addTrafficlight(3, "23", true);
+    this.addTrafficlight(5, "45", true);
+    this.addTrafficlight(13, "1213", true);
+    this.addTrafficlight(15, "1415", true);
+    this.addTrafficlight(9, "89", false);
+    this.addTrafficlight(19, "1819", false);
+    __Environment_0 ___Environment_0 = new __Environment_0() {
+      public void run() {
+        for (int i = 0; (i < Environment.this.trafficlight_lst.size()); i++) {
+          boolean _isGreen = Environment.this.trafficlight_lst.get(i).isGreen();
+          if (_isGreen) {
+            Environment.this.trafficlight_lst.get(i).turnRed();
+          } else {
+            Environment.this.trafficlight_lst.get(i).turnGreen();
+          }
+        }
+      }
+    };
+    this.timer.scheduleAtFixedRate(___Environment_0, 8000, 8000);
   }
   
   public void Update() {
@@ -74,6 +110,21 @@ public class Environment {
         }
       }
     }
+  }
+  
+  public boolean addTrafficlight(final int idNode, final String keyEdge, final boolean state) {
+    boolean _xblockexpression = false;
+    {
+      Node n = this.map.getG().getListNodes().get(idNode);
+      Edge e = this.map.getG().getDict_Edges().get(keyEdge);
+      double _x = n.getCoord().getX();
+      double _y = n.getCoord().getY();
+      trafficLight Tf = new trafficLight(_x, _y, state);
+      e.setHaveLight(true);
+      e.setLight(Tf);
+      _xblockexpression = this.trafficlight_lst.add(Tf);
+    }
+    return _xblockexpression;
   }
   
   public void initEnvironment(final int agents) {
@@ -141,5 +192,14 @@ public class Environment {
   
   public void setMap(final Map map) {
     this.map = map;
+  }
+  
+  @Pure
+  public ArrayList<trafficLight> getTrafficlight_lst() {
+    return this.trafficlight_lst;
+  }
+  
+  public void setTrafficlight_lst(final ArrayList<trafficLight> trafficlight_lst) {
+    this.trafficlight_lst = trafficlight_lst;
   }
 }

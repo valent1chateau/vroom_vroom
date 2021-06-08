@@ -11,6 +11,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.eclipse.xtext.xbase.lib.Conversions;
@@ -19,6 +20,7 @@ import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Environment;
 import traffic_simulation.environment.Map;
 import traffic_simulation.environment.classicDriverBody;
+import traffic_simulation.environment.trafficLight;
 
 /**
  * @author jeome
@@ -64,10 +66,29 @@ public class Window2 extends Stage {
     this.group = _group;
     for (int i = 0; (i < this.env.getMap().getG().getListNodes().size()); i++) {
       {
+        traffic_simulation.environment.Node n = this.env.getMap().getG().getListNodes().get(i);
+        if (((((((n.getId() != 3) && (n.getId() != 5)) && (n.getId() != 9)) && (n.getId() != 13)) && (n.getId() != 15)) && (n.getId() != 19))) {
+          Circle c = new Circle();
+          c.setCenterX(n.getCoord().getX());
+          c.setCenterY(n.getCoord().getY());
+          c.setRadius((this.width * 0.01));
+          this.group.getChildren().add(c);
+        }
+      }
+    }
+    for (int l = 0; (l < this.env.getTrafficlight_lst().size()); l++) {
+      {
+        trafficLight tf = this.env.getTrafficlight_lst().get(l);
         Circle c = new Circle();
-        c.setCenterX(this.env.getMap().getG().getListNodes().get(i).getCoord().getX());
-        c.setCenterY(this.env.getMap().getG().getListNodes().get(i).getCoord().getY());
+        c.setCenterX(tf.getCoord().getX());
+        c.setCenterY(tf.getCoord().getY());
         c.setRadius((this.width * 0.01));
+        boolean _isGreen = tf.isGreen();
+        if (_isGreen) {
+          c.setFill(Color.GREEN);
+        } else {
+          c.setFill(Color.RED);
+        }
         this.group.getChildren().add(c);
       }
     }
@@ -81,10 +102,29 @@ public class Window2 extends Stage {
         }
         for (int i = 0; (i < Window2.this.env.getMap().getG().getListNodes().size()); i++) {
           {
+            traffic_simulation.environment.Node n = Window2.this.env.getMap().getG().getListNodes().get(i);
+            if (((((((n.getId() != 3) && (n.getId() != 5)) && (n.getId() != 9)) && (n.getId() != 13)) && (n.getId() != 15)) && (n.getId() != 19))) {
+              Circle c = new Circle();
+              c.setCenterX(n.getCoord().getX());
+              c.setCenterY(n.getCoord().getY());
+              c.setRadius((Window2.this.width * 0.01));
+              Window2.this.group.getChildren().add(c);
+            }
+          }
+        }
+        for (int l = 0; (l < Window2.this.env.getTrafficlight_lst().size()); l++) {
+          {
+            trafficLight tf = Window2.this.env.getTrafficlight_lst().get(l);
             Circle c = new Circle();
-            c.setCenterX(Window2.this.env.getMap().getG().getListNodes().get(i).getCoord().getX());
-            c.setCenterY(Window2.this.env.getMap().getG().getListNodes().get(i).getCoord().getY());
+            c.setCenterX(tf.getCoord().getX());
+            c.setCenterY(tf.getCoord().getY());
             c.setRadius((Window2.this.width * 0.01));
+            boolean _isGreen = tf.isGreen();
+            if (_isGreen) {
+              c.setFill(Color.GREEN);
+            } else {
+              c.setFill(Color.RED);
+            }
             Window2.this.group.getChildren().add(c);
           }
         }

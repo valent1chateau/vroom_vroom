@@ -55,12 +55,72 @@ public class Perception {
   @Accessors
   private ArrayList<Vehicle> res;
   
+  private boolean LightIsView;
+  
+  @Accessors
+  private double distWithLight = (-1);
+  
   public Perception(final Vehicle v, final double dv, final Graph g) {
     this.vehicle = v;
     this.dist_vision = dv;
     this.G = g;
     ArrayList<Vehicle> _arrayList = new ArrayList<Vehicle>();
     this.res = _arrayList;
+    this.LightIsView = false;
+  }
+  
+  @Pure
+  public boolean getLightIsView() {
+    return this.LightIsView;
+  }
+  
+  public Object perceptLight() {
+    Object _xblockexpression = null;
+    {
+      Edge e = this.vehicle.getEdge();
+      Object _xifexpression = null;
+      boolean _isHaveLight = e.isHaveLight();
+      if (_isHaveLight) {
+        Object _xifexpression_1 = null;
+        boolean _isGreen = e.getLight().isGreen();
+        if ((_isGreen == false)) {
+          Object _xblockexpression_1 = null;
+          {
+            this.distWithLight = this.tool.distance(this.vehicle.getCoord(), e.getLight().getCoord());
+            Object _xifexpression_2 = null;
+            if ((this.distWithLight < this.dist_vision)) {
+              _xifexpression_2 = Boolean.valueOf(this.LightIsView = true);
+            } else {
+              double _xblockexpression_2 = (double) 0;
+              {
+                this.LightIsView = false;
+                _xblockexpression_2 = this.distWithLight = (-1);
+              }
+              _xifexpression_2 = Double.valueOf(_xblockexpression_2);
+            }
+            _xblockexpression_1 = ((Object)_xifexpression_2);
+          }
+          _xifexpression_1 = ((Object)_xblockexpression_1);
+        } else {
+          double _xblockexpression_2 = (double) 0;
+          {
+            this.LightIsView = false;
+            _xblockexpression_2 = this.distWithLight = (-1);
+          }
+          _xifexpression_1 = Double.valueOf(_xblockexpression_2);
+        }
+        _xifexpression = ((Object)_xifexpression_1);
+      } else {
+        double _xblockexpression_3 = (double) 0;
+        {
+          this.LightIsView = false;
+          _xblockexpression_3 = this.distWithLight = (-1);
+        }
+        _xifexpression = Double.valueOf(_xblockexpression_3);
+      }
+      _xblockexpression = ((Object)_xifexpression);
+    }
+    return _xblockexpression;
   }
   
   public ArrayList<Vehicle> percept() {
@@ -148,6 +208,10 @@ public class Perception {
     Perception other = (Perception) obj;
     if (Double.doubleToLongBits(other.dist_vision) != Double.doubleToLongBits(this.dist_vision))
       return false;
+    if (other.LightIsView != this.LightIsView)
+      return false;
+    if (Double.doubleToLongBits(other.distWithLight) != Double.doubleToLongBits(this.distWithLight))
+      return false;
     return super.equals(obj);
   }
   
@@ -158,6 +222,8 @@ public class Perception {
     int result = super.hashCode();
     final int prime = 31;
     result = prime * result + Double.hashCode(this.dist_vision);
+    result = prime * result + Boolean.hashCode(this.LightIsView);
+    result = prime * result + Double.hashCode(this.distWithLight);
     return result;
   }
   
@@ -177,5 +243,14 @@ public class Perception {
   
   public void setRes(final ArrayList<Vehicle> res) {
     this.res = res;
+  }
+  
+  @Pure
+  public double getDistWithLight() {
+    return this.distWithLight;
+  }
+  
+  public void setDistWithLight(final double distWithLight) {
+    this.distWithLight = distWithLight;
   }
 }

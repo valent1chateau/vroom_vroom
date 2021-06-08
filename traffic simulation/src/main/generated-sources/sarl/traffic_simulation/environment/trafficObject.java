@@ -6,6 +6,7 @@ import io.sarl.lang.annotation.SyntheticMember;
 import java.awt.geom.Point2D;
 import java.util.Objects;
 import java.util.UUID;
+import org.eclipse.xtend.lib.annotations.AccessorType;
 import org.eclipse.xtend.lib.annotations.Accessors;
 import org.eclipse.xtext.xbase.lib.Pure;
 
@@ -13,13 +14,13 @@ import org.eclipse.xtext.xbase.lib.Pure;
 @SarlElementType(10)
 @SuppressWarnings("all")
 public class trafficObject {
-  @Accessors
+  @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
   private UUID id;
   
   @Accessors
   private Point2D coord;
   
-  public trafficObject(final int xParam, final int yParam) {
+  public trafficObject(final double xParam, final double yParam) {
     Point2D.Double _double = new Point2D.Double(xParam, yParam);
     this.coord = _double;
   }
