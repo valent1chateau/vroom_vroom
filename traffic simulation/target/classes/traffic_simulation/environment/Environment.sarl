@@ -52,7 +52,7 @@ class Environment {
 	new() {
 		bodyList = new TreeMap<UUID, classicDriverBody>
 		priorityVehicle = new priorityVehicleBody()
-		map = new Map(1600, 900)
+		map = new Map(800, 600)
 		trafficlight_lst = new ArrayList<trafficLight>
 		addTrafficlight(3, "23", true)
 		addTrafficlight(5, "45", true)
@@ -109,7 +109,7 @@ class Environment {
 		var currentV: classicDriverBody
 		while (i < agentsToSpawn - 1){
 			currentV = new classicDriverBody(this.map)
-			bodyList.put(currentV.ID,currentV)
+			bodyList.put(currentV.ID,currentV)	
 			i++
 		}
 	}

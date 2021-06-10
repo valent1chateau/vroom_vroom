@@ -54,8 +54,8 @@ public class Window2 extends Stage {
       public abstract void handle(final long now);
     }
     
-    this.length = 1600;
-    this.width = 900;
+    this.length = 800;
+    this.width = 600;
     Map _map = new Map(this.length, this.width);
     this.map = _map;
     this.env = e;

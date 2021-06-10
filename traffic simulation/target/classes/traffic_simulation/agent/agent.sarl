@@ -55,6 +55,10 @@ event influence{
 	}
 }
 
+event suicide {
+	
+}
+
 agent classicDriver {
 	var tool = new Tools
 	var So : double = 1.0
@@ -65,8 +69,8 @@ agent classicDriver {
 
 	on Initialize {
 		loggingName = "classicDriver"
-		//info("I'm starting")
-		//info("my classicDriver id :" + ID)
+		info("I'm starting")
+//		info("my classicDriver id :" + ID)
 		
 	}
 	
@@ -141,6 +145,10 @@ agent classicDriver {
 		/*a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
 		emit(new influence(a, ID))*/
 		
+	}
+	
+	on suicide {
+		killMe
 	}
 
 	on light {

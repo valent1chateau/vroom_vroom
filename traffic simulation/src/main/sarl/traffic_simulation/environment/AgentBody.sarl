@@ -65,8 +65,10 @@ abstract class Vehicle implements Body {
 	var speed : double
 	@Accessors
 	var maxSpeed : double
+	@Accessors
 	var position : double
 	var distance : double
+	@Accessors
 	var distanceMax : double
 	@Accessors
 	var path : Path
@@ -267,8 +269,6 @@ class classicDriverBody extends Vehicle{
 		maxSpeed = 13.8
 		this.perception = new Perception(this, 150.0, map.getG)
 		this.edge = path.pathEdges.get(0)
-		
-		
 	}
 	
 	

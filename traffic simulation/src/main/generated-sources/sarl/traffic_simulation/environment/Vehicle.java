@@ -84,10 +84,12 @@ public abstract class Vehicle implements Body {
   @Accessors
   private double maxSpeed;
   
+  @Accessors
   private double position;
   
   private double distance;
   
+  @Accessors
   private double distanceMax;
   
   @Accessors
@@ -420,6 +422,24 @@ public abstract class Vehicle implements Body {
   
   public void setMaxSpeed(final double maxSpeed) {
     this.maxSpeed = maxSpeed;
+  }
+  
+  @Pure
+  public double getPosition() {
+    return this.position;
+  }
+  
+  public void setPosition(final double position) {
+    this.position = position;
+  }
+  
+  @Pure
+  public double getDistanceMax() {
+    return this.distanceMax;
+  }
+  
+  public void setDistanceMax(final double distanceMax) {
+    this.distanceMax = distanceMax;
   }
   
   @Pure

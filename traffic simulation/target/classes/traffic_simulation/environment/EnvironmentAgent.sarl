@@ -63,6 +63,9 @@ event Perceptions{
 	}	
 }
 
+event suicide {
+}
+
 agent EnvironmentAgent {
 	
 	uses  Lifecycle, DefaultContextInteractions, Logging, Schedules
@@ -126,23 +129,32 @@ agent EnvironmentAgent {
 		//println(countAgentSpawned)
 		if (bodies.isEmpty == false) {
 			//println(bodies.size)
-		for(entry : bodies.entrySet()){
-			bodies.get(entry.getKey()).calculatePerceptions
-			var p = bodies.get(entry.getKey()).perception.res
-			var vmax = bodies.get(entry.getKey()).maxSpeed
-			var v = bodies.get(entry.getKey()).speed
-			var amax = bodies.get(entry.getKey()).accMax
-			var coo = bodies.get(entry.getKey()).coord
-			var dims = bodies.get(entry.getKey()).dim
-			var redLight = bodies.get(entry.getKey()).perception.getLightIsView
-			var dstLight = bodies.get(entry.getKey()).perception.distWithLight
+			for(entry : bodies.entrySet()){
+				bodies.get(entry.getKey()).calculatePerceptions
+				var p = bodies.get(entry.getKey()).perception.res
+				var vmax = bodies.get(entry.getKey()).maxSpeed
+				var v = bodies.get(entry.getKey()).speed
+				var amax = bodies.get(entry.getKey()).accMax
+				var coo = bodies.get(entry.getKey()).coord
+				var dims = bodies.get(entry.getKey()).dim
+				var redLight = bodies.get(entry.getKey()).perception.getLightIsView
+				var dstLight = bodies.get(entry.getKey()).perception.distWithLight
+				
+				
+				
+				emit(new Perceptions(p, vmax, v, amax, coo, dims, redLight, dstLight))[it.UUID == entry.getKey()]
 			
-			
-			
-			emit(new Perceptions(p,vmax,v,amax,coo,dims,redLight,dstLight))[it.UUID == entry.getKey()]
-			
-			//println(entry.getKey)
-		}
+				//Suppression des bodies arrives a destination
+				if (bodies.get(entry.getKey()).position > 700){
+					environment.bodyList.remove(entry.key)
+					info("suppression de body enregistrée")
+					nbrAgentOnMap = nbrAgentOnMap - 1
+					emit(new suicide())[it.UUID == entry.getKey()]
+					
+				}
+				
+				info("nb agent :" + this.nbrAgentOnMap)
+			}
 		
 		}
 	}
@@ -163,7 +175,7 @@ agent EnvironmentAgent {
 		for (var i = 1; i <= nbAgent; i++) {
 			var bodyAgent = new classicDriverBody(this.environment.map)
 			if (bodyAgent.canSpawn == true){
-				if (environment.bodyList.size<100){
+				if (environment.bodyList.size<1){
 					// println("z")
 					bodyAgent.initialzeEdgeBodies
 					environment.bodyList.put(bodyAgent.ID, bodyAgent)
