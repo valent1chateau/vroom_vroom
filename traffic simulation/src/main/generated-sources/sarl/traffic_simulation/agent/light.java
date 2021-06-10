@@ -73,4 +73,7 @@ public class light extends Event {
     super.toString(builder);
     builder.add("l", this.l);
   }
+  
+  @SyntheticMember
+  private static final long serialVersionUID = 181969841L;
 }

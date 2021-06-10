@@ -74,7 +74,7 @@ public class Environment {
     this.bodyList = _treeMap;
     priorityVehicleBody _priorityVehicleBody = new priorityVehicleBody();
     this.priorityVehicle = _priorityVehicleBody;
-    Map _map = new Map(800, 600);
+    Map _map = new Map(1600, 900);
     this.map = _map;
     ArrayList<trafficLight> _arrayList = new ArrayList<trafficLight>();
     this.trafficlight_lst = _arrayList;

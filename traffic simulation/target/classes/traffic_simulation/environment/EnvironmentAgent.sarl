@@ -63,8 +63,8 @@ event Perceptions{
 	}	
 }
 
-event suicide {
-}
+//event suicide {
+//}
 
 agent EnvironmentAgent {
 	
@@ -77,10 +77,13 @@ agent EnvironmentAgent {
 	var nbrAgentOnMap = 0
 	var countAgentInfluence = new AtomicInteger(0)
 	var countAgentSpawned = 0
+	var nbTotalVehicule : int
 			
 	on Initialize {
 		
 		environment = occurrence.parameters.get(0) as Environment
+
+		//nbTotalVehicule =  
 		/*environment.initEnvironment(10);
 		for(entry : environment.bodyList.entrySet()){
 			//println(environment.bodyList.get(entry.getKey()))
@@ -145,15 +148,15 @@ agent EnvironmentAgent {
 				emit(new Perceptions(p, vmax, v, amax, coo, dims, redLight, dstLight))[it.UUID == entry.getKey()]
 			
 				//Suppression des bodies arrives a destination
-				if (bodies.get(entry.getKey()).position > 700){
+				/*if (bodies.get(entry.getKey()).position > bodies.get(entry.getKey()).distanceMax) {
 					environment.bodyList.remove(entry.key)
 					info("suppression de body enregistrée")
 					nbrAgentOnMap = nbrAgentOnMap - 1
-					emit(new suicide())[it.UUID == entry.getKey()]
+					//emit(new suicide())[it.UUID == entry.getKey()]
 					
-				}
+				}*/
 				
-				info("nb agent :" + this.nbrAgentOnMap)
+				
 			}
 		
 		}
@@ -167,7 +170,7 @@ agent EnvironmentAgent {
 			 
 			if(environment.bodyList.isEmpty!=true){
 				environment.Update()
-			
+				
 			}
 		//Thread::sleep(1)
 		var rand = new Random
@@ -175,7 +178,7 @@ agent EnvironmentAgent {
 		for (var i = 1; i <= nbAgent; i++) {
 			var bodyAgent = new classicDriverBody(this.environment.map)
 			if (bodyAgent.canSpawn == true){
-				if (environment.bodyList.size<1){
+				if (environment.bodyList.size<100){
 					// println("z")
 					bodyAgent.initialzeEdgeBodies
 					environment.bodyList.put(bodyAgent.ID, bodyAgent)
@@ -187,7 +190,7 @@ agent EnvironmentAgent {
 		}
 		if (countAgentSpawned == 0){
 			// print("s")
-			Thread::sleep(40)
+			Thread::sleep(20)
 			startLoop
 		}
 		

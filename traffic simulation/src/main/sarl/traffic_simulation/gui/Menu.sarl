@@ -36,8 +36,7 @@ class Menu extends Application{
 				win = new Window2(env)
 				win.show()
 				var boot = SRE.getBootstrap
-				boot.startAgent(typeof(EnvironmentAgent), env)
-				
+				boot.startAgent(typeof(EnvironmentAgent), env)				
 			}
 	
 	

@@ -34,15 +34,18 @@ import io.sarl.lang.core.Agent;
 import io.sarl.lang.core.AtomicSkillReference;
 import io.sarl.lang.core.BuiltinCapacitiesProvider;
 import io.sarl.lang.core.DynamicSkillProvider;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.PhysicEnvironment;
+import traffic_simulation.agent.influence;
 import traffic_simulation.agent.light;
-import traffic_simulation.agent.suicide;
 import traffic_simulation.environment.Perceptions;
+import traffic_simulation.environment.Vehicle;
 import traffic_simulation.util.Tools;
 
 @SarlSpecification("0.11")
@@ -60,24 +63,77 @@ public class classicDriver extends Agent {
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
     _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.setLoggingName("classicDriver");
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info("I\'m starting");
   }
   
   private void $behaviorUnit$Perceptions$1(final Perceptions occurrence) {
-    throw new Error("Unresolved compilation problems:"
-      + "\nType mismatch: cannot convert from UUID to UUID"
-      + "\nType mismatch: cannot convert from influence to Event"
-      + "\nType mismatch: cannot convert from UUID to UUID"
-      + "\nType mismatch: cannot convert from influence to Event");
+    ArrayList<Vehicle> p = occurrence.p_value;
+    double[] etat = occurrence.state;
+    double dim_car = occurrence.dim;
+    Point2D coord_car = occurrence.loc;
+    boolean isRed = occurrence.isRedView;
+    double distWithRedLight = occurrence.distwithLight;
+    double dist_min = (-1.0);
+    Vehicle carInFront = null;
+    double a = 0;
+    boolean _isEmpty = p.isEmpty();
+    if ((_isEmpty != true)) {
+      for (int i = 0; (i < p.size()); i++) {
+        {
+          double distBetweenCar = this.tool.distance_vehicle2(coord_car, p.get(i), dim_car);
+          if ((i == 0)) {
+            dist_min = distBetweenCar;
+            carInFront = p.get(i);
+          } else {
+            if ((distBetweenCar < dist_min)) {
+              dist_min = distBetweenCar;
+              carInFront = p.get(i);
+            }
+          }
+        }
+      }
+      if (isRed) {
+        if ((distWithRedLight < dist_min)) {
+          if (((distWithRedLight > 5) && (etat[1] == 0))) {
+            a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+          } else {
+            a = this.tool.accelerationInt(etat[2], etat[1], this.b, distWithRedLight, 1, etat[1], this.T);
+          }
+        } else {
+          if (((dist_min > 5) && (etat[1] == 0))) {
+            a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+          } else {
+            a = this.tool.accelerationInt(etat[2], etat[1], this.b, dist_min, 1, etat[1], this.T);
+          }
+        }
+      } else {
+        if (((dist_min > 5) && (etat[1] == 0))) {
+          a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+        } else {
+          a = this.tool.accelerationInt(etat[2], etat[1], this.b, dist_min, 1, etat[1], this.T);
+        }
+      }
+      DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+      UUID _iD = this.getID();
+      influence _influence = new influence(a, _iD);
+      _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_influence);
+    } else {
+      if (isRed) {
+        if (((distWithRedLight > 5) && (etat[1] == 0))) {
+          a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+        } else {
+          a = this.tool.accelerationInt(etat[2], etat[1], this.b, distWithRedLight, 1, etat[1], this.T);
+        }
+      } else {
+        a = this.tool.accelerationFree(etat[2], etat[1], etat[0]);
+      }
+      DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+      UUID _iD_1 = this.getID();
+      influence _influence_1 = new influence(a, _iD_1);
+      _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1.emit(_influence_1);
+    }
   }
   
-  private void $behaviorUnit$suicide$2(final suicide occurrence) {
-    Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.killMe();
-  }
-  
-  private void $behaviorUnit$light$3(final light occurrence) {
+  private void $behaviorUnit$light$2(final light occurrence) {
     boolean _equals = Objects.equal(occurrence.l, "green");
     if (_equals) {
       Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
@@ -154,18 +210,10 @@ public class classicDriver extends Agent {
   
   @SyntheticMember
   @PerceptGuardEvaluator
-  private void $guardEvaluator$suicide(final suicide occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
-    assert occurrence != null;
-    assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$suicide$2(occurrence));
-  }
-  
-  @SyntheticMember
-  @PerceptGuardEvaluator
   private void $guardEvaluator$light(final light occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$light$3(occurrence));
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$light$2(occurrence));
   }
   
   @SyntheticMember

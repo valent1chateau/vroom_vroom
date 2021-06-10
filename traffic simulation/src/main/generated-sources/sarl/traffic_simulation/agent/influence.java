@@ -81,4 +81,7 @@ public class influence extends Event {
     builder.add("acc", this.acc);
     builder.add("idt", this.idt);
   }
+  
+  @SyntheticMember
+  private static final long serialVersionUID = -1558656705L;
 }

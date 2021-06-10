@@ -44,19 +44,21 @@ import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
+import traffic_simulation.agent.classicDriver;
 import traffic_simulation.agent.influence;
 import traffic_simulation.environment.Environment;
 import traffic_simulation.environment.Perceptions;
 import traffic_simulation.environment.Vehicle;
 import traffic_simulation.environment.classicDriverBody;
-import traffic_simulation.environment.suicide;
 
 @SarlSpecification("0.11")
 @SarlElementType(19)
@@ -73,6 +75,8 @@ public class EnvironmentAgent extends Agent {
   private AtomicInteger countAgentInfluence = new AtomicInteger(0);
   
   private int countAgentSpawned = 0;
+  
+  private int nbTotalVehicule;
   
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     Object _get = occurrence.parameters[0];
@@ -147,51 +151,46 @@ public class EnvironmentAgent extends Agent {
             }
           };
           _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_perceptions, _function);
-          double _position = bodies.get(entry.getKey()).getPosition();
-          if ((_position > 700)) {
-            this.environment.getBodyList().remove(entry.getKey());
-            Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-            _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info("suppression de body enregistrée");
-            this.nbrAgentOnMap = (this.nbrAgentOnMap - 1);
-            DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
-            suicide _suicide = new suicide();
-            class $SerializableClosureProxy_1 implements Scope<Address> {
-              
-              private final UUID $_key;
-              
-              public $SerializableClosureProxy_1(final UUID $_key) {
-                this.$_key = $_key;
-              }
-              
-              @Override
-              public boolean matches(final Address it) {
-                UUID _uUID = it.getUUID();
-                return Objects.equal(_uUID, $_key);
-              }
-            }
-            final Scope<Address> _function_1 = new Scope<Address>() {
-              @Override
-              public boolean matches(final Address it) {
-                UUID _uUID = it.getUUID();
-                UUID _key = entry.getKey();
-                return Objects.equal(_uUID, _key);
-              }
-              private Object writeReplace() throws ObjectStreamException {
-                return new SerializableProxy($SerializableClosureProxy_1.class, entry.getKey());
-              }
-            };
-            _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1.emit(_suicide, _function_1);
-          }
-          Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-          _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info(("nb agent :" + Integer.valueOf(this.nbrAgentOnMap)));
         }
       }
     }
   }
   
   protected void actionsOnInfluence() {
-    throw new Error("Unresolved compilation problems:"
-      + "\nType mismatch: cannot convert from Class<classicDriver> to Class<? extends Agent>");
+    try {
+      boolean _isEmpty = this.environment.getBodyList().isEmpty();
+      if ((_isEmpty != true)) {
+        this.environment.Update();
+      }
+      Random rand = new Random();
+      int _nextInt = rand.nextInt(4);
+      int nbAgent = (1 + _nextInt);
+      for (int i = 1; (i <= nbAgent); i++) {
+        {
+          traffic_simulation.environment.Map _map = this.environment.getMap();
+          classicDriverBody bodyAgent = new classicDriverBody(_map);
+          boolean _canSpawn = bodyAgent.canSpawn();
+          if ((_canSpawn == true)) {
+            int _size = this.environment.getBodyList().size();
+            if ((_size < 100)) {
+              bodyAgent.initialzeEdgeBodies();
+              this.environment.getBodyList().put(bodyAgent.getID(), bodyAgent);
+              Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
+              DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+              _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.spawnInContextWithID(classicDriver.class, bodyAgent.getID(), _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.getDefaultContext());
+              int _countAgentSpawned = this.countAgentSpawned;
+              this.countAgentSpawned = (_countAgentSpawned + 1);
+            }
+          }
+        }
+      }
+      if ((this.countAgentSpawned == 0)) {
+        Thread.sleep(20);
+        this.startLoop();
+      }
+    } catch (Throwable _e) {
+      throw Exceptions.sneakyThrow(_e);
+    }
   }
   
   @Extension
@@ -291,6 +290,8 @@ public class EnvironmentAgent extends Agent {
       return false;
     if (other.countAgentSpawned != this.countAgentSpawned)
       return false;
+    if (other.nbTotalVehicule != this.nbTotalVehicule)
+      return false;
     return super.equals(obj);
   }
   
@@ -303,6 +304,7 @@ public class EnvironmentAgent extends Agent {
     result = prime * result + Double.hashCode(this.dt);
     result = prime * result + Integer.hashCode(this.nbrAgentOnMap);
     result = prime * result + Integer.hashCode(this.countAgentSpawned);
+    result = prime * result + Integer.hashCode(this.nbTotalVehicule);
     return result;
   }
   

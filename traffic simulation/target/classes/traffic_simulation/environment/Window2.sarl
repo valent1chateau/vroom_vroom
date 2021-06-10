@@ -42,9 +42,9 @@ class Window2 extends Stage {
 	var drivers = new TreeMap<UUID, classicDriverBody>
 	new(e : Environment) {
 		// super()
-		this.length = 800
-		this.width = 600
-		map = new Map(this.length, this.width)
+		this.length = 1600
+		this.width = 900
+		//map = new Map(this.length, this.width)
 		//drivers = new ArrayList<classicDriverBody>
 		
 		env = e
