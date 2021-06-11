@@ -20,12 +20,12 @@ public class Map {
   @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
   private Graph G;
   
-  private double l;
+  private int l;
   
   @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
-  private double w;
+  private int w;
   
-  public Map(final double length, final double width) {
+  public Map(final int length, final int width) {
     this.l = length;
     this.w = width;
     double[] coord = { 0.0, (0.4 * this.w), (0.4 * this.l), (0.4 * this.w), 0.0, (0.5 * this.w), (0.4 * this.l), (0.5 * this.w), 0.0, (0.6 * this.w), (0.4 * this.l), (0.6 * this.w), (0.45 * this.l), this.w, (0.45 * this.l), (0.65 * this.w), (0.55 * this.l), this.w, (0.55 * this.l), (0.65 * this.w), this.l, (0.6 * this.w), (0.6 * this.l), (0.6 * this.w), this.l, (0.5 * this.w), (0.6 * this.l), (0.5 * this.w), this.l, (0.4 * this.w), (0.6 * this.l), (0.4 * this.w), (0.55 * this.l), 0.0, (0.55 * this.l), (0.35 * this.w), (0.45 * this.l), 0.0, (0.45 * this.l), (0.35 * this.w) };
@@ -99,9 +99,9 @@ public class Map {
     if (getClass() != obj.getClass())
       return false;
     Map other = (Map) obj;
-    if (Double.doubleToLongBits(other.l) != Double.doubleToLongBits(this.l))
+    if (other.l != this.l)
       return false;
-    if (Double.doubleToLongBits(other.w) != Double.doubleToLongBits(this.w))
+    if (other.w != this.w)
       return false;
     return super.equals(obj);
   }
@@ -112,8 +112,8 @@ public class Map {
   public int hashCode() {
     int result = super.hashCode();
     final int prime = 31;
-    result = prime * result + Double.hashCode(this.l);
-    result = prime * result + Double.hashCode(this.w);
+    result = prime * result + Integer.hashCode(this.l);
+    result = prime * result + Integer.hashCode(this.w);
     return result;
   }
   
@@ -127,11 +127,11 @@ public class Map {
   }
   
   @Pure
-  public double getW() {
+  public int getW() {
     return this.w;
   }
   
-  public void setW(final double w) {
+  public void setW(final int w) {
     this.w = w;
   }
 }

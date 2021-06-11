@@ -31,8 +31,8 @@ import java.util.UUID
 class Window2 extends Stage {
 	var env : Environment
 	var map : Map
-	var length : double
-	var width : double
+	var length : int
+	var width : int
 	var cc : Circle = new Circle()
 	var t : long
 	var dt : double = 0.5
@@ -40,10 +40,10 @@ class Window2 extends Stage {
 	var test = false
 	// var drivers : ArrayList<classicDriverBody>
 	var drivers = new TreeMap<UUID, classicDriverBody>
-	new(e : Environment) {
+	new(e : Environment, h : int, w : int) {
 		// super()
-		this.length = 1600
-		this.width = 900
+		this.length = h
+		this.width = w
 		//map = new Map(this.length, this.width)
 		//drivers = new ArrayList<classicDriverBody>
 		

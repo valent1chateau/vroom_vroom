@@ -44,7 +44,8 @@ import java.awt.geom.Point2D
 /*  
  * This agent is managing the physic space.
  */
- 
+
+
 event Perceptions{
 	var p_value : ArrayList<Vehicle>
 	var state : double[]
@@ -63,8 +64,8 @@ event Perceptions{
 	}	
 }
 
-//event suicide {
-//}
+event suicide {
+}
 
 agent EnvironmentAgent {
 	
@@ -77,12 +78,13 @@ agent EnvironmentAgent {
 	var nbrAgentOnMap = 0
 	var countAgentInfluence = new AtomicInteger(0)
 	var countAgentSpawned = 0
-	var nbTotalVehicule : int
+	var nbTotalVehiculeClassic : int
+	
 			
 	on Initialize {
 		
 		environment = occurrence.parameters.get(0) as Environment
-
+		nbTotalVehiculeClassic = environment.nombreTotalAgentClassic
 		//nbTotalVehicule =  
 		/*environment.initEnvironment(10);
 		for(entry : environment.bodyList.entrySet()){
@@ -170,7 +172,18 @@ agent EnvironmentAgent {
 			 
 			if(environment.bodyList.isEmpty!=true){
 				environment.Update()
-				
+
+				for (entry : environment.bodyList.entrySet()) {
+					if (environment.bodyList.get(entry.getKey()).position >
+					environment.bodyList.get(entry.getKey()).distanceMax) {
+						
+					environment.bodyList.remove(entry.getKey())
+						// info("suppression de body enregistrée")
+					//nbTotalVehiculeClassic = nbTotalVehiculeClassic - 1
+					emit(new suicide())[it.UUID == entry.getKey()]
+						
+					}
+				}
 			}
 		//Thread::sleep(1)
 		var rand = new Random
@@ -178,7 +191,7 @@ agent EnvironmentAgent {
 		for (var i = 1; i <= nbAgent; i++) {
 			var bodyAgent = new classicDriverBody(this.environment.map)
 			if (bodyAgent.canSpawn == true){
-				if (environment.bodyList.size<100){
+				if (environment.bodyList.size < nbTotalVehiculeClassic) {
 					// println("z")
 					bodyAgent.initialzeEdgeBodies
 					environment.bodyList.put(bodyAgent.ID, bodyAgent)

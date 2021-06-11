@@ -8,11 +8,11 @@ class Map {
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
 	var G : Graph
 
-	var l : double
+	var l : int
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var w : double
+	var w : int
 
-	new(length : double, width : double) {
+	new(length : int, width : int) {
 		l = length
 		w = width
 

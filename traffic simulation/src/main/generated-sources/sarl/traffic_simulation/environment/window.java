@@ -42,15 +42,9 @@ public class window extends Application {
   private ArrayList<classicDriverBody> drivers;
   
   public window() {
-    this.length = 800;
-    this.width = 600;
-    Map _map = new Map(this.length, this.width);
-    this.map = _map;
-    ArrayList<classicDriverBody> _arrayList = new ArrayList<classicDriverBody>();
-    this.drivers = _arrayList;
-    this.cc.setCenterX(0);
-    this.cc.setCenterY(0);
-    this.cc.setRadius((this.width * 0.01));
+    throw new Error("Unresolved compilation problems:"
+      + "\nType mismatch: cannot convert from double to int"
+      + "\nType mismatch: cannot convert from double to int");
   }
   
   public void start(final Stage primaryStage) {

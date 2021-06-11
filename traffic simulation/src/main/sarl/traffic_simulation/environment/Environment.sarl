@@ -48,12 +48,14 @@ class Environment {
 
 	@Accessors
 	var trafficlight_lst : ArrayList<trafficLight>
+	@Accessors
+	var nombreTotalAgentClassic : int
 	
 	
-	new() {
+	new(height : int, width : int, nbAgent : int) {
 		bodyList = new TreeMap<UUID, classicDriverBody>
 		priorityVehicle = new priorityVehicleBody()
-		map = new Map(1600, 900)
+		map = new Map(height, width)
 		trafficlight_lst = new ArrayList<trafficLight>
 		addTrafficlight(3, "23", true)
 		addTrafficlight(5, "45", true)
@@ -61,7 +63,7 @@ class Environment {
 		addTrafficlight(15, "1415", true)
 		addTrafficlight(9, "89", false)
 		addTrafficlight(19, "1819", false)
-		
+		nombreTotalAgentClassic = nbAgent
 		timer.scheduleAtFixedRate(new TimerTask(){
 	
 		def run {
@@ -77,7 +79,7 @@ class Environment {
 			}
 		}
 	
-		}, 8000,8000)
+		}, 10000,10000)
 		
 	}
 	def Update() {

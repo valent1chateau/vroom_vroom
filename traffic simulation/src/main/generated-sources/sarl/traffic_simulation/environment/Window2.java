@@ -33,9 +33,9 @@ public class Window2 extends Stage {
   
   private Map map;
   
-  private double length;
+  private int length;
   
-  private double width;
+  private int width;
   
   private Circle cc = new Circle();
   
@@ -49,13 +49,13 @@ public class Window2 extends Stage {
   
   private TreeMap<UUID, classicDriverBody> drivers = new TreeMap<UUID, classicDriverBody>();
   
-  public Window2(final Environment e) {
+  public Window2(final Environment e, final int h, final int w) {
     abstract class __Window2_0 extends AnimationTimer {
       public abstract void handle(final long now);
     }
     
-    this.length = 1600;
-    this.width = 900;
+    this.length = h;
+    this.width = w;
     this.env = e;
     this.drivers = this.env.getBodyList();
     this.setTitle("window2");
@@ -151,9 +151,9 @@ public class Window2 extends Stage {
     if (getClass() != obj.getClass())
       return false;
     Window2 other = (Window2) obj;
-    if (Double.doubleToLongBits(other.length) != Double.doubleToLongBits(this.length))
+    if (other.length != this.length)
       return false;
-    if (Double.doubleToLongBits(other.width) != Double.doubleToLongBits(this.width))
+    if (other.width != this.width)
       return false;
     if (other.t != this.t)
       return false;
@@ -170,8 +170,8 @@ public class Window2 extends Stage {
   public int hashCode() {
     int result = super.hashCode();
     final int prime = 31;
-    result = prime * result + Double.hashCode(this.length);
-    result = prime * result + Double.hashCode(this.width);
+    result = prime * result + Integer.hashCode(this.length);
+    result = prime * result + Integer.hashCode(this.width);
     result = prime * result + Long.hashCode(this.t);
     result = prime * result + Double.hashCode(this.dt);
     result = prime * result + Boolean.hashCode(this.test);

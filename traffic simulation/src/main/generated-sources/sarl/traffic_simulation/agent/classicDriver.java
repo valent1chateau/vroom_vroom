@@ -46,6 +46,7 @@ import traffic_simulation.agent.influence;
 import traffic_simulation.agent.light;
 import traffic_simulation.environment.Perceptions;
 import traffic_simulation.environment.Vehicle;
+import traffic_simulation.environment.suicide;
 import traffic_simulation.util.Tools;
 
 @SarlSpecification("0.11")
@@ -60,12 +61,19 @@ public class classicDriver extends Agent {
   
   private double b = 1.67;
   
+  private boolean kill = false;
+  
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
     _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.setLoggingName("classicDriver");
   }
   
-  private void $behaviorUnit$Perceptions$1(final Perceptions occurrence) {
+  private void $behaviorUnit$suicide$1(final suicide occurrence) {
+    Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
+    _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.killMe();
+  }
+  
+  private void $behaviorUnit$Perceptions$2(final Perceptions occurrence) {
     ArrayList<Vehicle> p = occurrence.p_value;
     double[] etat = occurrence.state;
     double dim_car = occurrence.dim;
@@ -133,7 +141,7 @@ public class classicDriver extends Agent {
     }
   }
   
-  private void $behaviorUnit$light$2(final light occurrence) {
+  private void $behaviorUnit$light$3(final light occurrence) {
     boolean _equals = Objects.equal(occurrence.l, "green");
     if (_equals) {
       Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
@@ -213,7 +221,7 @@ public class classicDriver extends Agent {
   private void $guardEvaluator$light(final light occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$light$2(occurrence));
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$light$3(occurrence));
   }
   
   @SyntheticMember
@@ -221,7 +229,15 @@ public class classicDriver extends Agent {
   private void $guardEvaluator$Perceptions(final Perceptions occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$Perceptions$1(occurrence));
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$Perceptions$2(occurrence));
+  }
+  
+  @SyntheticMember
+  @PerceptGuardEvaluator
+  private void $guardEvaluator$suicide(final suicide occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
+    assert occurrence != null;
+    assert ___SARLlocal_runnableCollection != null;
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$suicide$1(occurrence));
   }
   
   @Override
@@ -241,6 +257,8 @@ public class classicDriver extends Agent {
       return false;
     if (Double.doubleToLongBits(other.b) != Double.doubleToLongBits(this.b))
       return false;
+    if (other.kill != this.kill)
+      return false;
     return super.equals(obj);
   }
   
@@ -253,6 +271,7 @@ public class classicDriver extends Agent {
     result = prime * result + Double.hashCode(this.So);
     result = prime * result + Double.hashCode(this.T);
     result = prime * result + Double.hashCode(this.b);
+    result = prime * result + Boolean.hashCode(this.kill);
     return result;
   }
   

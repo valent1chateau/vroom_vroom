@@ -59,6 +59,7 @@ import traffic_simulation.environment.Environment;
 import traffic_simulation.environment.Perceptions;
 import traffic_simulation.environment.Vehicle;
 import traffic_simulation.environment.classicDriverBody;
+import traffic_simulation.environment.suicide;
 
 @SarlSpecification("0.11")
 @SarlElementType(19)
@@ -76,11 +77,12 @@ public class EnvironmentAgent extends Agent {
   
   private int countAgentSpawned = 0;
   
-  private int nbTotalVehicule;
+  private int nbTotalVehiculeClassic;
   
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     Object _get = occurrence.parameters[0];
     this.environment = ((Environment) _get);
+    this.nbTotalVehiculeClassic = this.environment.getNombreTotalAgentClassic();
     this.actionsOnInfluence();
   }
   
@@ -161,6 +163,42 @@ public class EnvironmentAgent extends Agent {
       boolean _isEmpty = this.environment.getBodyList().isEmpty();
       if ((_isEmpty != true)) {
         this.environment.Update();
+        Set<Map.Entry<UUID, classicDriverBody>> _entrySet = this.environment.getBodyList().entrySet();
+        for (final Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
+          double _position = this.environment.getBodyList().get(entry.getKey()).getPosition();
+          double _distanceMax = this.environment.getBodyList().get(entry.getKey()).getDistanceMax();
+          if ((_position > _distanceMax)) {
+            this.environment.getBodyList().remove(entry.getKey());
+            DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+            suicide _suicide = new suicide();
+            class $SerializableClosureProxy implements Scope<Address> {
+              
+              private final UUID $_key;
+              
+              public $SerializableClosureProxy(final UUID $_key) {
+                this.$_key = $_key;
+              }
+              
+              @Override
+              public boolean matches(final Address it) {
+                UUID _uUID = it.getUUID();
+                return Objects.equal(_uUID, $_key);
+              }
+            }
+            final Scope<Address> _function = new Scope<Address>() {
+              @Override
+              public boolean matches(final Address it) {
+                UUID _uUID = it.getUUID();
+                UUID _key = entry.getKey();
+                return Objects.equal(_uUID, _key);
+              }
+              private Object writeReplace() throws ObjectStreamException {
+                return new SerializableProxy($SerializableClosureProxy.class, entry.getKey());
+              }
+            };
+            _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_suicide, _function);
+          }
+        }
       }
       Random rand = new Random();
       int _nextInt = rand.nextInt(4);
@@ -172,12 +210,12 @@ public class EnvironmentAgent extends Agent {
           boolean _canSpawn = bodyAgent.canSpawn();
           if ((_canSpawn == true)) {
             int _size = this.environment.getBodyList().size();
-            if ((_size < 100)) {
+            if ((_size < this.nbTotalVehiculeClassic)) {
               bodyAgent.initialzeEdgeBodies();
               this.environment.getBodyList().put(bodyAgent.getID(), bodyAgent);
               Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
-              DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
-              _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.spawnInContextWithID(classicDriver.class, bodyAgent.getID(), _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.getDefaultContext());
+              DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+              _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.spawnInContextWithID(classicDriver.class, bodyAgent.getID(), _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1.getDefaultContext());
               int _countAgentSpawned = this.countAgentSpawned;
               this.countAgentSpawned = (_countAgentSpawned + 1);
             }
@@ -290,7 +328,7 @@ public class EnvironmentAgent extends Agent {
       return false;
     if (other.countAgentSpawned != this.countAgentSpawned)
       return false;
-    if (other.nbTotalVehicule != this.nbTotalVehicule)
+    if (other.nbTotalVehiculeClassic != this.nbTotalVehiculeClassic)
       return false;
     return super.equals(obj);
   }
@@ -304,7 +342,7 @@ public class EnvironmentAgent extends Agent {
     result = prime * result + Double.hashCode(this.dt);
     result = prime * result + Integer.hashCode(this.nbrAgentOnMap);
     result = prime * result + Integer.hashCode(this.countAgentSpawned);
-    result = prime * result + Integer.hashCode(this.nbTotalVehicule);
+    result = prime * result + Integer.hashCode(this.nbTotalVehiculeClassic);
     return result;
   }
   

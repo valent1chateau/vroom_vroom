@@ -33,6 +33,7 @@ import io.sarl.core.AgentSpawned
 
 import java.util.concurrent.atomic.AtomicInteger
 import traffic_simulation.environment.Perceptions
+import traffic_simulation.environment.suicide
 import traffic_simulation.util.Tools
 import traffic_simulation.environment.Vehicle
 
@@ -60,6 +61,7 @@ agent classicDriver {
 	var So : double = 1.0
 	var T : double = 1.5
 	var b : double = 1.67
+	var kill : boolean = false
 
 	uses PhysicEnvironment, Lifecycle, DefaultContextInteractions, Logging
 
@@ -68,7 +70,11 @@ agent classicDriver {
 			// info("I'm starting")
 		// info("my classicDriver id :" + ID)
 	}
-
+	
+	on suicide{
+		killMe
+	}
+	
 	on Perceptions{
 		// info(occurrence.value)
 		// info("ok")
@@ -122,7 +128,11 @@ agent classicDriver {
 			}
 			//println(etat.get(1) - carInFront.speed)
 			
+			
+			
 			emit(new influence(a, ID))
+			
+			
 			// println("q")
 			// println(a)
 
@@ -149,7 +159,9 @@ agent classicDriver {
 				a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
 			}
 
+			
 			emit(new influence(a, ID))
+			
 			
 		  }
 		 

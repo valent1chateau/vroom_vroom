@@ -65,7 +65,10 @@ public class Environment {
   @Accessors
   private ArrayList<trafficLight> trafficlight_lst;
   
-  public Environment() {
+  @Accessors
+  private int nombreTotalAgentClassic;
+  
+  public Environment(final int height, final int width, final int nbAgent) {
     abstract class __Environment_0 extends TimerTask {
       public abstract void run();
     }
@@ -74,7 +77,7 @@ public class Environment {
     this.bodyList = _treeMap;
     priorityVehicleBody _priorityVehicleBody = new priorityVehicleBody();
     this.priorityVehicle = _priorityVehicleBody;
-    Map _map = new Map(1600, 900);
+    Map _map = new Map(height, width);
     this.map = _map;
     ArrayList<trafficLight> _arrayList = new ArrayList<trafficLight>();
     this.trafficlight_lst = _arrayList;
@@ -84,6 +87,7 @@ public class Environment {
     this.addTrafficlight(15, "1415", true);
     this.addTrafficlight(9, "89", false);
     this.addTrafficlight(19, "1819", false);
+    this.nombreTotalAgentClassic = nbAgent;
     __Environment_0 ___Environment_0 = new __Environment_0() {
       public void run() {
         for (int i = 0; (i < Environment.this.trafficlight_lst.size()); i++) {
@@ -96,7 +100,7 @@ public class Environment {
         }
       }
     };
-    this.timer.scheduleAtFixedRate(___Environment_0, 8000, 8000);
+    this.timer.scheduleAtFixedRate(___Environment_0, 10000, 10000);
   }
   
   public void Update() {
@@ -154,6 +158,8 @@ public class Environment {
     Environment other = (Environment) obj;
     if (other.agentsToSpawn != this.agentsToSpawn)
       return false;
+    if (other.nombreTotalAgentClassic != this.nombreTotalAgentClassic)
+      return false;
     return super.equals(obj);
   }
   
@@ -164,6 +170,7 @@ public class Environment {
     int result = super.hashCode();
     final int prime = 31;
     result = prime * result + Integer.hashCode(this.agentsToSpawn);
+    result = prime * result + Integer.hashCode(this.nombreTotalAgentClassic);
     return result;
   }
   
@@ -201,5 +208,14 @@ public class Environment {
   
   public void setTrafficlight_lst(final ArrayList<trafficLight> trafficlight_lst) {
     this.trafficlight_lst = trafficlight_lst;
+  }
+  
+  @Pure
+  public int getNombreTotalAgentClassic() {
+    return this.nombreTotalAgentClassic;
+  }
+  
+  public void setNombreTotalAgentClassic(final int nombreTotalAgentClassic) {
+    this.nombreTotalAgentClassic = nombreTotalAgentClassic;
   }
 }
