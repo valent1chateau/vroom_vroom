@@ -22,8 +22,5 @@ class Main {
 		
 	}
 
-	static def startexemple {
-		var boot = SRE.getBootstrap
-		boot.startAgent(typeof(Agenttest))
-	}
+	
 }

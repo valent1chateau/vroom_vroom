@@ -63,7 +63,7 @@ agent classicDriver {
 	var b : double = 1.67
 	var kill : boolean = false
 
-	uses PhysicEnvironment, Lifecycle, DefaultContextInteractions, Logging
+	uses  Lifecycle, DefaultContextInteractions, Logging
 
 	on Initialize {
 		loggingName = "classicDriver"
@@ -182,7 +182,7 @@ agent classicDriver {
 
 agent priorityDriver {
 
-	uses PhysicEnvironment, Lifecycle, DefaultContextInteractions, Logging
+	uses Lifecycle, DefaultContextInteractions, Logging
 
 	on Initialize {
 		loggingName = "priorityDriver"
@@ -194,7 +194,7 @@ agent priorityDriver {
 		if (occurrence.l == "green") {
 			info("nice it's " + occurrence.l)
 		} else {
-			info("fuck but I have the priority!")
+			info(" but I have the priority!")
 		}
 		killMe
 	}

@@ -20,26 +20,20 @@
  */
 package traffic_simulation.environment
 
-import traffic_simulation.^agent.*
-import traffic_simulation.time.TimePercept
-import traffic_simulation.environment.*
-import io.sarl.core.Behaviors
+import io.sarl.core.AgentSpawned
 import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Destroy
 import io.sarl.core.Initialize
 import io.sarl.core.Lifecycle
-import io.sarl.lang.core.Address
-import java.util.UUID
-import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
-import io.sarl.core.OpenEventSpace
 import io.sarl.core.Logging
-import io.sarl.core.AgentSpawned
-import java.util.ArrayList
-import java.util.TreeMap
 import io.sarl.core.Schedules
-import java.util.Random
-import io.sarl.core.Time
 import java.awt.geom.Point2D
+import java.util.ArrayList
+import java.util.Random
+import java.util.UUID
+import java.util.concurrent.atomic.AtomicInteger
+import traffic_simulation.^agent.classicDriver
+import traffic_simulation.^agent.influence
 
 /*  
  * This agent is managing the physic space.
@@ -95,43 +89,44 @@ agent EnvironmentAgent {
 		 */
 		actionsOnInfluence
 	}
-
+	
+	on Destroy{
+		environment.stop
+	}
+	
 	on AgentSpawned {
 		var v : int = spawnedReceived.incrementAndGet
 		if (v == countAgentSpawned) {
 			
-			//emit(new light("green"))
+			
 			countAgentSpawned = 0
 			spawnedReceived = new AtomicInteger(0)
 			startLoop()
-			// killMe
+			
 			
 		}
 	}
 	
 	on influence{
-		// var u = countAgentInfluence.incrementAndGet
+		
 		var ac = occurrence.acc
 		var id = occurrence.idt 
 		environment.bodyList.get(id).acc = ac
-		//println(environment.bodyList.get(id).edge.id_)
-		//println(nbrAgentOnMap)
+		
 		if (countAgentInfluence.incrementAndGet() == nbrAgentOnMap) {
-			// info("oui")
-			// println(countAgentInfluence.get())
+			
 			countAgentInfluence.set(0)
-			//println(countAgentInfluence)
+			
 			actionsOnInfluence()
 			
 		}
 	}
 	
 	def startLoop {
-		//Compute perceptions
+		
 		var bodies = environment.bodyList
 		nbrAgentOnMap = environment.bodyList.size()
-		//println(nbrAgentOnMap)
-		//println(countAgentSpawned)
+		
 		if (bodies.isEmpty == false) {
 			//println(bodies.size)
 			for(entry : bodies.entrySet()){
@@ -149,14 +144,7 @@ agent EnvironmentAgent {
 				
 				emit(new Perceptions(p, vmax, v, amax, coo, dims, redLight, dstLight))[it.UUID == entry.getKey()]
 			
-				//Suppression des bodies arrives a destination
-				/*if (bodies.get(entry.getKey()).position > bodies.get(entry.getKey()).distanceMax) {
-					environment.bodyList.remove(entry.key)
-					info("suppression de body enregistrée")
-					nbrAgentOnMap = nbrAgentOnMap - 1
-					//emit(new suicide())[it.UUID == entry.getKey()]
-					
-				}*/
+			
 				
 				
 			}
@@ -166,50 +154,63 @@ agent EnvironmentAgent {
 	
 	def actionsOnInfluence(){
 		
+			var listKey : ArrayList<UUID> = new ArrayList<UUID>
 			
 			
-			// println(t)
 			 
 			if(environment.bodyList.isEmpty!=true){
 				environment.Update()
-
+				
 				for (entry : environment.bodyList.entrySet()) {
-					if (environment.bodyList.get(entry.getKey()).position >
+					if (environment.bodyList.get(entry.getKey()).position >=
 					environment.bodyList.get(entry.getKey()).distanceMax) {
 						
-					environment.bodyList.remove(entry.getKey())
-						// info("suppression de body enregistrée")
-					//nbTotalVehiculeClassic = nbTotalVehiculeClassic - 1
-					emit(new suicide())[it.UUID == entry.getKey()]
+					listKey.add(entry.getKey())
+					
+					
 						
 					}
 				}
+				for (var k = 0; k < listKey.size(); k++) {
+					environment.bodyList.remove(listKey.get(k))
+					var key = listKey.get(k)
+					emit(new suicide())[it.UUID == key]
+				}
+				
 			}
-		//Thread::sleep(1)
+		
 		var rand = new Random
 		var nbAgent = 1 + rand.nextInt(4)
 		for (var i = 1; i <= nbAgent; i++) {
 			var bodyAgent = new classicDriverBody(this.environment.map)
 			if (bodyAgent.canSpawn == true){
-				if (environment.bodyList.size < nbTotalVehiculeClassic) {
-					// println("z")
+				if (nbTotalVehiculeClassic!=0) {
 					bodyAgent.initialzeEdgeBodies
 					environment.bodyList.put(bodyAgent.ID, bodyAgent)
 					
 					typeof(classicDriver).spawnInContextWithID(bodyAgent.ID, defaultContext)
 					countAgentSpawned += 1
+					nbTotalVehiculeClassic -=1
 					} 
 				} 
 		}
 		if (countAgentSpawned == 0){
-			// print("s")
 			Thread::sleep(20)
+			if (nbTotalVehiculeClassic == 0 && environment.bodyList.isEmpty) {
+				print("e")
+				killMe
+			}
+
+		
+			else {
 			startLoop
 		}
-		
+			
 		}
 		
 		
+		
+		}
 	
 	/*def endLoop {
 		startLoop();

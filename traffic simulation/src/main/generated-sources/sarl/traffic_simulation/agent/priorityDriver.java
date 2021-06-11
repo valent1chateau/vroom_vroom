@@ -39,7 +39,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
-import traffic_simulation.agent.PhysicEnvironment;
 import traffic_simulation.agent.light;
 
 @SarlSpecification("0.11")
@@ -63,24 +62,10 @@ public class priorityDriver extends Agent {
       _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info(("nice it\'s " + occurrence.l));
     } else {
       Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-      _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info("fuck but I have the priority!");
+      _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info(" but I have the priority!");
     }
     Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
     _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.killMe();
-  }
-  
-  @Extension
-  @ImportedCapacityFeature(PhysicEnvironment.class)
-  @SyntheticMember
-  private transient AtomicSkillReference $CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT;
-  
-  @SyntheticMember
-  @Pure
-  private PhysicEnvironment $CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT$CALLER() {
-    if (this.$CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT == null || this.$CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT.get() == null) {
-      this.$CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT = $getSkill(PhysicEnvironment.class);
-    }
-    return $castSkill(PhysicEnvironment.class, this.$CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT);
   }
   
   @Extension

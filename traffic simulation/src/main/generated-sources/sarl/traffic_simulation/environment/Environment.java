@@ -145,6 +145,15 @@ public class Environment {
     }
   }
   
+  public int stop() {
+    int _xblockexpression = (int) 0;
+    {
+      this.timer.cancel();
+      _xblockexpression = this.timer.purge();
+    }
+    return _xblockexpression;
+  }
+  
   @Override
   @Pure
   @SyntheticMember

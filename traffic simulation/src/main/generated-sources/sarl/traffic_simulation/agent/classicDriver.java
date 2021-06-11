@@ -41,7 +41,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
-import traffic_simulation.agent.PhysicEnvironment;
 import traffic_simulation.agent.influence;
 import traffic_simulation.agent.light;
 import traffic_simulation.environment.Perceptions;
@@ -150,20 +149,6 @@ public class classicDriver extends Agent {
       Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
       _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info(("oh no it\'s " + occurrence.l));
     }
-  }
-  
-  @Extension
-  @ImportedCapacityFeature(PhysicEnvironment.class)
-  @SyntheticMember
-  private transient AtomicSkillReference $CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT;
-  
-  @SyntheticMember
-  @Pure
-  private PhysicEnvironment $CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT$CALLER() {
-    if (this.$CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT == null || this.$CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT.get() == null) {
-      this.$CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT = $getSkill(PhysicEnvironment.class);
-    }
-    return $castSkill(PhysicEnvironment.class, this.$CAPACITY_USE$TRAFFIC_SIMULATION_AGENT_PHYSICENVIRONMENT);
   }
   
   @Extension

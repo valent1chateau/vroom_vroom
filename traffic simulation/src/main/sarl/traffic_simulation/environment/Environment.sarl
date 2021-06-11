@@ -24,7 +24,7 @@ import java.util.UUID
 import java.time.LocalDateTime
 import java.util.Timer
 import java.util.TimerTask
-import traffic_simulation.time.TimeManager
+
 import java.util.TreeMap
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.ArrayList
@@ -115,5 +115,11 @@ class Environment {
 			bodyList.put(currentV.ID,currentV)	
 			i++
 		}
+	}
+	
+	def stop() {
+		timer.cancel
+		timer.purge
+		
 	}
 }

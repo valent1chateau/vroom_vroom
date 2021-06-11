@@ -265,7 +265,7 @@ class classicDriverBody extends Vehicle{
 		this.c.setFill(Color.BLUE)
 		D_Max()
 		
-		accMax =2
+		accMax =4
 		maxSpeed = 13.8
 		this.perception = new Perception(this, 150.0, map.getG)
 		this.edge = path.pathEdges.get(0)

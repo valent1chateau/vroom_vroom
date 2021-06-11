@@ -23,6 +23,7 @@ package traffic_simulation.environment;
 import com.google.common.base.Objects;
 import io.sarl.core.AgentSpawned;
 import io.sarl.core.DefaultContextInteractions;
+import io.sarl.core.Destroy;
 import io.sarl.core.Initialize;
 import io.sarl.core.Lifecycle;
 import io.sarl.core.Logging;
@@ -52,6 +53,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Extension;
+import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.classicDriver;
 import traffic_simulation.agent.influence;
@@ -86,7 +88,11 @@ public class EnvironmentAgent extends Agent {
     this.actionsOnInfluence();
   }
   
-  private void $behaviorUnit$AgentSpawned$1(final AgentSpawned occurrence) {
+  private void $behaviorUnit$Destroy$1(final Destroy occurrence) {
+    this.environment.stop();
+  }
+  
+  private void $behaviorUnit$AgentSpawned$2(final AgentSpawned occurrence) {
     int v = this.spawnedReceived.incrementAndGet();
     if ((v == this.countAgentSpawned)) {
       this.countAgentSpawned = 0;
@@ -96,7 +102,7 @@ public class EnvironmentAgent extends Agent {
     }
   }
   
-  private void $behaviorUnit$influence$2(final influence occurrence) {
+  private void $behaviorUnit$influence$3(final influence occurrence) {
     double ac = occurrence.acc;
     UUID id = occurrence.idt;
     classicDriverBody _get = this.environment.getBodyList().get(id);
@@ -160,6 +166,7 @@ public class EnvironmentAgent extends Agent {
   
   protected void actionsOnInfluence() {
     try {
+      ArrayList<UUID> listKey = new ArrayList<UUID>();
       boolean _isEmpty = this.environment.getBodyList().isEmpty();
       if ((_isEmpty != true)) {
         this.environment.Update();
@@ -167,33 +174,38 @@ public class EnvironmentAgent extends Agent {
         for (final Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
           double _position = this.environment.getBodyList().get(entry.getKey()).getPosition();
           double _distanceMax = this.environment.getBodyList().get(entry.getKey()).getDistanceMax();
-          if ((_position > _distanceMax)) {
-            this.environment.getBodyList().remove(entry.getKey());
+          if ((_position >= _distanceMax)) {
+            listKey.add(entry.getKey());
+          }
+        }
+        for (int k = 0; (k < listKey.size()); k++) {
+          {
+            this.environment.getBodyList().remove(listKey.get(k));
+            UUID key = listKey.get(k);
             DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
             suicide _suicide = new suicide();
             class $SerializableClosureProxy implements Scope<Address> {
               
-              private final UUID $_key;
+              private final UUID key;
               
-              public $SerializableClosureProxy(final UUID $_key) {
-                this.$_key = $_key;
+              public $SerializableClosureProxy(final UUID key) {
+                this.key = key;
               }
               
               @Override
               public boolean matches(final Address it) {
                 UUID _uUID = it.getUUID();
-                return Objects.equal(_uUID, $_key);
+                return Objects.equal(_uUID, key);
               }
             }
             final Scope<Address> _function = new Scope<Address>() {
               @Override
               public boolean matches(final Address it) {
                 UUID _uUID = it.getUUID();
-                UUID _key = entry.getKey();
-                return Objects.equal(_uUID, _key);
+                return Objects.equal(_uUID, key);
               }
               private Object writeReplace() throws ObjectStreamException {
-                return new SerializableProxy($SerializableClosureProxy.class, entry.getKey());
+                return new SerializableProxy($SerializableClosureProxy.class, key);
               }
             };
             _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.emit(_suicide, _function);
@@ -209,22 +221,29 @@ public class EnvironmentAgent extends Agent {
           classicDriverBody bodyAgent = new classicDriverBody(_map);
           boolean _canSpawn = bodyAgent.canSpawn();
           if ((_canSpawn == true)) {
-            int _size = this.environment.getBodyList().size();
-            if ((_size < this.nbTotalVehiculeClassic)) {
+            if ((this.nbTotalVehiculeClassic != 0)) {
               bodyAgent.initialzeEdgeBodies();
               this.environment.getBodyList().put(bodyAgent.getID(), bodyAgent);
               Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
-              DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
-              _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.spawnInContextWithID(classicDriver.class, bodyAgent.getID(), _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER_1.getDefaultContext());
+              DefaultContextInteractions _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER();
+              _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.spawnInContextWithID(classicDriver.class, bodyAgent.getID(), _$CAPACITY_USE$IO_SARL_CORE_DEFAULTCONTEXTINTERACTIONS$CALLER.getDefaultContext());
               int _countAgentSpawned = this.countAgentSpawned;
               this.countAgentSpawned = (_countAgentSpawned + 1);
+              int _nbTotalVehiculeClassic = this.nbTotalVehiculeClassic;
+              this.nbTotalVehiculeClassic = (_nbTotalVehiculeClassic - 1);
             }
           }
         }
       }
       if ((this.countAgentSpawned == 0)) {
         Thread.sleep(20);
-        this.startLoop();
+        if (((this.nbTotalVehiculeClassic == 0) && this.environment.getBodyList().isEmpty())) {
+          InputOutput.<String>print("e");
+          Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
+          _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.killMe();
+        } else {
+          this.startLoop();
+        }
       }
     } catch (Throwable _e) {
       throw Exceptions.sneakyThrow(_e);
@@ -300,7 +319,15 @@ public class EnvironmentAgent extends Agent {
   private void $guardEvaluator$AgentSpawned(final AgentSpawned occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$AgentSpawned$1(occurrence));
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$AgentSpawned$2(occurrence));
+  }
+  
+  @SyntheticMember
+  @PerceptGuardEvaluator
+  private void $guardEvaluator$Destroy(final Destroy occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
+    assert occurrence != null;
+    assert ___SARLlocal_runnableCollection != null;
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$Destroy$1(occurrence));
   }
   
   @SyntheticMember
@@ -308,7 +335,7 @@ public class EnvironmentAgent extends Agent {
   private void $guardEvaluator$influence(final influence occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$influence$2(occurrence));
+    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$influence$3(occurrence));
   }
   
   @Override

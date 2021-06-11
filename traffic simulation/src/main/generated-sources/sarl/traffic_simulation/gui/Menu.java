@@ -146,7 +146,7 @@ public class Menu extends Application {
     root.add(this.nbHautFen, 2, 2);
     root.add(this.buttonPlay, 0, 3);
     root.add(this.buttonExit, 1, 3);
-    primaryStage.setTitle("Menu - vroom_vroom");
+    primaryStage.setTitle("Menu - Traffic simulation");
     Scene _scene = new Scene(root, 350, 250);
     scene = _scene;
     primaryStage.setScene(scene);

@@ -58,22 +58,10 @@ public class Window2 extends Stage {
     this.width = w;
     this.env = e;
     this.drivers = this.env.getBodyList();
-    this.setTitle("window2");
+    this.setTitle("simulation");
     ArrayList<Edge> _poly = this.env.getMap().poly();
     Group _group = new Group(((Node[])Conversions.unwrapArray(_poly, Node.class)));
     this.group = _group;
-    for (int i = 0; (i < this.env.getMap().getG().getListNodes().size()); i++) {
-      {
-        traffic_simulation.environment.Node n = this.env.getMap().getG().getListNodes().get(i);
-        if (((((((n.getId() != 3) && (n.getId() != 5)) && (n.getId() != 9)) && (n.getId() != 13)) && (n.getId() != 15)) && (n.getId() != 19))) {
-          Circle c = new Circle();
-          c.setCenterX(n.getCoord().getX());
-          c.setCenterY(n.getCoord().getY());
-          c.setRadius((this.width * 0.01));
-          this.group.getChildren().add(c);
-        }
-      }
-    }
     for (int l = 0; (l < this.env.getTrafficlight_lst().size()); l++) {
       {
         trafficLight tf = this.env.getTrafficlight_lst().get(l);
@@ -97,18 +85,6 @@ public class Window2 extends Stage {
         Window2.this.group.getChildren().clear();
         for (int j = 0; (j < Window2.this.env.getMap().poly().size()); j++) {
           Window2.this.group.getChildren().add(Window2.this.env.getMap().poly().get(j));
-        }
-        for (int i = 0; (i < Window2.this.env.getMap().getG().getListNodes().size()); i++) {
-          {
-            traffic_simulation.environment.Node n = Window2.this.env.getMap().getG().getListNodes().get(i);
-            if (((((((n.getId() != 3) && (n.getId() != 5)) && (n.getId() != 9)) && (n.getId() != 13)) && (n.getId() != 15)) && (n.getId() != 19))) {
-              Circle c = new Circle();
-              c.setCenterX(n.getCoord().getX());
-              c.setCenterY(n.getCoord().getY());
-              c.setRadius((Window2.this.width * 0.01));
-              Window2.this.group.getChildren().add(c);
-            }
-          }
         }
         for (int l = 0; (l < Window2.this.env.getTrafficlight_lst().size()); l++) {
           {

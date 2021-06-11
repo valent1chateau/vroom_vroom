@@ -117,7 +117,7 @@ class Menu extends Application {
 		root.add(buttonPlay, 0, 3)
 		root.add(buttonExit, 1, 3)
 
-		primaryStage.setTitle("Menu - vroom_vroom")
+		primaryStage.setTitle("Menu - Traffic simulation")
 		
 		scene = new Scene(root, 350, 250)
 		primaryStage.setScene(scene)
