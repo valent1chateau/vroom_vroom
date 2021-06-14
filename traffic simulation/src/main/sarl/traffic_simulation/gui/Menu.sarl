@@ -1,6 +1,3 @@
-/** 
- * 
- */
 package traffic_simulation.gui
 
 import traffic_simulation.environment.Window2
@@ -20,44 +17,38 @@ import javafx.^event.ActionEvent
 import javafx.^event.EventHandler
 import io.sarl.bootstrap.SRE
 
-/** 
- * @author jeome
- * 
- */
+// Classe qui va gérer la fenetre de menu ainsi que tout les objets se trouvant
+// à l'intérieur de cette fenetre
 class Menu extends Application {
 	var buttonPlay : Button
 	var buttonExit : Button
 	var win : Window2
 	var env : Environment
 	var labelnbAgent : Label
-	var labelnbAgentDang : Label
-	var labelX : Label
 	var labelDimFen : Label
 	var labelAccel : Label
 	var labelUnitAccel : Label
 	var labelFeu : Label
 	var labelUnitTemps : Label
 	var nbAgentText : TextField
-	var nbAgentDangText : TextField
 	var nbHautFen : TextField
 	var nbLargFen : TextField
 	var nbAccel : TextField
 	var nbTempsFeu : TextField
 	var nbAgent : int
-	var nbAgentDang : int
 	var LongueurFenetre : int
 	var HauteurFenetre : int
 	var nbAcceleration : double
 	var nbTempsFeuRouge : int
 
+	// Création des différents objets
 	new() {
 
-		// super()
 		buttonPlay = new Button(" ▶ ")
 		buttonPlay.setOnAction(new EventHandler<ActionEvent> {
 
 			def handle(e : ActionEvent) {
-				// throw new UnsupportedOperationException("TODO: auto-generated method stub")
+
 				nbAgent = Integer.parseInt(nbAgentText.getText())
 				LongueurFenetre = Integer.parseInt(nbLargFen.getText())
 				HauteurFenetre = Integer.parseInt(nbHautFen.getText())
@@ -87,7 +78,7 @@ class Menu extends Application {
 		nbAgentText.setPrefColumnCount(2)
 
 		labelDimFen = new Label("Dimension de la fenetre:")
-		labelX = new Label("x")
+
 		nbHautFen = new TextField()
 		nbHautFen.setText("800")
 		nbHautFen.setPrefColumnCount(3)
@@ -107,9 +98,12 @@ class Menu extends Application {
 		nbTempsFeu.setPrefColumnCount(3)
 		labelUnitTemps = new Label("s")
 	}
-
+	
+	//	Permet le placement des différents objets créés
+	//	La fonction s'occupe également du titre, de la taille et du lancement
+	//	de la fenetre
 	def start(primaryStage : Stage) throws Exception {
-		// throw new UnsupportedOperationException("TODO: auto-generated method stub")
+
 		var root : GridPane
 		var scene : Scene
 

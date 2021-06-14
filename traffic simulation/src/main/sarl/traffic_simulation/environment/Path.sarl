@@ -1,16 +1,11 @@
-/** 
- * 
- */
+
 package traffic_simulation.environment
 
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.util.*
 import java.lang.Math.*
 
-/** 
- * @author jeome
- * 
- */
+
 class Path {
 
 	var openList : ArrayList<Node>
@@ -32,7 +27,7 @@ class Path {
 
 	}
 
-	def Astar(G : Graph, nStart : Node, nEnd : Node) {
+	def Astar(G : Graph, nStart : Node, nEnd : Node) {//implémentation de l'algorithme A^ définissant le chemin à partir d'un noeud de départ et d'un noeud d'arrivée
 
 		var stop : boolean = false
 
@@ -82,14 +77,13 @@ class Path {
 		resEdge(G)
 	}
 
-	def ResNode(G : Graph, nStart : Node, nEnd : Node) {
+	def ResNode(G : Graph, nStart : Node, nEnd : Node) { //ajout dans la liste pathNodes les noeuds formant le chemin
 		var idStart = nStart.id
 		var invRes : ArrayList<Node> = new ArrayList<Node>
 		invRes.add(nEnd)
 		var p : int = nEnd.id
 		while (p != idStart) {
-			// var index : int = closeList.indexOf(G.getListNodes.get(p))
-			// println(p)
+			
 			p = pred.get((G.getListNodes.get(p).id))
 			invRes.add(G.getListNodes.get(p))
 
@@ -100,14 +94,14 @@ class Path {
 
 	}
 
-	def resEdge(G : Graph) {
+	def resEdge(G : Graph) { //ajout dans la liste resultat pathedges les edges formant le chemin
 		for (var i = 0; i < pathNodes.size() - 1; i++) {
 			var key = String.valueOf(pathNodes.get(i).id) + String.valueOf(pathNodes.get(i + 1).id)
 			pathEdges.add(G.dict_Edges.get(key))
 		}
 	}
 
-	def bestNodeinTheList(L : ArrayList<Node>) : Node {
+	def bestNodeinTheList(L : ArrayList<Node>) : Node {//prend la meilleur node dans la lise
 		var best = L.get(0)
 
 		for (var i = 1; i < L.size(); i++) {
@@ -118,7 +112,7 @@ class Path {
 		return best
 	}
 
-	def isBest(n1 : Node, n2 : Node) : boolean {
+	def isBest(n1 : Node, n2 : Node) : boolean {//defini si une node est meilleur que l'autre
 		var res = false
 		var ghf1 : double[] = ghf.get(n1.id)
 		var ghf2 : double[] = ghf.get(n2.id)
@@ -129,7 +123,7 @@ class Path {
 		return res
 	}
 
-	def cost_g(G : Graph, Nin : Node, Nout : Node) : double {
+	def cost_g(G : Graph, Nin : Node, Nout : Node) : double {//cout g de l'edge
 		var res : double = ghf.get(Nin.id).get(0)
 		var keyEdge = String.valueOf(Nin.id) + String.valueOf(Nout.id)
 		var e : Edge = G.dict_Edges.get(keyEdge)
@@ -137,14 +131,15 @@ class Path {
 		return res
 	}
 
-	// distance euclidienne du noeud par rapport au noeud d'arrivé
-	def heuristique(n : Node, nEnd : Node) : double {
+	
+	def heuristique(n : Node, nEnd : Node) : double {//definition de l'heuristique 
 		var res : double
+		//distance euclidienne
 		res = Math.sqrt((nEnd.coord.getX() - n.coord.getX()) ** 2 + ((nEnd.coord.getY() - n.coord.getY()) ** 2 ))
 		return res
 	}
 
-	def f(g : double, h : double) : double {
+	def f(g : double, h : double) : double {//somme de g + h l'heuristique
 		return g + h
 	}
 	

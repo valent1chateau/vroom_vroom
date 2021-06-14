@@ -8,24 +8,25 @@ import java.lang.Math.*
 
 class Graph {
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var nbNodes : int
+	var nbNodes : int	//nombre de noeuds
 
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var ListEdge : ArrayList<Edge>
+	var ListEdge : ArrayList<Edge>	//Liste des edges
 
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var ListNodes : ArrayList<Node>
+	var ListNodes : ArrayList<Node>		//Liste des Nodes
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var Lst_Adj : ArrayList<ArrayList<Node>>
+	var Lst_Adj : ArrayList<ArrayList<Node>>	//liste d'adjacence du graphe
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var dict_Edges : Map<String, Edge>
+	var dict_Edges : Map<String, Edge>		//dictionnaire des edges classés selon une clé
 
-	var tool = new Tools
+	var tool = new Tools				//outils des fonctions mathématiques pour calculer les courbes de Béziers et les distances
 
 	new() {
 	}
 
 	new(ListN : ArrayList<Node>, Lst_A : ArrayList<ArrayList<Node>>) {
+		//initialisation des paramètres 
 		ListNodes = ListN
 		Lst_Adj = Lst_A
 		nbNodes = ListNodes.size()
@@ -33,11 +34,7 @@ class Graph {
 		dict_Edges = new Hashtable<String, Edge>
 	}
 	
-	def addToGraph(): void {
-		
-	}
-
-	def LstAdj_To_Graph() {
+	def LstAdj_To_Graph() {//méthode créant le graphe à partir de la liste d'adjacence
 		var idt : int
 		var nbP : int
 		var pas : double
@@ -72,6 +69,7 @@ class Graph {
 							points.set(t + 1, Nin.coord.getY())
 							tour = tour + 1
 						}
+						//calcul de la distance de l'edge
 						E.weight = Math.sqrt((Nout.coord.getX() - Nin.coord.getX()) ** 2 +
 							((Nout.coord.getY() - Nin.coord.getY()) ** 2 ))
 
@@ -101,7 +99,7 @@ class Graph {
 						} else {
 							PC.setLocation(Nout.coord.getX(), Nin.coord.getY())
 						}
-
+						//récupération des points des courbes de Béziers
 						points = bezierQuad(Nin.coord, PC, Nout.coord, nbP)
 
 						E.weight = tool.weight_curve(
@@ -119,8 +117,7 @@ class Graph {
 		}
 	}
 
-	// / fonction calculant la courbe de Bézier quadratic à partir d'un point de départ P1,
-	// / d'un point d'arrivée P2 et d'un point de contrôle PC.
+	//calcul des courbes de Bézier
 	def bezierQuad(P1 : Point2D, PC : Point2D, P2 : Point2D, nbPoints : int) : double[] {
 		var res : double[]
 		var t : ArrayList<Double>
@@ -134,7 +131,7 @@ class Graph {
 		t = new ArrayList()
 		d = 0.0
 		var pas : double = 1.0d / nbPoints
-		// println(pas)
+		
 		for (var i = 0; i <= nbPoints; i++) {
 			t.add(d)
 			d = d + pas
@@ -153,10 +150,8 @@ class Graph {
 			tour += 1
 
 		}
-
 		
 		return res
-
 	}
 
 		

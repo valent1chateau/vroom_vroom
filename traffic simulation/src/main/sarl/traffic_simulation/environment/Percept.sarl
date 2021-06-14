@@ -1,23 +1,4 @@
-/* 
- * $Id$
- * 
- * Copyright (c) 2011-17 Stephane GALLAND <stephane.galland@utbm.fr>.
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * This program is free software; you can redistribute it and/or modify
- */
+
 package traffic_simulation.environment
 
 import java.io.Serializable
@@ -29,33 +10,23 @@ import traffic_simulation.util.Tools
 import org.eclipse.xtend.lib.annotations.Accessors
 import java.awt.geom.Point2D
 
-/* import traffic_simulation.math.Point2f
- * import traffic_simulation.math.Shape2f
- * import traffic_simulation.math.Vector2f
- */
 
-/**
- * Defined a perception unit.
- * 
- * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
- * @version $Name$ $Revision$ $Date$
- */
   
 class Perception {
 
 	@Accessors
 	var vehicle : Vehicle
-	var dist_vision : double
+	var dist_vision : double	//distance de vision du conducteur en général 150 mètres
 	var tool : Tools = new Tools
 	var G : Graph
 
 	@Accessors
 	var res : ArrayList<Vehicle>
 	
-	var LightIsView : boolean 
+	var LightIsView : boolean //true si feu de circulation perçu
 	
 	@Accessors
-	var distWithLight : double = -1
+	var distWithLight : double = -1 //distance avec le feu perçu, s'il n'est pas perçut elle vaut -1
 	
 	new(v : Vehicle, dv : double, g : Graph){
 		vehicle = v
@@ -69,7 +40,8 @@ class Perception {
 	def getLightIsView() : boolean{
 		return LightIsView
 	}
-	def perceptLight(){
+	
+	def perceptLight(){//defini si un feu de circulation est perçut
 		var e = vehicle.edge
 		
 		if (e.haveLight) {
@@ -91,13 +63,13 @@ class Perception {
 			this.LightIsView = false
 			distWithLight = -1
 		}
-		//println(LightIsView)
+		
 	}
 	
-	def percept() : ArrayList<Vehicle> {
-
+	def percept() : ArrayList<Vehicle> {// fonction percept : calcul la perception, détermine si les bodies perçut par le conducteur 
+										//cette éthode met à jour la liste res dans lequel se truve tous les bodies perçut à au plus 150 mètres = distVision donnée
 		res = new ArrayList<Vehicle>
-		//println(vehicle.edge.bodies.size())
+		//cas de l'edge sur lequel est le vehicule qui perçoit
 		for (var i = 0; i < vehicle.edge.bodies.size();i++){
 			var v = vehicle.edge.bodies.get(i)
 			// on vérifie que le véhicule ne se perçoit pas lui-même et ne perçoit pas les véhicules derrières
@@ -110,7 +82,7 @@ class Perception {
 		}
 		
 		var dist_restante = dist_vision - (vehicle.edge.weight - vehicle.pos_edge)
-		
+		//cas ou on peut encore percevoir au-dela de l'edge sur lequel se situe le conducteur 
 		if (dist_restante > 0) {
 			dfs_percept(vehicle.edge.getNout, dist_restante)
 			
@@ -119,14 +91,15 @@ class Perception {
 		return res
 	}
 	
-	def dfs_percept(n : Node, dist_restante : double) {
+	def dfs_percept(n : Node, dist_restante : double) { //dfs permettant de percevoir sur les edges suivants tant que dist_restante >0, i.e tant que le conducteur 
+														// peut percevoir selon sa distVision
 		for (var i = 0; i < n.neighboors.size(); i++) {
 			var nout = n.neighboors.get(i)
 			var e = G.dict_Edges.get(String.valueOf(n.id) + String.valueOf(nout.id))
-			//println(String.valueOf(n.id) + " - " +  String.valueOf(nout.id))
+			
 			for (var k = 0; k < e.bodies.size(); k++) {
 				var vh = e.bodies.get(k)
-				//println(isCarBehind(vh))
+				
 				if (vh.id != vehicle.id && isView(vh) && isCarBehind(vh) != true)
 			{
 					res.add(vh)

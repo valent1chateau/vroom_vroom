@@ -1,26 +1,5 @@
-/**
- * $Id$
- * 
- * Copyright (c) 2014-17 Stephane GALLAND <stephane.galland@utbm.fr>.
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * This program is free software; you can redistribute it and/or modify
- */
 package traffic_simulation.agent;
 
-import com.google.common.base.Objects;
 import io.sarl.core.DefaultContextInteractions;
 import io.sarl.core.Initialize;
 import io.sarl.core.Lifecycle;
@@ -39,33 +18,12 @@ import java.util.UUID;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
-import traffic_simulation.agent.light;
 
 @SarlSpecification("0.11")
 @SarlElementType(19)
 @SuppressWarnings("all")
 public class priorityDriver extends Agent {
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.setLoggingName("priorityDriver");
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info("I\'m starting");
-    Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_2 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-    UUID _iD = this.getID();
-    _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_2.info(("my priorityDriver id :" + _iD));
-  }
-  
-  private void $behaviorUnit$light$1(final light occurrence) {
-    boolean _equals = Objects.equal(occurrence.l, "green");
-    if (_equals) {
-      Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-      _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info(("nice it\'s " + occurrence.l));
-    } else {
-      Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-      _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info(" but I have the priority!");
-    }
-    Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
-    _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.killMe();
   }
   
   @Extension
@@ -119,28 +77,20 @@ public class priorityDriver extends Agent {
   }
   
   @SyntheticMember
-  @PerceptGuardEvaluator
-  private void $guardEvaluator$light(final light occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
-    assert occurrence != null;
-    assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$light$1(occurrence));
+  public priorityDriver(final UUID arg0, final UUID arg1) {
+    super(arg0, arg1);
   }
   
   @SyntheticMember
-  public priorityDriver(final UUID parentID, final UUID agentID) {
-    super(parentID, agentID);
-  }
-  
-  @SyntheticMember
-  @Inject
   @Deprecated
-  public priorityDriver(final BuiltinCapacitiesProvider provider, final UUID parentID, final UUID agentID) {
-    super(provider, parentID, agentID);
+  @Inject
+  public priorityDriver(final BuiltinCapacitiesProvider arg0, final UUID arg1, final UUID arg2) {
+    super(arg0, arg1, arg2);
   }
   
   @SyntheticMember
   @Inject
-  public priorityDriver(final UUID parentID, final UUID agentID, final DynamicSkillProvider skillProvider) {
-    super(parentID, agentID, skillProvider);
+  public priorityDriver(final UUID arg0, final UUID arg1, final DynamicSkillProvider arg2) {
+    super(arg0, arg1, arg2);
   }
 }

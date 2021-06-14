@@ -35,11 +35,11 @@ class trafficLight implements Light extends trafficObject {
 		this.isGreen = state
 	}
 	
-	def turnRed : void {
+	def turnRed : void {	//switch le feu au rouge
 		switchLight(false)
 	}
 	
-	def turnGreen : void {
+	def turnGreen : void {	//switch le feu au verts
 		switchLight(true)
 	}
 	

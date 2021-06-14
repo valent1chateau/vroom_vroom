@@ -1,23 +1,3 @@
-/**
- * $Id$
- * 
- * Copyright (c) 2014-17 Stephane GALLAND <stephane.galland@utbm.fr>.
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * This program is free software; you can redistribute it and/or modify
- */
 package traffic_simulation.environment;
 
 import com.google.common.base.Objects;
@@ -53,7 +33,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.eclipse.xtext.xbase.lib.Extension;
-import org.eclipse.xtext.xbase.lib.InputOutput;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.classicDriver;
 import traffic_simulation.agent.influence;
@@ -68,8 +47,6 @@ import traffic_simulation.environment.suicide;
 @SuppressWarnings("all")
 public class EnvironmentAgent extends Agent {
   private Environment environment;
-  
-  private double dt = 0.5;
   
   private AtomicInteger spawnedReceived = new AtomicInteger(0);
   
@@ -241,7 +218,6 @@ public class EnvironmentAgent extends Agent {
       if ((this.countAgentSpawned == 0)) {
         Thread.sleep(20);
         if (((this.nbTotalVehiculeClassic == 0) && this.environment.getBodyList().isEmpty())) {
-          InputOutput.<String>print("e");
           Lifecycle _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER();
           _$CAPACITY_USE$IO_SARL_CORE_LIFECYCLE$CALLER.killMe();
         } else {
@@ -352,8 +328,6 @@ public class EnvironmentAgent extends Agent {
     if (getClass() != obj.getClass())
       return false;
     EnvironmentAgent other = (EnvironmentAgent) obj;
-    if (Double.doubleToLongBits(other.dt) != Double.doubleToLongBits(this.dt))
-      return false;
     if (other.nbrAgentOnMap != this.nbrAgentOnMap)
       return false;
     if (other.countAgentSpawned != this.countAgentSpawned)
@@ -371,7 +345,6 @@ public class EnvironmentAgent extends Agent {
   public int hashCode() {
     int result = super.hashCode();
     final int prime = 31;
-    result = prime * result + Double.hashCode(this.dt);
     result = prime * result + Integer.hashCode(this.nbrAgentOnMap);
     result = prime * result + Integer.hashCode(this.countAgentSpawned);
     result = prime * result + Integer.hashCode(this.nbTotalVehiculeClassic);
@@ -380,20 +353,20 @@ public class EnvironmentAgent extends Agent {
   }
   
   @SyntheticMember
-  public EnvironmentAgent(final UUID parentID, final UUID agentID) {
-    super(parentID, agentID);
+  public EnvironmentAgent(final UUID arg0, final UUID arg1) {
+    super(arg0, arg1);
   }
   
   @SyntheticMember
-  @Inject
   @Deprecated
-  public EnvironmentAgent(final BuiltinCapacitiesProvider provider, final UUID parentID, final UUID agentID) {
-    super(provider, parentID, agentID);
+  @Inject
+  public EnvironmentAgent(final BuiltinCapacitiesProvider arg0, final UUID arg1, final UUID arg2) {
+    super(arg0, arg1, arg2);
   }
   
   @SyntheticMember
   @Inject
-  public EnvironmentAgent(final UUID parentID, final UUID agentID, final DynamicSkillProvider skillProvider) {
-    super(parentID, agentID, skillProvider);
+  public EnvironmentAgent(final UUID arg0, final UUID arg1, final DynamicSkillProvider arg2) {
+    super(arg0, arg1, arg2);
   }
 }

@@ -1,16 +1,11 @@
-/** 
- * 
- */
+
 package traffic_simulation.util
 
 import java.lang.Math.*
 import traffic_simulation.environment.Vehicle
 import java.awt.geom.Point2D
 
-/** 
- * @author jeome
- * 
- */
+
 class Tools {
 	
 	new(){}
@@ -19,25 +14,23 @@ class Tools {
 		return x1 * (1.0d - t) ** 2.0d + 2.0d * xc * t * (1.0d - t) + x2 * (t) ** 2.0d
 	}
 	
-	/*def g(P : double[], t : double){
-		return Math.sqrt(f(P.get(0),P.get(1),P.get(2),t)**2
-	 * }
-	 */
+	//dérivé des fonctions de calcul des coordonnées des courbes de Béziers
 	def deriv_bez(x1 : double, xc : double, x2 : double, t : double) : double {
 		return - 2.0d*x1*(1.0d-t) + 2.0d * xc * (1.0d - 2.0d*t) + 2.0d* x2 * t
 	}
 	
-	def g(P : double[], t : double){
+	def g(P : double[], t : double){//fonction intermédiaire 
 		return Math.sqrt(
 			deriv_bez(P.get(0), P.get(1), P.get(2), t) ** 2 + deriv_bez(P.get(3), P.get(4), P.get(5), t) ** 2)
 	}
 	
+	//fonction calculant la longueur d'une courbe
 	def weight_curve(P : double[], a : double, b : double, n : double) : double{
 		var m = a
 		var d = b - a
 		var h = d/n
 		var I = h * ((g(P, a) / 2) + (g(P, b) / 2) )
-		//println(h)
+		
 		for (var i = 0;i<n;i++){
 			I = I + h*g(P,m+h)
 			m = m + h
@@ -45,43 +38,44 @@ class Tools {
 		return I
 	}
 	
+	// fonction calculant l'accélération libre
 	def accelerationFree(a:double,Va:double,V0:double) : double{
 		var res : double
 		res = a*(1 - (Va/V0)**2)
 		return res
 	}
-	
+	// fonction calculant l'accélération prenant en compte un véhicule devant
 	def accelerationInt(a : double, Va : double, b : double,Sa:double,S0:double,delta:double,T:double) : double {
 		var res : double
 		res = -a*(((S0+Va*T)/Sa) + (Va*delta)/(2*Math.sqrt(a*b)*Sa))**2
 		return res
 	}
-	
+	// fonction calculant la position
 	def calc_position(v:double, t : double) : double{
 		var res : double
 		res = v * t
 		return res
 	}
-	
+	// fonction calculant la vitesse
 	def calc_speed(acc : double, t : double) : double {
 		var res : double
 		res = acc * t 
 		return res
 	}
-
+	// fonction calculant la distance entre deux points
 	def distance(P1 : Point2D, P2 : Point2D) : double {
 		var res : double
 		res = Math.sqrt((P2.getX() - P1.getX()) ** 2 + (P2.getY() - P1.getY()) ** 2)
 		return res
 	}
 	
-	
+	// fonction calculant la distance entre un point et un véhicule
 	def distance_vehicle2(P1 : Point2D, v2 : Vehicle, dim1 : double) : double {
 		var res : double
 		res = Math.sqrt((v2.coord.getX() - P1.getX()) ** 2 + (v2.coord.getY() - P1.getY()) ** 2) - dim1/2 - v2.dim/2
 		return res
 	}
-
+	// fonction calculant la distance entre deux véhicules
 	def distance_vehicle(v1 : Vehicle, v2 : Vehicle) : double {
 		var res : double
 		res = Math.sqrt((v2.coord.getX() - v1.coord.getX()) ** 2 + (v2.coord.getY() - v1.coord.getY()) ** 2) -

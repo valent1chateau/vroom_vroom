@@ -8,13 +8,11 @@ import org.eclipse.xtend.lib.annotations.Accessors
 class Node {
 
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var id : int
+	var id : int		//id du noeud
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var coord : Point2D
+	var coord : Point2D	//coord du noeud
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var pred : Node
-	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var neighboors : ArrayList<Node>
+	var neighboors : ArrayList<Node>		//liste des voisins du noeuds
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
 	var statut : String
 
@@ -28,21 +26,21 @@ class Node {
 
 class Edge extends Polyline {
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var id_ : int
+	var id_ : int			//id de l'edge
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var Nin : Node
+	var Nin : Node			//noeud d'entrée de l'edge
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var Nout : Node
+	var Nout : Node			//noeud de sortie de l'edge
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var nbVoies : int
+	var nbVoies : int		//non utilisé
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var weight : double
+	var weight : double		//distance de l'edge
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var bodies : ArrayList<Vehicle>
+	var bodies : ArrayList<Vehicle>		//liste des bodies des véhicues présent sur le morceau de route 
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var haveLight : boolean = false
+	var haveLight : boolean = false		//true si l'edge possède un feu de circulation
 	@Accessors(PUBLIC_SETTER, PUBLIC_GETTER)
-	var light : trafficLight
+	var light : trafficLight			//feu de circulation s'il y en a un 
 
 	new (i : int, in_ : Node, out_ : Node) {
 		super()
@@ -52,12 +50,12 @@ class Edge extends Polyline {
 		this.bodies = new ArrayList<Vehicle>
 	}
 	
-	def addBody(v : Vehicle) {
+	def addBody(v : Vehicle) { //methode d'ajout d'un body dans la liste
 		
 		bodies.add(v)
 	}
 	
-	def removeBody(v : Vehicle){
+	def removeBody(v : Vehicle){ //methode de retrait d'un body de la liste
 		bodies.remove(v)
 	}
 }

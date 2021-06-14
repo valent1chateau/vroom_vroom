@@ -15,9 +15,6 @@ import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Graph;
 import traffic_simulation.environment.Node;
 
-/**
- * @author jeome
- */
 @SarlSpecification("0.11")
 @SarlElementType(10)
 @SuppressWarnings("all")

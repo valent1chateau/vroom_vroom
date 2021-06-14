@@ -1,23 +1,4 @@
-/* 
- * $Id$
- * 
- * Copyright (c) 2014-17 Stephane GALLAND <stephane.galland@utbm.fr>.
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * This program is free software; you can redistribute it and/or modify
- */
+
 package traffic_simulation.^agent
 
 import io.sarl.core.Initialize
@@ -37,18 +18,11 @@ import traffic_simulation.environment.suicide
 import traffic_simulation.util.Tools
 import traffic_simulation.environment.Vehicle
 
-//import traffic_simulation.environment.AbstractEnvironment
-event light {
-	var l : String
 
-	new (x : String) {
-		l = x
-	}
-}
-
+//event permettant de récupérer les influences des agents
 event influence {
-	var acc : double
-	var idt : UUID
+	var acc : double //acceleration récuperer et calculée par l'agent classicdriver
+	var idt : UUID   //id de l'agent et du body
 
 	new(a : double, id : UUID) {
 		acc = a
@@ -56,146 +30,105 @@ event influence {
 	}
 }
 
+
+//agent classicDriver : agent conduisant un véhicule classique 
 agent classicDriver {
-	var tool = new Tools
-	var So : double = 1.5
-	var T : double = 1.5
-	var b : double = 1.67
+	var tool = new Tools   //class possédant les fonctions de calcul d'accélération et de distance
+	var So : double = 1.5          // disatnce minimal entre 2 voitures
+	var T : double = 1.5 			// desired time headway
+	var b : double = 1.67 			//comfortable braking deceleration
 	var kill : boolean = false
 
 	uses  Lifecycle, DefaultContextInteractions, Logging
 
 	on Initialize {
 		loggingName = "classicDriver"
-			// info("I'm starting")
-		// info("my classicDriver id :" + ID)
+			
 	}
-	
+	//pour tuer l'agent quand il a parcouru son chemin
 	on suicide{
 		killMe
 	}
 	
+	
 	on Perceptions{
-		// info(occurrence.value)
-		// info("ok")
-		var p = occurrence.p_value
-		var etat = occurrence.state
-		var dim_car = occurrence.dim
-		var coord_car = occurrence.loc
-		var isRed = occurrence.isRedView
-		var distWithRedLight = occurrence.distwithLight
+		
+		var p = occurrence.p_value		//récupération de la perception des véhicules perçus
+		var etat = occurrence.state				//récupération de la liste des états du véhicule ; vitesse Max, Vitesse actuelle, acc. Max
+		var dim_car = occurrence.dim				// récupération de la dimension du véhicule
+		var coord_car = occurrence.loc			//récupération des coordonnées
+		var isRed = occurrence.isRedView			//récupération de l'état du feu
+		var distWithRedLight = occurrence.distwithLight		//récupération de la distance avec le feu rouge  
 
 		var dist_min : double = -1.0
-		var carInFront : Vehicle
-		var a : double
+		var carInFront : Vehicle		//initialisation du véhicule potentiellement présent devant la voiture 
+		var a : double					//accélération a envoyer
 
-		if (p.isEmpty != true) {
-			// println(p)
+		if (p.isEmpty != true) { //cas ou la liste des bodies perçut est non vide
+			
 			for (var i = 0; i < p.size(); i++) {
-				var distBetweenCar = tool.distance_vehicle2(coord_car, p.get(i), dim_car)
+				var distBetweenCar = tool.distance_vehicle2(coord_car, p.get(i), dim_car) //distance entre la voiture et celle de devant
 				if (i == 0) {
 					dist_min = distBetweenCar
 					carInFront = p.get(i)
 				} else {
 					if (distBetweenCar < dist_min) {
-						dist_min = distBetweenCar
-						carInFront = p.get(i)
+						dist_min = distBetweenCar    //on récupère la distance la plus petite entre la voiture et celle de devant car on veut la voiture la plus proche
+						carInFront = p.get(i)        //récupération de la voiture de devant 
 					}
 				}
 			}
 
-			if (isRed) {
-				if (distWithRedLight < dist_min) {
-					if (distWithRedLight > 5 && etat.get(1) == 0) {
-						a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
-					} else {
-						a = tool.accelerationInt(etat.get(2), etat.get(1), b, distWithRedLight, 1, etat.get(1), T)
+			if (isRed) { //cas feu rouge
+				if (distWithRedLight < dist_min) {// cas ou la distance avec le feu est inférieur à la distance avec la voiture la plus proche
+					if (distWithRedLight > 5 && etat.get(1) == 0) { //cas où l'on est à plus de 5 mètres
+						a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0)) //calcul de l'accéleration libre sans objet devant
+					} else {// cas inférieur à 5 mètres
+						a = tool.accelerationInt(etat.get(2), etat.get(1), b, distWithRedLight, 1, etat.get(1), T) // calcul de l'acceleration avec prise en compte de l'objet devant
 					}
 
-				} else {
+				} else { // cas ou la voiture devant est plus prov=che du feu de circulation
 					if (dist_min > 5 && etat.get(1) == 0) {
 						a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
 					} else {
 						a = tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, 1, etat.get(1), T)
 					}
 				}
-			} else {
+			} else { //cas ou le feu est vert et la voiture devant est proche à une distance inf à 150 mètres
 				if (dist_min > 5 && etat.get(1) == 0) {
 					a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
 				} else {
 					a = tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, 1, etat.get(1), T)
 				}
 			}
-			//println(etat.get(1) - carInFront.speed)
 			
+			emit(new influence(a, ID)) //une fois l'accélération calculé l'agent émet un e influence
 			
-			
-			emit(new influence(a, ID))
-			
-			
-			// println("q")
-			// println(a)
-
-		/* if (a < -1000) {
-		 * println(
-		 * tool.accelerationInt(etat.get(2), etat.get(1), b, dist_min, So, etat.get(1) - carInFront.speed, T))
-		 * println(a)
-		 * println(etat.get(2))
-		 * println(etat.get(1))
-		 * println(dist_min)
-		 * println(etat.get(1) - carInFront.speed)
-		 * }
-		 */
-			
-				// println("a")
-		} else {
-			if (isRed) {
-				if (distWithRedLight > 5 && etat.get(1) == 0) {
+	
+		} else { // cas ou il n'y a pas de voiture devant
+			if (isRed) { //cas ou le feu est rouge
+				if (distWithRedLight > 5 && etat.get(1) == 0) {// cas ou le feu est supérieur à 5 mètres
 					a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
-				} else {
+				} else {//cas ou le feu est inferieur à 5 mètres
 					a = tool.accelerationInt(etat.get(2), etat.get(1), b, distWithRedLight, 1, etat.get(1), T)
 				}
-			} else {
+			} else {// cas ou le feu est vert
 				a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
 			}
 
 			
 			emit(new influence(a, ID))
 			
-			
 		  }
-		 
-		/* a = tool.accelerationFree(etat.get(2), etat.get(1), etat.get(0))
-	 * emit(new influence(a, ID))
-	 */
 	}
 
-	on light {
-		if (occurrence.l == "green") {
-			info("yes it's " + occurrence.l)
-		} else {
-			info("oh no it's " + occurrence.l)
-		}
-		// killMe
-	}
 }
 
-agent priorityDriver {
+agent priorityDriver {// agent du véhicule prioritaire 
 
 	uses Lifecycle, DefaultContextInteractions, Logging
 
 	on Initialize {
-		loggingName = "priorityDriver"
-		info("I'm starting")
-		info("my priorityDriver id :" + ID)
-	}
-
-	on light {
-		if (occurrence.l == "green") {
-			info("nice it's " + occurrence.l)
-		} else {
-			info(" but I have the priority!")
-		}
-		killMe
+		
 	}
 }

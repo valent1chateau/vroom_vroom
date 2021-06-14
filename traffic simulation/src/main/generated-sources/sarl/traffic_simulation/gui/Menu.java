@@ -22,9 +22,6 @@ import traffic_simulation.environment.Environment;
 import traffic_simulation.environment.EnvironmentAgent;
 import traffic_simulation.environment.Window2;
 
-/**
- * @author jeome
- */
 @SarlSpecification("0.11")
 @SarlElementType(10)
 @SuppressWarnings("all")
@@ -39,10 +36,6 @@ public class Menu extends Application {
   
   private Label labelnbAgent;
   
-  private Label labelnbAgentDang;
-  
-  private Label labelX;
-  
   private Label labelDimFen;
   
   private Label labelAccel;
@@ -55,8 +48,6 @@ public class Menu extends Application {
   
   private TextField nbAgentText;
   
-  private TextField nbAgentDangText;
-  
   private TextField nbHautFen;
   
   private TextField nbLargFen;
@@ -66,8 +57,6 @@ public class Menu extends Application {
   private TextField nbTempsFeu;
   
   private int nbAgent;
-  
-  private int nbAgentDang;
   
   private int LongueurFenetre;
   
@@ -127,8 +116,6 @@ public class Menu extends Application {
     this.nbAgentText.setPrefColumnCount(2);
     Label _label_1 = new Label("Dimension de la fenetre:");
     this.labelDimFen = _label_1;
-    Label _label_2 = new Label("x");
-    this.labelX = _label_2;
     TextField _textField_1 = new TextField();
     this.nbHautFen = _textField_1;
     this.nbHautFen.setText("800");
@@ -137,22 +124,22 @@ public class Menu extends Application {
     this.nbLargFen = _textField_2;
     this.nbLargFen.setText("1200");
     this.nbLargFen.setPrefColumnCount(3);
-    Label _label_3 = new Label("Accelération du véhicule:");
-    this.labelAccel = _label_3;
+    Label _label_2 = new Label("Accelération du véhicule:");
+    this.labelAccel = _label_2;
     TextField _textField_3 = new TextField();
     this.nbAccel = _textField_3;
     this.nbAccel.setText("4");
     this.nbAccel.setPrefColumnCount(3);
-    Label _label_4 = new Label("m/s^-2");
-    this.labelUnitAccel = _label_4;
-    Label _label_5 = new Label("Temps feu rouge:");
-    this.labelFeu = _label_5;
+    Label _label_3 = new Label("m/s^-2");
+    this.labelUnitAccel = _label_3;
+    Label _label_4 = new Label("Temps feu rouge:");
+    this.labelFeu = _label_4;
     TextField _textField_4 = new TextField();
     this.nbTempsFeu = _textField_4;
     this.nbTempsFeu.setText("10");
     this.nbTempsFeu.setPrefColumnCount(3);
-    Label _label_6 = new Label("s");
-    this.labelUnitTemps = _label_6;
+    Label _label_5 = new Label("s");
+    this.labelUnitTemps = _label_5;
   }
   
   public void start(final Stage primaryStage) throws Exception {
@@ -197,8 +184,6 @@ public class Menu extends Application {
     Menu other = (Menu) obj;
     if (other.nbAgent != this.nbAgent)
       return false;
-    if (other.nbAgentDang != this.nbAgentDang)
-      return false;
     if (other.LongueurFenetre != this.LongueurFenetre)
       return false;
     if (other.HauteurFenetre != this.HauteurFenetre)
@@ -217,7 +202,6 @@ public class Menu extends Application {
     int result = super.hashCode();
     final int prime = 31;
     result = prime * result + Integer.hashCode(this.nbAgent);
-    result = prime * result + Integer.hashCode(this.nbAgentDang);
     result = prime * result + Integer.hashCode(this.LongueurFenetre);
     result = prime * result + Integer.hashCode(this.HauteurFenetre);
     result = prime * result + Double.hashCode(this.nbAcceleration);

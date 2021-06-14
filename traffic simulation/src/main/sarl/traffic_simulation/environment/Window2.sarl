@@ -24,40 +24,27 @@ import javafx.animation.AnimationTimer
 import java.util.TreeMap
 import java.util.UUID
 
-/** 
- * @author jeome
- * 
- */
+//class de l'interface grapphique principale de notre simulation
 class Window2 extends Stage {
-	var env : Environment
-	var map : Map
+	var env : Environment		//prend en paramètre l'environment
 	var length : int
 	var width : int
-	var cc : Circle = new Circle()
-	var t : long
-	var dt : double = 0.5
 	var group : Group
-	var test = false
-	// var drivers : ArrayList<classicDriverBody>
+	
 	var drivers = new TreeMap<UUID, classicDriverBody>
 	new(e : Environment, h : int, w : int) {
-		// super()
+		
 		this.length = h
 		this.width = w
-		//map = new Map(this.length, this.width)
-		//drivers = new ArrayList<classicDriverBody>
 		
 		env = e
 		drivers = env.bodyList
 		this.setTitle("simulation")
 		
-		
-
-		
 		// create a Group
-		 group = new Group(env.map.poly());
+		 group = new Group(env.map.poly()); //ajout des polylines de l'environment
 		
-
+		//ajout des cercles représentant les feux de circulations
 		for (var l = 0; l < env.trafficlight_lst.size(); l++) {
 			var tf = env.trafficlight_lst.get(l)
 			var c : Circle = new Circle()
@@ -71,22 +58,22 @@ class Window2 extends Stage {
 			}
 			group.getChildren().add(c)
 		}
-		t = 0
 		
 		
+		//boucle de l'animation 
 		var boucle : AnimationTimer = new AnimationTimer() {
 
 			def handle(now : long) {
 				
 				drivers = env.bodyList
 				group.getChildren().clear()
-				// group = new Group(env.map.poly());
+				
+				//ajout des polylines = routes
 				for (var j = 0; j < env.map.poly().size; j++) {
 					group.getChildren().add(env.map.poly().get(j))
 				}
-
-			
 				
+				//ajout des fuex de circulations
 				for (var l = 0; l < env.trafficlight_lst.size();l++){
 					var tf = env.trafficlight_lst.get(l)
 					var c : Circle = new Circle()
@@ -100,31 +87,11 @@ class Window2 extends Stage {
 					}
 					group.getChildren().add(c)
 				}
-				//println(drivers.isEmpty)
-			/*if (drivers.isEmpty != true && test == false) {
-				var a = drivers.values
-					group.getChildren().add(a.get(0).c)
-					test = true*/
-				for (entry : drivers.entrySet()) {
-				//println(drivers.get(entry.getKey()).c)
-				//println(drivers.get(entry.getKey()))
-				group.getChildren().add(drivers.get(entry.getKey()).c)
-				//println("e")
-				//println(drivers.get(entry.getKey()).c)
-				/*if (t == 10) {
-					drivers.add(new classicDriverBody(map))
-					group.getChildren().add(drivers.get(drivers.size - 1).c)
-					t = 0
-				}*/
-				/*for (var k = 0; k < drivers.size; k++) {
-					drivers.get(k).accelerateFree(0.5)
-					//drivers.get(k).positionToCoord
-					// drivers.get(k).move(1)
-				}*/
 				
-				// throw new UnsupportedOperationException("TODO: auto-generated method stub")
- 				t = t + 1
-			}
+				//ajout des véhicules représenter par des ronds
+				for (entry : drivers.entrySet()) {
+					group.getChildren().add(drivers.get(entry.getKey()).c)
+				}
 			}
 			
 		}
@@ -134,7 +101,7 @@ class Window2 extends Stage {
 		// set the scene
 		this.setScene(scene);
 
-		//primaryStage.show();
+		
 		
 		
 	}

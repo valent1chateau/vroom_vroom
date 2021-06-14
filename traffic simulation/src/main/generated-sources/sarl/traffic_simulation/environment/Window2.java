@@ -4,6 +4,7 @@ import io.sarl.lang.annotation.SarlElementType;
 import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -18,34 +19,20 @@ import org.eclipse.xtext.xbase.lib.Conversions;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Edge;
 import traffic_simulation.environment.Environment;
-import traffic_simulation.environment.Map;
 import traffic_simulation.environment.classicDriverBody;
 import traffic_simulation.environment.trafficLight;
 
-/**
- * @author jeome
- */
 @SarlSpecification("0.11")
 @SarlElementType(10)
 @SuppressWarnings("all")
 public class Window2 extends Stage {
   private Environment env;
   
-  private Map map;
-  
   private int length;
   
   private int width;
   
-  private Circle cc = new Circle();
-  
-  private long t;
-  
-  private double dt = 0.5;
-  
   private Group group;
-  
-  private boolean test = false;
   
   private TreeMap<UUID, classicDriverBody> drivers = new TreeMap<UUID, classicDriverBody>();
   
@@ -78,7 +65,6 @@ public class Window2 extends Stage {
         this.group.getChildren().add(c);
       }
     }
-    this.t = 0;
     AnimationTimer boucle = new __Window2_0() {
       public void handle(final long now) {
         Window2.this.drivers = Window2.this.env.getBodyList();
@@ -102,12 +88,9 @@ public class Window2 extends Stage {
             Window2.this.group.getChildren().add(c);
           }
         }
-        Set<java.util.Map.Entry<UUID, classicDriverBody>> _entrySet = Window2.this.drivers.entrySet();
-        for (final java.util.Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
-          {
-            Window2.this.group.getChildren().add(Window2.this.drivers.get(entry.getKey()).getC());
-            Window2.this.t = (Window2.this.t + 1);
-          }
+        Set<Map.Entry<UUID, classicDriverBody>> _entrySet = Window2.this.drivers.entrySet();
+        for (final Map.Entry<UUID, classicDriverBody> entry : _entrySet) {
+          Window2.this.group.getChildren().add(Window2.this.drivers.get(entry.getKey()).getC());
         }
       }
     };
@@ -131,12 +114,6 @@ public class Window2 extends Stage {
       return false;
     if (other.width != this.width)
       return false;
-    if (other.t != this.t)
-      return false;
-    if (Double.doubleToLongBits(other.dt) != Double.doubleToLongBits(this.dt))
-      return false;
-    if (other.test != this.test)
-      return false;
     return super.equals(obj);
   }
   
@@ -148,9 +125,6 @@ public class Window2 extends Stage {
     final int prime = 31;
     result = prime * result + Integer.hashCode(this.length);
     result = prime * result + Integer.hashCode(this.width);
-    result = prime * result + Long.hashCode(this.t);
-    result = prime * result + Double.hashCode(this.dt);
-    result = prime * result + Boolean.hashCode(this.test);
     return result;
   }
 }

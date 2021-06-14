@@ -6,9 +6,6 @@ import io.sarl.lang.annotation.SarlSpecification;
 import io.sarl.lang.annotation.SyntheticMember;
 import traffic_simulation.gui.Menu;
 
-/**
- * @author jeome
- */
 @SarlSpecification("0.11")
 @SarlElementType(10)
 @SuppressWarnings("all")

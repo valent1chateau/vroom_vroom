@@ -1,26 +1,5 @@
-/**
- * $Id$
- * 
- * Copyright (c) 2014-17 Stephane GALLAND <stephane.galland@utbm.fr>.
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * This program is free software; you can redistribute it and/or modify
- */
 package traffic_simulation.agent;
 
-import com.google.common.base.Objects;
 import io.sarl.core.DefaultContextInteractions;
 import io.sarl.core.Initialize;
 import io.sarl.core.Lifecycle;
@@ -42,7 +21,6 @@ import javax.inject.Inject;
 import org.eclipse.xtext.xbase.lib.Extension;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.agent.influence;
-import traffic_simulation.agent.light;
 import traffic_simulation.environment.Perceptions;
 import traffic_simulation.environment.Vehicle;
 import traffic_simulation.environment.suicide;
@@ -140,17 +118,6 @@ public class classicDriver extends Agent {
     }
   }
   
-  private void $behaviorUnit$light$3(final light occurrence) {
-    boolean _equals = Objects.equal(occurrence.l, "green");
-    if (_equals) {
-      Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-      _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info(("yes it\'s " + occurrence.l));
-    } else {
-      Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1 = this.$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER();
-      _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER_1.info(("oh no it\'s " + occurrence.l));
-    }
-  }
-  
   @Extension
   @ImportedCapacityFeature(Lifecycle.class)
   @SyntheticMember
@@ -199,14 +166,6 @@ public class classicDriver extends Agent {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
     ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$Initialize$0(occurrence));
-  }
-  
-  @SyntheticMember
-  @PerceptGuardEvaluator
-  private void $guardEvaluator$light(final light occurrence, final Collection<Runnable> ___SARLlocal_runnableCollection) {
-    assert occurrence != null;
-    assert ___SARLlocal_runnableCollection != null;
-    ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$light$3(occurrence));
   }
   
   @SyntheticMember
@@ -261,20 +220,20 @@ public class classicDriver extends Agent {
   }
   
   @SyntheticMember
-  public classicDriver(final UUID parentID, final UUID agentID) {
-    super(parentID, agentID);
+  public classicDriver(final UUID arg0, final UUID arg1) {
+    super(arg0, arg1);
   }
   
   @SyntheticMember
-  @Inject
   @Deprecated
-  public classicDriver(final BuiltinCapacitiesProvider provider, final UUID parentID, final UUID agentID) {
-    super(provider, parentID, agentID);
+  @Inject
+  public classicDriver(final BuiltinCapacitiesProvider arg0, final UUID arg1, final UUID arg2) {
+    super(arg0, arg1, arg2);
   }
   
   @SyntheticMember
   @Inject
-  public classicDriver(final UUID parentID, final UUID agentID, final DynamicSkillProvider skillProvider) {
-    super(parentID, agentID, skillProvider);
+  public classicDriver(final UUID arg0, final UUID arg1, final DynamicSkillProvider arg2) {
+    super(arg0, arg1, arg2);
   }
 }

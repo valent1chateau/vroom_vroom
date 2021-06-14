@@ -21,9 +21,6 @@ public class Node {
   private Point2D coord;
   
   @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
-  private Node pred;
-  
-  @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
   private ArrayList<Node> neighboors;
   
   @Accessors({ AccessorType.PUBLIC_SETTER, AccessorType.PUBLIC_GETTER })
@@ -83,15 +80,6 @@ public class Node {
   
   public void setCoord(final Point2D coord) {
     this.coord = coord;
-  }
-  
-  @Pure
-  public Node getPred() {
-    return this.pred;
-  }
-  
-  public void setPred(final Node pred) {
-    this.pred = pred;
   }
   
   @Pure

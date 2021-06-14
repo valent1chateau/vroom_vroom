@@ -1,23 +1,4 @@
-/* 
- * $Id$
- * 
- * Copyright (c) 2014-17 Stephane GALLAND <stephane.galland@utbm.fr>.
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * This program is free software; you can redistribute it and/or modify
- */
+
 package traffic_simulation.environment
 
 import io.sarl.core.AgentSpawned
@@ -35,18 +16,16 @@ import java.util.concurrent.atomic.AtomicInteger
 import traffic_simulation.^agent.classicDriver
 import traffic_simulation.^agent.influence
 
-/*  
- * This agent is managing the physic space.
- */
+
 
 
 event Perceptions{
-	var p_value : ArrayList<Vehicle>
-	var state : double[]
-	var loc : Point2D
-	var dim : double
-	var distwithLight : double 
-	var isRedView : boolean
+	var p_value : ArrayList<Vehicle>	//liste des bodies des agents perçuent
+	var state : double[]				//liste des états du body de l'agent : vitesseMax, vitesse actuel, acceleration Max
+	var loc : Point2D					//position du body
+	var dim : double					//dimension du body
+	var distwithLight : double 			//distance avec le fu rouge s'il y a
+	var isRedView : boolean				//true si le feu perçut est rouge
 	new (p : ArrayList<Vehicle>,vtm : double,vt : double, am : double,co : Point2D,d : double,isRed : boolean,distLight : double){
 	p_value = p
 	state = #[vtm,vt,am]
@@ -58,45 +37,38 @@ event Perceptions{
 	}	
 }
 
+//event permettant à un agent de s'autokiller
 event suicide {
 }
-
+//agent gérant la boucle principal, il fait l'intermediaire entre ce qu'il se passe dans l'environment et les décissions des agents classicDriver
 agent EnvironmentAgent {
 	
 	uses  Lifecycle, DefaultContextInteractions, Logging, Schedules
 	
 	var environment : Environment
 	
-	var dt = 0.5
-	var spawnedReceived : AtomicInteger = new AtomicInteger(0)
+	
+	var spawnedReceived : AtomicInteger = new AtomicInteger(0) //compte le nombre d'agent spawner
 	var nbrAgentOnMap = 0
-	var countAgentInfluence = new AtomicInteger(0)
-	var countAgentSpawned = 0
-	var nbTotalVehiculeClassic : int
-	var accBody : double
+	var countAgentInfluence = new AtomicInteger(0) //compte le nombre d'agent ayant emis une influence
+	var countAgentSpawned = 0									//nombre de nouveaux agents ayant spawner
+	var nbTotalVehiculeClassic : int								//nombre total de véhicule dans la simulation
+	var accBody : double											//acceleration max des bodies
 			
 	on Initialize {
 		
-		environment = occurrence.parameters.get(0) as Environment
-		nbTotalVehiculeClassic = environment.nombreTotalAgentClassic
+		environment = occurrence.parameters.get(0) as Environment		//récupération de l'environment
+		nbTotalVehiculeClassic = environment.nombreTotalAgentClassic	
 		accBody = environment.nbAccl
 		
-		//nbTotalVehicule =  
-		/*environment.initEnvironment(10);
-		for(entry : environment.bodyList.entrySet()){
-			//println(environment.bodyList.get(entry.getKey()))
-			typeof(classicDriver).spawnInContextWithID(entry.getKey(),defaultContext)
-		}
-		 * spawn(typeof(priorityDriver))
-		 */
-		actionsOnInfluence
+		actionsOnInfluence		//appel de la fonction qui va démarrer la boucle start
 	}
 	
-	on Destroy{
+	on Destroy{//destruction de l'environment
 		environment.stop
 	}
 	
-	on AgentSpawned {
+	on AgentSpawned {//vérification que tous les agents qui doivent spawn ont bien spawn pour relancer la boucle startloop
 		var v : int = spawnedReceived.incrementAndGet
 		if (v == countAgentSpawned) {
 			
@@ -110,11 +82,11 @@ agent EnvironmentAgent {
 	}
 	
 	on influence{
-		
+		//récupération de l'id et de l'accélération calculer par l'agent
 		var ac = occurrence.acc
 		var id = occurrence.idt 
 		environment.bodyList.get(id).acc = ac
-		
+		//on attend que tous les agents ont émis leur influence
 		if (countAgentInfluence.incrementAndGet() == nbrAgentOnMap) {
 			
 			countAgentInfluence.set(0)
@@ -124,15 +96,16 @@ agent EnvironmentAgent {
 		}
 	}
 	
-	def startLoop {
+	def startLoop {//boucle principal
 		
 		var bodies = environment.bodyList
 		nbrAgentOnMap = environment.bodyList.size()
 		
 		if (bodies.isEmpty == false) {
 			//println(bodies.size)
-			for(entry : bodies.entrySet()){
+			for(entry : bodies.entrySet()){	//chaque body calcul sa perception
 				bodies.get(entry.getKey()).calculatePerceptions
+				//recupération de la perception de chaque body + d'autres éléments
 				var p = bodies.get(entry.getKey()).perception.res
 				var vmax = bodies.get(entry.getKey()).maxSpeed
 				var v = bodies.get(entry.getKey()).speed
@@ -143,7 +116,7 @@ agent EnvironmentAgent {
 				var dstLight = bodies.get(entry.getKey()).perception.distWithLight
 				
 				
-				
+				//emission de la perception de chacun des bodies sur la map à leurs agents respectifs. Ils sont lié par un UUID commun
 				emit(new Perceptions(p, vmax, v, amax, coo, dims, redLight, dstLight))[it.UUID == entry.getKey()]
 			
 			
@@ -154,71 +127,57 @@ agent EnvironmentAgent {
 		}
 	}
 	
+	//actions établient après que tous les agents ont émis leurs influences
 	def actionsOnInfluence(){
 		
 			var listKey : ArrayList<UUID> = new ArrayList<UUID>
-			
-			
 			 
 			if(environment.bodyList.isEmpty!=true){
-				environment.Update()
+				environment.Update()		//mise à jour de l'environment
 				
-				for (entry : environment.bodyList.entrySet()) {
+				for (entry : environment.bodyList.entrySet()) {	//ajout des clés/indices des bodies a supprimés, i.e les bodies sortant de la map
 					if (environment.bodyList.get(entry.getKey()).position >=
 					environment.bodyList.get(entry.getKey()).distanceMax) {
 						
 					listKey.add(entry.getKey())
-					
-					
 						
 					}
 				}
 				for (var k = 0; k < listKey.size(); k++) {
+					//on supprime les bodies de l'environment et on supprime leurs agents respectifs
 					environment.bodyList.remove(listKey.get(k))
 					var key = listKey.get(k)
 					emit(new suicide())[it.UUID == key]
 				}
-				
 			}
 		
 		var rand = new Random
-		var nbAgent = 1 + rand.nextInt(4)
+		var nbAgent = 1 + rand.nextInt(4)	//on défini le nombre d'agent à spawn (entre 1 et 4)
 		for (var i = 1; i <= nbAgent; i++) {
 			var bodyAgent = new classicDriverBody(this.environment.map, accBody)
+			//on vérifie que l'agent peut spawn
 			if (bodyAgent.canSpawn == true){
-				if (nbTotalVehiculeClassic!=0) {
+				if (nbTotalVehiculeClassic!=0) {//on vérifie qu'il reste des agents à  faire spawn
 					bodyAgent.initialzeEdgeBodies
-					environment.bodyList.put(bodyAgent.ID, bodyAgent)
+					environment.bodyList.put(bodyAgent.ID, bodyAgent)	//ajout du coprs du véhicule dans l'enc=vironment
 					
-					typeof(classicDriver).spawnInContextWithID(bodyAgent.ID, defaultContext)
+					typeof(classicDriver).spawnInContextWithID(bodyAgent.ID, defaultContext) //on fait spawn l'agent qui est associé au nouveau corps
 					countAgentSpawned += 1
 					nbTotalVehiculeClassic -=1
 					} 
 				} 
 		}
-		if (countAgentSpawned == 0){
+		if (countAgentSpawned == 0){//cas ou il n'y a pas d'agent à faire spawn
 			Thread::sleep(20)
-			if (nbTotalVehiculeClassic == 0 && environment.bodyList.isEmpty) {
-				print("e")
+			if (nbTotalVehiculeClassic == 0 && environment.bodyList.isEmpty) {//si tous les agents on spawn et qu'il n'y a plus de bodies dans la map 
+			//on peut kill l'environmentAgent
 				killMe
 			}
-
-		
-			else {
+			else {//sinon on relance la boucle
 			startLoop
-		}
+			}
 			
 		}
 		
-		
-		
-		}
-	
-	/*def endLoop {
-		startLoop();
-	}*/
-	
-//	on Influence { }
-// on Perception { }
-	
+	}
 }

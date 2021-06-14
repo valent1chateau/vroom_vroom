@@ -6,9 +6,6 @@ import java.awt.geom.Point2D;
 import org.eclipse.xtext.xbase.lib.Pure;
 import traffic_simulation.environment.Vehicle;
 
-/**
- * @author jeome
- */
 @SarlSpecification("0.11")
 @SarlElementType(10)
 @SuppressWarnings("all")
@@ -23,11 +20,6 @@ public class Tools {
     return (((x1 * _power) + (((2.0d * xc) * t) * (1.0d - t))) + (x2 * _power_1));
   }
   
-  /**
-   * def g(P : double[], t : double){
-   * return Math.sqrt(f(P.get(0),P.get(1),P.get(2),t)**2
-   * }
-   */
   @Pure
   public double deriv_bez(final double x1, final double xc, final double x2, final double t) {
     return (((((-2.0d) * x1) * (1.0d - t)) + ((2.0d * xc) * (1.0d - (2.0d * t)))) + ((2.0d * x2) * t));
