@@ -73,12 +73,14 @@ agent EnvironmentAgent {
 	var countAgentInfluence = new AtomicInteger(0)
 	var countAgentSpawned = 0
 	var nbTotalVehiculeClassic : int
-	
+	var accBody : double
 			
 	on Initialize {
 		
 		environment = occurrence.parameters.get(0) as Environment
 		nbTotalVehiculeClassic = environment.nombreTotalAgentClassic
+		accBody = environment.nbAccl
+		
 		//nbTotalVehicule =  
 		/*environment.initEnvironment(10);
 		for(entry : environment.bodyList.entrySet()){
@@ -182,7 +184,7 @@ agent EnvironmentAgent {
 		var rand = new Random
 		var nbAgent = 1 + rand.nextInt(4)
 		for (var i = 1; i <= nbAgent; i++) {
-			var bodyAgent = new classicDriverBody(this.environment.map)
+			var bodyAgent = new classicDriverBody(this.environment.map, accBody)
 			if (bodyAgent.canSpawn == true){
 				if (nbTotalVehiculeClassic!=0) {
 					bodyAgent.initialzeEdgeBodies

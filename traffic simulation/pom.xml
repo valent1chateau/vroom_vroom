@@ -22,6 +22,11 @@
       <artifactId>mathphysics</artifactId>
       <version>16.0</version>
     </dependency>
+     <dependency>
+      <groupId>io.janusproject</groupId>
+      <artifactId>io.janusproject.kernel</artifactId>
+      <version>3.${sarl.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -35,6 +40,30 @@
           <encoding>${project.build.sourceEncoding}</encoding>
         </configuration>
       </plugin>
+      <plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptors>
+						<descriptor>with-dependencies.xml</descriptor>
+					</descriptors>
+					<archive>
+						<manifest>
+							<mainClass>traffic_simulation.environment.Main</mainClass>
+						</manifest>
+						
+					</archive>
+					<attach>false</attach>
+				</configuration>
+			</plugin>
       <plugin>
         <groupId>io.sarl.maven</groupId>
         <artifactId>sarl-maven-plugin</artifactId>

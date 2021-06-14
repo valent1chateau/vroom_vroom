@@ -50,13 +50,18 @@ class Environment {
 	var trafficlight_lst : ArrayList<trafficLight>
 	@Accessors
 	var nombreTotalAgentClassic : int
+	@Accessors
+	var tempsFeu : int
+	@Accessors
+	var nbAccl : double
 	
-	
-	new(height : int, width : int, nbAgent : int) {
+	new(height : int, width : int, nbAgent : int, nbAcc : double, tpsFeu:int) {
 		bodyList = new TreeMap<UUID, classicDriverBody>
 		priorityVehicle = new priorityVehicleBody()
 		map = new Map(height, width)
 		trafficlight_lst = new ArrayList<trafficLight>
+		nbAccl = nbAcc
+		tempsFeu = tpsFeu
 		addTrafficlight(3, "23", true)
 		addTrafficlight(5, "45", true)
 		addTrafficlight(13, "1213", true)
@@ -79,7 +84,7 @@ class Environment {
 			}
 		}
 	
-		}, 10000,10000)
+		}, tempsFeu*1000, tempsFeu*1000)
 		
 	}
 	def Update() {
@@ -106,16 +111,7 @@ class Environment {
 		trafficlight_lst.add(Tf)
 	}
 	
-	def initEnvironment(agents:int){
-		agentsToSpawn = agents
-		var i = 0 
-		var currentV: classicDriverBody
-		while (i < agentsToSpawn - 1){
-			currentV = new classicDriverBody(this.map)
-			bodyList.put(currentV.ID,currentV)	
-			i++
-		}
-	}
+	
 	
 	def stop() {
 		timer.cancel

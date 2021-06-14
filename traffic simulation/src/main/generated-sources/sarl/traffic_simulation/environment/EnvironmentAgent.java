@@ -81,10 +81,13 @@ public class EnvironmentAgent extends Agent {
   
   private int nbTotalVehiculeClassic;
   
+  private double accBody;
+  
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     Object _get = occurrence.parameters[0];
     this.environment = ((Environment) _get);
     this.nbTotalVehiculeClassic = this.environment.getNombreTotalAgentClassic();
+    this.accBody = this.environment.getNbAccl();
     this.actionsOnInfluence();
   }
   
@@ -218,7 +221,7 @@ public class EnvironmentAgent extends Agent {
       for (int i = 1; (i <= nbAgent); i++) {
         {
           traffic_simulation.environment.Map _map = this.environment.getMap();
-          classicDriverBody bodyAgent = new classicDriverBody(_map);
+          classicDriverBody bodyAgent = new classicDriverBody(_map, this.accBody);
           boolean _canSpawn = bodyAgent.canSpawn();
           if ((_canSpawn == true)) {
             if ((this.nbTotalVehiculeClassic != 0)) {
@@ -357,6 +360,8 @@ public class EnvironmentAgent extends Agent {
       return false;
     if (other.nbTotalVehiculeClassic != this.nbTotalVehiculeClassic)
       return false;
+    if (Double.doubleToLongBits(other.accBody) != Double.doubleToLongBits(this.accBody))
+      return false;
     return super.equals(obj);
   }
   
@@ -370,6 +375,7 @@ public class EnvironmentAgent extends Agent {
     result = prime * result + Integer.hashCode(this.nbrAgentOnMap);
     result = prime * result + Integer.hashCode(this.countAgentSpawned);
     result = prime * result + Integer.hashCode(this.nbTotalVehiculeClassic);
+    result = prime * result + Double.hashCode(this.accBody);
     return result;
   }
   

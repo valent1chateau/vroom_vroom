@@ -45,6 +45,14 @@ public class Menu extends Application {
   
   private Label labelDimFen;
   
+  private Label labelAccel;
+  
+  private Label labelUnitAccel;
+  
+  private Label labelFeu;
+  
+  private Label labelUnitTemps;
+  
   private TextField nbAgentText;
   
   private TextField nbAgentDangText;
@@ -53,6 +61,10 @@ public class Menu extends Application {
   
   private TextField nbLargFen;
   
+  private TextField nbAccel;
+  
+  private TextField nbTempsFeu;
+  
   private int nbAgent;
   
   private int nbAgentDang;
@@ -60,6 +72,10 @@ public class Menu extends Application {
   private int LongueurFenetre;
   
   private int HauteurFenetre;
+  
+  private double nbAcceleration;
+  
+  private int nbTempsFeuRouge;
   
   public Menu() {
     abstract class __Menu_0 implements EventHandler<ActionEvent> {
@@ -76,10 +92,11 @@ public class Menu extends Application {
       public void handle(final ActionEvent e) {
         try {
           Menu.this.nbAgent = Integer.parseInt(Menu.this.nbAgentText.getText());
-          Menu.this.nbAgentDang = Integer.parseInt(Menu.this.nbAgentDangText.getText());
           Menu.this.LongueurFenetre = Integer.parseInt(Menu.this.nbLargFen.getText());
           Menu.this.HauteurFenetre = Integer.parseInt(Menu.this.nbHautFen.getText());
-          Environment _environment = new Environment(Menu.this.LongueurFenetre, Menu.this.HauteurFenetre, Menu.this.nbAgent);
+          Menu.this.nbAcceleration = Double.parseDouble(Menu.this.nbAccel.getText());
+          Menu.this.nbTempsFeuRouge = Integer.parseInt(Menu.this.nbTempsFeu.getText());
+          Environment _environment = new Environment(Menu.this.LongueurFenetre, Menu.this.HauteurFenetre, Menu.this.nbAgent, Menu.this.nbAcceleration, Menu.this.nbTempsFeuRouge);
           Menu.this.env = _environment;
           Window2 _window2 = new Window2(Menu.this.env, Menu.this.LongueurFenetre, Menu.this.HauteurFenetre);
           Menu.this.win = _window2;
@@ -108,24 +125,34 @@ public class Menu extends Application {
     this.nbAgentText = _textField;
     this.nbAgentText.setText("30");
     this.nbAgentText.setPrefColumnCount(2);
-    Label _label_1 = new Label("Nombre d\'agent dangereux:");
-    this.labelnbAgentDang = _label_1;
+    Label _label_1 = new Label("Dimension de la fenetre:");
+    this.labelDimFen = _label_1;
+    Label _label_2 = new Label("x");
+    this.labelX = _label_2;
     TextField _textField_1 = new TextField();
-    this.nbAgentDangText = _textField_1;
-    this.nbAgentDangText.setText("2");
-    this.nbAgentDangText.setPrefColumnCount(2);
-    Label _label_2 = new Label("Dimension de la fenetre:");
-    this.labelDimFen = _label_2;
-    Label _label_3 = new Label("x");
-    this.labelX = _label_3;
-    TextField _textField_2 = new TextField();
-    this.nbHautFen = _textField_2;
+    this.nbHautFen = _textField_1;
     this.nbHautFen.setText("800");
     this.nbHautFen.setPrefColumnCount(3);
-    TextField _textField_3 = new TextField();
-    this.nbLargFen = _textField_3;
+    TextField _textField_2 = new TextField();
+    this.nbLargFen = _textField_2;
     this.nbLargFen.setText("1200");
     this.nbLargFen.setPrefColumnCount(3);
+    Label _label_3 = new Label("Accelération du véhicule:");
+    this.labelAccel = _label_3;
+    TextField _textField_3 = new TextField();
+    this.nbAccel = _textField_3;
+    this.nbAccel.setText("4");
+    this.nbAccel.setPrefColumnCount(3);
+    Label _label_4 = new Label("m/s^-2");
+    this.labelUnitAccel = _label_4;
+    Label _label_5 = new Label("Temps feu rouge:");
+    this.labelFeu = _label_5;
+    TextField _textField_4 = new TextField();
+    this.nbTempsFeu = _textField_4;
+    this.nbTempsFeu.setText("10");
+    this.nbTempsFeu.setPrefColumnCount(3);
+    Label _label_6 = new Label("s");
+    this.labelUnitTemps = _label_6;
   }
   
   public void start(final Stage primaryStage) throws Exception {
@@ -139,15 +166,19 @@ public class Menu extends Application {
     root.setPadding(_insets);
     root.add(this.labelnbAgent, 0, 0);
     root.add(this.nbAgentText, 1, 0);
-    root.add(this.labelnbAgentDang, 0, 1);
-    root.add(this.nbAgentDangText, 1, 1);
-    root.add(this.labelDimFen, 0, 2);
-    root.add(this.nbLargFen, 1, 2);
-    root.add(this.nbHautFen, 2, 2);
-    root.add(this.buttonPlay, 0, 3);
-    root.add(this.buttonExit, 1, 3);
+    root.add(this.labelDimFen, 0, 1);
+    root.add(this.nbLargFen, 1, 1);
+    root.add(this.nbHautFen, 2, 1);
+    root.add(this.labelAccel, 0, 2);
+    root.add(this.nbAccel, 1, 2);
+    root.add(this.labelUnitAccel, 2, 2);
+    root.add(this.labelFeu, 0, 3);
+    root.add(this.nbTempsFeu, 1, 3);
+    root.add(this.labelUnitTemps, 2, 3);
+    root.add(this.buttonPlay, 0, 4);
+    root.add(this.buttonExit, 1, 4);
     primaryStage.setTitle("Menu - Traffic simulation");
-    Scene _scene = new Scene(root, 350, 250);
+    Scene _scene = new Scene(root, 400, 250);
     scene = _scene;
     primaryStage.setScene(scene);
     primaryStage.show();
@@ -172,6 +203,10 @@ public class Menu extends Application {
       return false;
     if (other.HauteurFenetre != this.HauteurFenetre)
       return false;
+    if (Double.doubleToLongBits(other.nbAcceleration) != Double.doubleToLongBits(this.nbAcceleration))
+      return false;
+    if (other.nbTempsFeuRouge != this.nbTempsFeuRouge)
+      return false;
     return super.equals(obj);
   }
   
@@ -185,6 +220,8 @@ public class Menu extends Application {
     result = prime * result + Integer.hashCode(this.nbAgentDang);
     result = prime * result + Integer.hashCode(this.LongueurFenetre);
     result = prime * result + Integer.hashCode(this.HauteurFenetre);
+    result = prime * result + Double.hashCode(this.nbAcceleration);
+    result = prime * result + Integer.hashCode(this.nbTempsFeuRouge);
     return result;
   }
 }

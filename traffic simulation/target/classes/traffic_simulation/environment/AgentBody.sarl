@@ -250,7 +250,7 @@ class priorityVehicleBody extends Vehicle {
 
 class classicDriverBody extends Vehicle{
 	
-	new(map : Map) {
+	new(map : Map, acc_max : double) {
 		super()
 		newPath(map.getG)
 		var x = path.pathNodes.get(0).coord.getX()
@@ -265,7 +265,7 @@ class classicDriverBody extends Vehicle{
 		this.c.setFill(Color.BLUE)
 		D_Max()
 		
-		accMax =4
+		accMax =acc_max
 		maxSpeed = 13.8
 		this.perception = new Perception(this, 150.0, map.getG)
 		this.edge = path.pathEdges.get(0)

@@ -58,7 +58,7 @@ event influence {
 
 agent classicDriver {
 	var tool = new Tools
-	var So : double = 1.0
+	var So : double = 1.5
 	var T : double = 1.5
 	var b : double = 1.67
 	var kill : boolean = false

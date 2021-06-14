@@ -68,7 +68,13 @@ public class Environment {
   @Accessors
   private int nombreTotalAgentClassic;
   
-  public Environment(final int height, final int width, final int nbAgent) {
+  @Accessors
+  private int tempsFeu;
+  
+  @Accessors
+  private double nbAccl;
+  
+  public Environment(final int height, final int width, final int nbAgent, final double nbAcc, final int tpsFeu) {
     abstract class __Environment_0 extends TimerTask {
       public abstract void run();
     }
@@ -81,6 +87,8 @@ public class Environment {
     this.map = _map;
     ArrayList<trafficLight> _arrayList = new ArrayList<trafficLight>();
     this.trafficlight_lst = _arrayList;
+    this.nbAccl = nbAcc;
+    this.tempsFeu = tpsFeu;
     this.addTrafficlight(3, "23", true);
     this.addTrafficlight(5, "45", true);
     this.addTrafficlight(13, "1213", true);
@@ -100,7 +108,7 @@ public class Environment {
         }
       }
     };
-    this.timer.scheduleAtFixedRate(___Environment_0, 10000, 10000);
+    this.timer.scheduleAtFixedRate(___Environment_0, (this.tempsFeu * 1000), (this.tempsFeu * 1000));
   }
   
   public void Update() {
@@ -131,20 +139,6 @@ public class Environment {
     return _xblockexpression;
   }
   
-  public void initEnvironment(final int agents) {
-    this.agentsToSpawn = agents;
-    int i = 0;
-    classicDriverBody currentV = null;
-    while ((i < (this.agentsToSpawn - 1))) {
-      {
-        classicDriverBody _classicDriverBody = new classicDriverBody(this.map);
-        currentV = _classicDriverBody;
-        this.bodyList.put(currentV.getID(), currentV);
-        i++;
-      }
-    }
-  }
-  
   public int stop() {
     int _xblockexpression = (int) 0;
     {
@@ -169,6 +163,10 @@ public class Environment {
       return false;
     if (other.nombreTotalAgentClassic != this.nombreTotalAgentClassic)
       return false;
+    if (other.tempsFeu != this.tempsFeu)
+      return false;
+    if (Double.doubleToLongBits(other.nbAccl) != Double.doubleToLongBits(this.nbAccl))
+      return false;
     return super.equals(obj);
   }
   
@@ -180,6 +178,8 @@ public class Environment {
     final int prime = 31;
     result = prime * result + Integer.hashCode(this.agentsToSpawn);
     result = prime * result + Integer.hashCode(this.nombreTotalAgentClassic);
+    result = prime * result + Integer.hashCode(this.tempsFeu);
+    result = prime * result + Double.hashCode(this.nbAccl);
     return result;
   }
   
@@ -226,5 +226,23 @@ public class Environment {
   
   public void setNombreTotalAgentClassic(final int nombreTotalAgentClassic) {
     this.nombreTotalAgentClassic = nombreTotalAgentClassic;
+  }
+  
+  @Pure
+  public int getTempsFeu() {
+    return this.tempsFeu;
+  }
+  
+  public void setTempsFeu(final int tempsFeu) {
+    this.tempsFeu = tempsFeu;
+  }
+  
+  @Pure
+  public double getNbAccl() {
+    return this.nbAccl;
+  }
+  
+  public void setNbAccl(final double nbAccl) {
+    this.nbAccl = nbAccl;
   }
 }

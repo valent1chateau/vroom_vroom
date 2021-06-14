@@ -54,7 +54,7 @@ import traffic_simulation.util.Tools;
 public class classicDriver extends Agent {
   private Tools tool = new Tools();
   
-  private double So = 1.0;
+  private double So = 1.5;
   
   private double T = 1.5;
   

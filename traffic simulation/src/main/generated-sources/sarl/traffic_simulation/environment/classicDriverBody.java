@@ -37,7 +37,7 @@ import traffic_simulation.environment.Vehicle;
 @SarlElementType(10)
 @SuppressWarnings("all")
 public class classicDriverBody extends Vehicle {
-  public classicDriverBody(final Map map) {
+  public classicDriverBody(final Map map, final double acc_max) {
     super();
     this.newPath(map.getG());
     double x = this.getPath().getPathNodes().get(0).getCoord().getX();
@@ -53,7 +53,7 @@ public class classicDriverBody extends Vehicle {
     this.setDim((2 * 2.25));
     this.getC().setFill(Color.BLUE);
     this.D_Max();
-    this.setAccMax(4);
+    this.setAccMax(acc_max);
     this.setMaxSpeed(13.8);
     Graph _g = map.getG();
     Perception _perception = new Perception(this, 150.0, _g);
