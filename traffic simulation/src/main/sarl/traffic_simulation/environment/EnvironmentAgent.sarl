@@ -152,7 +152,7 @@ agent EnvironmentAgent {
 			}
 		
 		var rand = new Random
-		var nbAgent = 1 + rand.nextInt(6)	//on défini le nombre d'agent à spawn (entre 1 et 6)
+		var nbAgent = 1 + rand.nextInt(4)	//on défini le nombre d'agent à spawn (entre 1 et 4)
 		for (var i = 1; i <= nbAgent; i++) {
 			var bodyAgent = new classicDriverBody(this.environment.map, accBody)
 			//on vérifie que l'agent peut spawn

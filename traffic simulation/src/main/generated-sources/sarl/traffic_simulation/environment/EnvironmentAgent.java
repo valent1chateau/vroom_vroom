@@ -193,7 +193,7 @@ public class EnvironmentAgent extends Agent {
         }
       }
       Random rand = new Random();
-      int _nextInt = rand.nextInt(6);
+      int _nextInt = rand.nextInt(4);
       int nbAgent = (1 + _nextInt);
       for (int i = 1; (i <= nbAgent); i++) {
         {
