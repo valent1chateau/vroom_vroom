@@ -211,7 +211,7 @@ public abstract class Vehicle implements Body {
                 res = false;
               }
             } else {
-              if (((s_id == 2) || (s_id == 2))) {
+              if (((s_id == 2) || (s_id == 4))) {
                 double _x = lst_v.get(i).coord.getX();
                 if (((sx + (this.dim / 2)) > (_x - (lst_v.get(i).dim / 2)))) {
                   res = false;
